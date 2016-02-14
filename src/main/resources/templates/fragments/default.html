@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+
+    <!--<meta name="_csrf" th:content="${_csrf}? ${_csrf.token}"/>-->
+    <!--<meta name="_csrf_header" th:content="${_csrf}? ${_csrf.headerName}"/>-->
+
+    <th:block th:replace="fragments/global :: head"/>
+    <th:block layout:fragment="head"/>
+</head>
+<body>
+
+<div class="container">
+    <div class="row">
+        <th:block layout:fragment="content"/>
+    </div>
+</div>
+
+<th:block th:replace="fragments/global :: js"/>
+<th:block layout:fragment="js"/>
+
+</body>
+</html>
