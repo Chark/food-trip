@@ -21,10 +21,6 @@ public class Basket extends BaseEntity {
         this.sandwiches.add(item);
     }
 
-    public void removeItem(Sandwich item) {
-        this.sandwiches.remove(item);
-    }
-
     public List<Sandwich> getSandwiches() {
         return sandwiches;
     }
