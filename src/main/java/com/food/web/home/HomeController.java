@@ -1,4 +1,4 @@
-package com.food.app.home;
+package com.food.web.home;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
