@@ -3,6 +3,7 @@ jdk:
   - oraclejdk8
 script:
   - cd food-trip-back
+  - chmod +x gradlew
   - ./gradlew test
 cache:
   directories:
