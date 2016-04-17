@@ -2,7 +2,7 @@ language: java
 jdk:
   - oraclejdk8
 before_install:
-  - chmod +x gradlew
+  - cd food-trip-back && chmod +x gradlew
 script:
   - cd food-trip-back && ./gradlew test
 install:
