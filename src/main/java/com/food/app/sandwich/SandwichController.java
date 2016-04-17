@@ -1,4 +1,4 @@
-package com.food.web.sandwich;
+package com.food.app.sandwich;
 
 import com.food.domain.sandwich.Basket;
 import org.springframework.beans.factory.annotation.Autowired;

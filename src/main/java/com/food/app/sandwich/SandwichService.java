@@ -1,4 +1,4 @@
-package com.food.web.sandwich;
+package com.food.app.sandwich;
 
 import com.food.domain.sandwich.Basket;
 import com.food.domain.sandwich.BasketRepository;

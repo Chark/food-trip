@@ -1,4 +1,4 @@
-package com.food.web.home;
+package com.food.app.home;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
