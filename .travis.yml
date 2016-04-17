@@ -4,7 +4,7 @@ jdk:
 script:
   - ./food-trip-back/gradlew test
 before_install:
-  - chmod +x gradlew
+  - chmod +x /food-trip-back/gradlew
 install:
   - /bin/true
 cache:
