@@ -11,7 +11,7 @@ apply plugin: 'java'
 apply plugin: 'spring-boot'
 
 jar {
-	baseName = 'food-trip'
+	baseName = 'food-trip-back'
 	version = '0.1'
 }
 
