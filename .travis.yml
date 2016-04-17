@@ -1,10 +1,10 @@
 language: java
 jdk:
   - oraclejdk8
-script:
-  - ./food-trip-back/gradlew test
 before_install:
-  - chmod +x food-trip-back/gradlew
+  - chmod +x gradlew
+script:
+  - cd && ./gradlew test
 install:
   - /bin/true
 cache:
