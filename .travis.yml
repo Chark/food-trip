@@ -1,0 +1,12 @@
+language: java
+jdk:
+  - oraclejdk8
+script:
+  - ./gradlew test
+before_install:
+  - chmod +x gradlew
+install:
+  - /bin/true
+cache:
+  directories:
+  - ~/.gradle
