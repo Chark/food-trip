@@ -1,12 +1,9 @@
 language: java
 jdk:
   - oraclejdk8
-before_install:
-  - cd food-trip-back && chmod +x gradlew
 script:
-  - cd food-trip-back && ./gradlew test
-install:
-  - /bin/true
+  - cd food-trip-back
+  - ./gradlew test
 cache:
   directories:
   - ~/.gradle
