@@ -30,10 +30,7 @@ public class Permission extends BaseEntity implements GrantedAuthority {
         this.authority = authority;
     }
 
-    public String getName() {
-        return name;
-    }
-
+    @Override
     public String getAuthority() {
         return authority.toString();
     }

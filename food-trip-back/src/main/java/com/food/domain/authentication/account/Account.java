@@ -1,9 +1,7 @@
 package com.food.domain.authentication.account;
 
 import com.food.domain.BaseEntity;
-import com.food.app.utils.Strings;
 import com.food.domain.authentication.permission.Permission;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.Column;
@@ -62,12 +60,12 @@ public class Account extends BaseEntity implements UserDetails {
     }
 
     public void setEmail(String email) {
-        this.email = normalize(email);
+        this.email = email.toLowerCase();
     }
 
     public void setUsername(String username) {
         this.prettyUsername = username;
-        this.username = normalize(username);
+        this.username = username.toLowerCase();
     }
 
     public String getPrettyUsername() {
@@ -119,9 +117,5 @@ public class Account extends BaseEntity implements UserDetails {
     @Override
     public boolean isEnabled() {
         return enabled;
-    }
-
-    public static String normalize(String value) {
-        return Strings.normalize(value);
     }
 }

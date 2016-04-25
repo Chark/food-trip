@@ -22,7 +22,6 @@ repositories {
 	mavenCentral()
 }
 
-
 dependencies {
 	compile('org.webjars:bootswatch-lumen:3.3.5')
 	compile('org.webjars:jquery:2.2.0')
