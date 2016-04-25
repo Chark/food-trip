@@ -9,4 +9,4 @@ cache:
   directories:
   - ~/.gradle
 after_success:
-  - coveralls
+  - ./food-trip-back/gradlew cobertura coveralls
