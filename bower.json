@@ -14,5 +14,8 @@
     "bower_components",
     "test",
     "tests"
-  ]
+  ],
+  "devDependencies": {
+    "semantic": "semantic-ui#^2.1.8"
+  }
 }
