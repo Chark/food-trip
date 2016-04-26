@@ -71,5 +71,5 @@ module.exports = function (grunt) {
 
 
     grunt.registerTask('init', ['uglify:deps_js', 'concat:js_main', 'concat:css_deps', 'concat:css_main']);
-    grunt.registerTask('init', ['watch']);
+    grunt.registerTask('watch', ['watch']);
 };
