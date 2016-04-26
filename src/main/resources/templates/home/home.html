@@ -1,6 +1,6 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorator="fragments/default">
+      layout:decorator="layouts/default">
 <body>
 
 <th:block layout:fragment="head">
@@ -12,7 +12,7 @@
         <div class="page-header">
             <h1>Example home page with layouts</h1>
         </div>
-        <ul style="font-size: 2em">
+        <ul style="font-size: 2em; height: 800;">
             <li th:each="var : ${variables}">
                 <th:block th:text="${var}"/>
             </li>

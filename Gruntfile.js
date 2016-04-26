@@ -15,7 +15,6 @@ module.exports = function (grunt) {
                 }
             }
         },
-
         concat: {
             css_deps: {
                 files: {
@@ -31,10 +30,8 @@ module.exports = function (grunt) {
             js_main: {
                 src: 'src/main/resources/static/js/**/*.js',
                 dest: 'src/main/resources/static/compiled/app.js'
-
             }
         },
-
         watch: {
             js_main: {
                 files: 'src/main/resources/static/js/**/*.js',
@@ -53,8 +50,6 @@ module.exports = function (grunt) {
                 }
             }
         }
-
-
     });
     grunt.registerTask('default', 'Do something interesting.', function () {
         grunt.log.writeln("");
@@ -70,7 +65,5 @@ module.exports = function (grunt) {
         grunt.log.writeln("");
     });
 
-
     grunt.registerTask('init', ['uglify:deps_js', 'concat:js_main', 'concat:css_deps', 'concat:css_main']);
-    grunt.registerTask('watch', ['watch']);
 };
