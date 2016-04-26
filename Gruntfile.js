@@ -8,7 +8,7 @@ module.exports = function (grunt) {
         uglify: {
             deps_js: {
                 files: {
-                    'output/dependencies.min.js': [
+                    'src/main/resources/static/compiled/plugins.js': [
                         'src/main/resources/static/vendor/jquery/dist/jquery.js',
                         'src/main/resources/static/vendor/semantic/dist/semantic.js'
                     ]
@@ -19,18 +19,19 @@ module.exports = function (grunt) {
         concat: {
             css_deps: {
                 files: {
-                    'output/dependencies.css': [
+                    'src/main/resources/static/compiled/plugins.css': [
                         'src/main/resources/static/vendor/semantic/dist/semantic.css'
                     ]
                 }
             },
             css_main: {
                 src: 'src/main/resources/static/css/**/*.css',
-                dest: 'output/main.css'
+                dest: 'src/main/resources/static/compiled/app.css'
             },
             js_main: {
                 src: 'src/main/resources/static/js/**/*.js',
-                dest: 'output/scripts.js'
+                dest: 'src/main/resources/static/compiled/app.js'
+
             }
         },
 
