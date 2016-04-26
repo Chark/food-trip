@@ -1,9 +1,10 @@
 language: java
 jdk:
   - oraclejdk8
-script:
+before_install:
   - chmod +x gradlew
-  - ./gradlew test
+script:
+  - ./gradlew check
 cache:
   directories:
   - ~/.gradle
