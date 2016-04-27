@@ -1,1 +1,1 @@
-console.log("Ello m8");
+$('.ui.dropdown').dropdown();

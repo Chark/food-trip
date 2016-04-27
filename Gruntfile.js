@@ -38,6 +38,16 @@ module.exports = function (grunt) {
                 dest: '<%= config.DEPLOY_PATH  %>/app.js'
             }
         },
+        copy: {
+            fonts: {
+                expand: true,
+                cwd: '<%= config.VENDOR_PATH  %>/semantic/dist/themes/default/assets/fonts/',
+                src: '**',
+                dest: '<%= config.DEPLOY_PATH  %>/themes/default/assets/fonts',
+                flatten: true,
+                filter: 'isFile'
+            }
+        },
         watch: {
             options: {
                 event: ['changed', 'added', 'deleted']
