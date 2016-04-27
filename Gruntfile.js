@@ -5,12 +5,18 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-concat');
 
     grunt.initConfig({
+        config: {
+            APP_PATH: 'src/test/assets/app',
+            DEPLOY_PATH: 'src/test/assets/compiled',
+            VENDOR_PATH: 'src/test/assets/vendor'
+        },
+
         uglify: {
             deps_js: {
                 files: {
-                    'src/main/resources/static/compiled/plugins.js': [
-                        'src/main/resources/static/vendor/jquery/dist/jquery.js',
-                        'src/main/resources/static/vendor/semantic/dist/semantic.js'
+                    '<%= config.DEPLOY_PATH  %>/plugins.js': [
+                        '<%= config.VENDOR_PATH  %>/jquery/dist/jquery.js',
+                        '<%= config.VENDOR_PATH  %>/semantic/dist/semantic.js'
                     ]
                 }
             }
@@ -18,23 +24,23 @@ module.exports = function (grunt) {
         concat: {
             css_deps: {
                 files: {
-                    'src/main/resources/static/compiled/plugins.css': [
-                        'src/main/resources/static/vendor/semantic/dist/semantic.css'
+                    '<%= config.DEPLOY_PATH  %>/plugins.css': [
+                        '<%= config.VENDOR_PATH  %>/semantic/dist/semantic.css'
                     ]
                 }
             },
             css_main: {
-                src: 'src/main/resources/static/css/**/*.css',
-                dest: 'src/main/resources/static/compiled/app.css'
+                src: '<%= config.APP_PATH  %>/css/**/*.css',
+                dest: '<%= config.DEPLOY_PATH  %>/app.css'
             },
             js_main: {
-                src: 'src/main/resources/static/js/**/*.js',
-                dest: 'src/main/resources/static/compiled/app.js'
+                src: '<%= config.APP_PATH  %>/js/**/*.js',
+                dest: '<%= config.DEPLOY_PATH  %>/app.js'
             }
         },
         watch: {
             js_main: {
-                files: 'src/main/resources/static/js/**/*.js',
+                files: '<%= config.APP_PATH  %>/js/**/*.js',
                 tasks: ['concat:js_main'],
                 options: {
                     spawn: false,
@@ -42,7 +48,7 @@ module.exports = function (grunt) {
                 }
             },
             css_main: {
-                files: 'src/main/resources/static/css/**/*.css',
+                files: '<%= config.APP_PATH  %>/css/**/*.css',
                 tasks: ['concat:css_main'],
                 options: {
                     spawn: false,
