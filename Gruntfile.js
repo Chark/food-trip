@@ -6,9 +6,9 @@ module.exports = function (grunt) {
 
     grunt.initConfig({
         config: {
-            APP_PATH: 'src/test/assets/app',
-            DEPLOY_PATH: 'src/test/assets/compiled',
-            VENDOR_PATH: 'src/test/assets/vendor'
+            APP_PATH: 'src/assets/app',
+            DEPLOY_PATH: 'src/main/resources/static/compiled',
+            VENDOR_PATH: 'src/assets/vendor'
         },
 
         uglify: {
@@ -39,6 +39,9 @@ module.exports = function (grunt) {
             }
         },
         watch: {
+            options: {
+                event: ['changed', 'added', 'deleted']
+            },
             js_main: {
                 files: '<%= config.APP_PATH  %>/js/**/*.js',
                 tasks: ['concat:js_main'],
