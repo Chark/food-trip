@@ -16,7 +16,7 @@ module.exports = function (grunt) {
                 files: {
                     '<%= config.DEPLOY_PATH  %>/plugins.js': [
                         '<%= config.VENDOR_PATH  %>/jquery/dist/jquery.js',
-                        '<%= config.VENDOR_PATH  %>/semantic/dist/semantic.js'
+                        '<%= config.VENDOR_PATH  %>/bootstrap/dist/js/bootstrap.js'
                     ]
                 }
             }
@@ -25,7 +25,7 @@ module.exports = function (grunt) {
             css_deps: {
                 files: {
                     '<%= config.DEPLOY_PATH  %>/plugins.css': [
-                        '<%= config.VENDOR_PATH  %>/semantic/dist/semantic.css'
+                        '<%= config.VENDOR_PATH  %>/bootstrap/dist/css/bootstrap.css'
                     ]
                 }
             },
@@ -41,9 +41,9 @@ module.exports = function (grunt) {
         copy: {
             fonts: {
                 expand: true,
-                cwd: '<%= config.VENDOR_PATH  %>/semantic/dist/themes/default/assets/fonts/',
+                cwd: '<%= config.VENDOR_PATH  %>/bootstrap/dist/fonts/',
                 src: '**',
-                dest: '<%= config.DEPLOY_PATH  %>/themes/default/assets/fonts',
+                dest: '<%= config.DEPLOY_PATH  %>/themes/default/assets/fonts/',
                 flatten: true,
                 filter: 'isFile'
             }

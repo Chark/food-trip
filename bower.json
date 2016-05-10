@@ -2,9 +2,7 @@
   "name": "food-trip",
   "description": "Spring Boot application for managing, commenting on various fast food restaurants.",
   "main": "index.js",
-  "authors": [
-    "Arvydas Daubaris"
-  ],
+  "author": "Chark Team",
   "license": "ISC",
   "homepage": "https://github.com/Chark/food-trip",
   "private": true,
@@ -15,7 +13,8 @@
     "test",
     "tests"
   ],
-  "devDependencies": {
-    "semantic": "semantic-ui#^2.1.8"
+  "dependencies": {
+    "bootstrap": "^3.3.6",
+    "jquery": "^2.2.3"
   }
 }
