@@ -1,4 +1,4 @@
-package io.chark.food.app.authentication;
+package io.chark.food.app.account;
 
 import io.chark.food.domain.authentication.account.Account;
 import io.chark.food.domain.authentication.account.AccountRepository;
@@ -17,7 +17,6 @@ import org.springframework.stereotype.Service;
 import javax.annotation.PostConstruct;
 import java.util.Optional;
 
-import static io.chark.food.domain.authentication.permission.Permission.Authority.ROLE_ADMIN;
 import static io.chark.food.domain.authentication.permission.Permission.Authority.ROLE_USER;
 
 @Service
@@ -69,6 +68,9 @@ public class AccountService implements UserDetailsService {
                 passwordEncoder.encode(password));
 
         account.addPermission(getPermission(ROLE_USER));
+
+        // todo - enable only via email verification!
+        account.setEnabled(true);
         try {
             account = accountRepository.save(account);
             LOGGER.debug("Created new user Account{username='{}', email='{}'}",

@@ -45,7 +45,7 @@
                 </li>
                 <li class="dropdown" sec:authorize="isAuthenticated()">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                        <th:block sec:authentication="principal.username"/>
+                        <th:block sec:authentication="principal.prettyUsername"/>
                         <span class="caret"></span>
                     </a>
                     <ul class="dropdown-menu">
@@ -102,7 +102,7 @@
                 </div>
                 <div class="modal-footer">
                     <div class="pull-left">
-                        Don't have an account? <a href="javascript:;">Register</a>
+                        Don't have an account? <a th:href="@{/register}">Register</a>
                     </div>
                     <button type="submit" class="btn btn-success">Login</button>
                     <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>

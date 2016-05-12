@@ -1,20 +1,17 @@
 package io.chark.food.app.authentication;
 
+import io.chark.food.app.account.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(securedEnabled = true)
-public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
+public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private AccountService accountService;
@@ -27,6 +24,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .antMatchers(
                     "/",
                     "/home",
+                    "/register",
                     "/compiled/**")
                 .permitAll()
             .anyRequest()
@@ -46,10 +44,5 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected AccountService userDetailsService() {
         return accountService;
-    }
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
     }
 }

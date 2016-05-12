@@ -3,13 +3,97 @@
       layout:decorator="layouts/clean">
 
 <head>
-    <title>Login</title>
+    <title>Register</title>
 </head>
 
 <body>
 <div layout:fragment="content">
-    <div class="col-lg-12">
-        register plz
+    <div class="container">
+        <div class="col-sm-offset-4 col-sm-4">
+
+            <!-- A generic error message -->
+            <div class="alert alert-dismissible alert-danger" th:if="${error}">
+                <button data-dismiss="alert" class="close" type="button">×</button>
+                <strong>Error!</strong>
+                <th:block th:text="${error}"/>
+            </div>
+
+            <!-- Main registration panel -->
+            <div class="panel panel-default">
+                <div class="panel-heading">Register</div>
+                <form th:action="@{/register}" th:object="${register}" method="POST">
+                    <div class="panel-body">
+                        <div class="form-group" th:classappend="${#fields.hasErrors('username')} ? 'has-error'">
+                            <div class="row">
+                                <!-- Username field and full validation -->
+                                <label class="col-xs-12 control-label">
+                                    Username
+                                    <input placeholder="Username"
+                                           class="form-control"
+                                           required="required"
+                                           type="text"
+                                           th:field="*{username}"/>
+
+                                    <small th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Invalid username</small>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group" th:classappend="${#fields.hasErrors('email')} ? 'has-error'">
+                            <div class="row">
+                                <!-- Email field and full validation -->
+                                <label class="col-xs-12 control-label">
+                                    Email
+                                    <input placeholder="Email address"
+                                           class="form-control"
+                                           required="required"
+                                           type="email"
+                                           th:field="*{email}"/>
+
+                                    <small th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Invalid email</small>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group" th:classappend="${#fields.hasErrors('password')} ? 'has-error'">
+                            <div class="row">
+                                <!-- Password field and full validation -->
+                                <label class="col-xs-12 control-label">
+                                    Password
+                                    <input placeholder="Password"
+                                           class="form-control"
+                                           required="required"
+                                           type="password"
+                                           th:field="*{password}"/>
+
+                                    <small th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Invalid password</small>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group" th:classappend="${#fields.hasErrors('repeatPassword')} ? 'has-error'">
+                            <div class="row">
+                                <!-- Repeat password field and full validation -->
+                                <label class="col-xs-12 control-label">
+                                    Repeat password
+                                    <input placeholder="Repeat password"
+                                           class="form-control"
+                                           required="required"
+                                           type="password"
+                                           th:field="*{repeatPassword}"/>
+
+                                    <small th:if="${#fields.hasErrors('repeatPassword')}" th:errors="*{repeatPassword}">Invalid password</small>
+                                </label>
+                            </div>
+                        </div>
+                        <div>
+                            <button type="submit" class="btn btn-sm btn-success">Register</button>
+                            <a th:href="@{/}" class="btn btn-sm btn-danger">Cancel</a>
+                        </div>
+                    </div>
+                    <div class="panel-footer">
+                        Have an account? <a th:href="@{/login}">Login</a>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 </div>
 

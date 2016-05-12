@@ -1,4 +1,4 @@
-package io.chark.food.app.authentication;
+package io.chark.food.app.account;
 
 import io.chark.food.FoodTripIntegrationTest;
 import io.chark.food.domain.authentication.account.Account;
@@ -9,7 +9,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.annotation.Resource;
@@ -31,9 +31,6 @@ public class AccountServiceTest {
     @Resource
     private AccountRepository accountRepository;
 
-    @Resource
-    private PasswordEncoder passwordEncoder;
-
     private AccountService accountService;
 
     @Before
@@ -41,7 +38,7 @@ public class AccountServiceTest {
         accountService = new AccountService(
                 permissionRepository,
                 accountRepository,
-                passwordEncoder);
+                new BCryptPasswordEncoder());
     }
 
     @After

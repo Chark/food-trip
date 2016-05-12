@@ -1,3 +1,10 @@
+/**
+ * Go one page back.
+ */
+function pageBack() {
+    window.history.back();
+}
+
 $(function () {
 
     // csrf token is present in the header on each page.
