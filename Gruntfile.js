@@ -16,7 +16,7 @@ module.exports = function (grunt) {
                 files: {
                     '<%= config.DEPLOY_PATH  %>/plugins.js': [
                         '<%= config.VENDOR_PATH  %>/jquery/dist/jquery.js',
-                        '<%= config.VENDOR_PATH  %>/bootstrap/dist/js/bootstrap.js'
+                        '<%= config.VENDOR_PATH  %>/bootswatch-dist/js/bootstrap.js'
                     ]
                 }
             }
@@ -25,7 +25,7 @@ module.exports = function (grunt) {
             css_deps: {
                 files: {
                     '<%= config.DEPLOY_PATH  %>/plugins.css': [
-                        '<%= config.VENDOR_PATH  %>/bootstrap/dist/css/bootstrap.css'
+                        '<%= config.VENDOR_PATH  %>/bootswatch-dist/css/bootstrap.css'
                     ]
                 }
             },
@@ -41,7 +41,7 @@ module.exports = function (grunt) {
         copy: {
             fonts: {
                 expand: true,
-                cwd: '<%= config.VENDOR_PATH  %>/bootstrap/dist/fonts/',
+                cwd: '<%= config.VENDOR_PATH  %>/bootswatch-dist/fonts/',
                 src: '**',
                 dest: '<%= config.DEPLOY_PATH  %>/themes/default/assets/fonts/',
                 flatten: true,

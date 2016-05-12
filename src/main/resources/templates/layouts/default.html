@@ -5,52 +5,63 @@
     <meta charset="UTF-8"/>
     <meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
 
-    <!--<meta name="_csrf" th:content="${_csrf}? ${_csrf.token}"/>-->
-    <!--<meta name="_csrf_header" th:content="${_csrf}? ${_csrf.headerName}"/>-->
+    <meta name="_csrf" th:content="${_csrf}? ${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf}? ${_csrf.headerName}"/>
 
+    <!-- Style files -->
     <link rel="stylesheet" type="text/css" th:href="@{compiled/plugins.css}"/>
     <link rel="stylesheet" type="text/css" th:href="@{compiled/app.css}"/>
+
+    <!-- Adittional header content-->
     <th:block layout:fragment="head"/>
 </head>
 <body>
 
-<div class="ui menu">
-    <div class="header item">Brand</div>
-    <a class="active item">Link</a>
-    <a class="item">Link</a>
-    <div class="ui dropdown item" tabindex="0">
-        Dropdown
-        <i class="dropdown icon"></i>
-        <div class="menu transition hidden" tabindex="-1">
-            <div class="item">Action</div>
-            <div class="item">Another Action</div>
-            <div class="item">Something else here</div>
-            <div class="divider"></div>
-            <div class="item">Separated Link</div>
-            <div class="divider"></div>
-            <div class="item">One more separated link</div>
+<!-- Main page navbar -->
+<div class="navbar navbar-default navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a href="../" class="navbar-brand">Bootswatch</a>
+            <button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#navbar-main">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
         </div>
-    </div>
-    <div class="right menu">
-        <div class="item">
-            <div class="ui action left icon input">
-                <i class="search icon"></i>
-                <input type="text" placeholder="Search"/>
-                <button class="ui button">Submit</button>
-            </div>
+        <div class="navbar-collapse collapse" id="navbar-main">
+            <ul class="nav navbar-nav">
+                <li><a href="javascript:;">Home</a></li>
+            </ul>
+
+            <ul class="nav navbar-nav navbar-right">
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        ${USERNAME}
+                        <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="javascript:;">Profile</a></li>
+                        <li class="divider"></li>
+                        <li><a href="javascript:;">Logout</a></li>
+                    </ul>
+                </li>
+            </ul>
         </div>
-        <a class="item">Link</a>
     </div>
 </div>
 
-<div class="container">
+<!-- Page content -->
+<div class="container-fluid">
     <div class="row">
         <th:block layout:fragment="content"/>
     </div>
 </div>
 
+<!-- Global javascript files -->
 <script type="application/javascript" th:src="@{compiled/plugins.js}"></script>
 <script type="application/javascript" th:src="@{compiled/app.js}"></script>
+
+<!-- Adittional javascript files -->
 <th:block layout:fragment="js"/>
 
 </body>
