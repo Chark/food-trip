@@ -6,6 +6,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.ManyToMany;
 import java.util.*;
 
@@ -41,8 +42,8 @@ public class Account extends BaseEntity implements UserDetails {
     private boolean enabled;
     private boolean locked;
 
-    @ManyToMany
     @Column(nullable = false)
+    @ManyToMany(fetch = FetchType.EAGER)
     private Set<Permission> permissions = new HashSet<>();
 
     public Account() {
@@ -66,6 +67,13 @@ public class Account extends BaseEntity implements UserDetails {
     public void setUsername(String username) {
         this.prettyUsername = username;
         this.username = username.toLowerCase();
+    }
+
+    /**
+     * Enable or disable a user account, disabled accounts cannot login.
+     */
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 
     public String getPrettyUsername() {

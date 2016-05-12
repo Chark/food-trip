@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+
+    <meta name="_csrf" th:content="${_csrf}? ${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf}? ${_csrf.headerName}"/>
+
+    <!-- Style files -->
+    <link rel="stylesheet" type="text/css" th:href="@{compiled/plugins.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{compiled/app.css}"/>
+
+    <title layout:title-pattern="$DECORATOR_TITLE - $CONTENT_TITLE">
+        FoodTrip
+    </title>
+
+    <!-- Adittional header content-->
+    <th:block layout:fragment="head"/>
+</head>
+<body>
+
+<!-- Page content -->
+<div class="container-fluid">
+    <div class="row">
+        <th:block layout:fragment="content"/>
+    </div>
+</div>
+
+<!-- Global javascript files -->
+<script type="application/javascript" th:src="@{compiled/plugins.js}"></script>
+<script type="application/javascript" th:src="@{compiled/app.js}"></script>
+
+<!-- Adittional javascript files -->
+<th:block layout:fragment="js"/>
+
+</body>
+</html>

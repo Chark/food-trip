@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.PostConstruct;
 import java.util.Optional;
 
+import static io.chark.food.domain.authentication.permission.Permission.Authority.ROLE_ADMIN;
 import static io.chark.food.domain.authentication.permission.Permission.Authority.ROLE_USER;
 
 @Service
@@ -43,11 +44,14 @@ public class AccountService implements UserDetailsService {
      * Initialize roles used by the system.
      */
     @PostConstruct
-    public void initRoles() {
+    public void init() {
         addPermission("User", ROLE_USER);
         addPermission("Worker", Permission.Authority.ROLE_WORKER);
         addPermission("Moderator", Permission.Authority.ROLE_MODERATOR);
         addPermission("Administrator", Permission.Authority.ROLE_ADMIN);
+
+        // Init default admin account if there are no accounts defined.
+        initAdmin();
     }
 
     /**
@@ -86,6 +90,26 @@ public class AccountService implements UserDetailsService {
             throw new UsernameNotFoundException("Account not found");
         }
         return account;
+    }
+
+    /**
+     * Initialize an admin account if there are no account accounts.
+     */
+    public void initAdmin() {
+        if (accountRepository.count() == 0) {
+            Account account = register("admin", "admin@admin.com", "admin")
+                    .get();
+
+            account.setEnabled(true);
+
+            // Admin has all authorities.
+            for (Permission.Authority authority : Permission.Authority.values()) {
+                account.addPermission(getPermission(authority));
+            }
+
+            LOGGER.info("Initializing default admin account");
+            accountRepository.save(account);
+        }
     }
 
     /**
