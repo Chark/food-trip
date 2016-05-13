@@ -13,7 +13,20 @@ import java.util.*;
 @Entity
 public class Account extends BaseEntity implements UserDetails {
 
+    /**
+     * Default length for longer string fields.
+     */
+    public static final int DEFAULT_LONG_LENGTH = 1024;
+
+    /**
+     * Default length for various string values.
+     */
     public static final int DEFAULT_LENGTH = 64;
+
+    /**
+     * Default min length for various string values.
+     */
+    public static final int MIN_LENGTH = 4;
 
     @Column(length = DEFAULT_LENGTH, nullable = false, unique = true)
     private String prettyUsername;
@@ -32,11 +45,20 @@ public class Account extends BaseEntity implements UserDetails {
 
     @Column(length = DEFAULT_LENGTH)
     private String name;
+
+    @Column(length = DEFAULT_LONG_LENGTH)
     private String bio;
+
+    @Column(length = DEFAULT_LENGTH)
+    private String website;
+
+    @Column(length = DEFAULT_LENGTH)
+    private String phone;
 
     @Column(nullable = false)
     private Date registrationDate;
 
+    // Karma points?
     private int points;
 
     private boolean enabled;
@@ -90,6 +112,54 @@ public class Account extends BaseEntity implements UserDetails {
 
     public void addPermission(Permission permission) {
         permissions.add(permission);
+    }
+
+    public String getBio() {
+        return bio;
+    }
+
+    public void setBio(String bio) {
+        this.bio = bio;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Set<Permission> getPermissions() {
+        return permissions;
+    }
+
+    public int getPoints() {
+        return points;
+    }
+
+    public String getWebsite() {
+        return website;
+    }
+
+    public void setWebsite(String website) {
+        this.website = website;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     @Override

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<!-- Create a label for permission -->
+<th:block th:fragment="permissionLabel (permission)">
+    <th:block th:switch="${permission.color}">
+        <span th:case="${T(io.chark.food.domain.extras.Color).DEFAULT}" class="label label-default"
+              th:text="${permission.name}"></span>
+        <span th:case="${T(io.chark.food.domain.extras.Color).BLUE}" class="label label-primary"
+              th:text="${permission.name}"></span>
+        <span th:case="${T(io.chark.food.domain.extras.Color).GREEN}" class="label label-green"
+              th:text="${permission.name}"></span>
+        <span th:case="${T(io.chark.food.domain.extras.Color).RED}" class="label label-danger"
+              th:text="${permission.name}"></span>
+        <span th:case="${T(io.chark.food.domain.extras.Color).YELLOW}" class="label label-warning"
+              th:text="${permission.name}"></span>
+    </th:block>
+</th:block>
+
+</body>
+</html>

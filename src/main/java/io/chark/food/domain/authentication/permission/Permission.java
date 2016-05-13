@@ -1,6 +1,7 @@
 package io.chark.food.domain.authentication.permission;
 
 import io.chark.food.domain.BaseEntity;
+import io.chark.food.domain.extras.Color;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.Column;
@@ -22,17 +23,29 @@ public class Permission extends BaseEntity implements GrantedAuthority {
     @Column(nullable = false, unique = true)
     private Authority authority;
 
+    @Column(nullable = false)
+    private Color color = Color.DEFAULT;
+
     public Permission() {
     }
 
-    public Permission(String name, Authority authority) {
+    public Permission(String name, Authority authority, Color color) {
         this.name = name;
         this.authority = authority;
+        this.color = color;
     }
 
     @Override
     public String getAuthority() {
         return authority.toString();
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public Color getColor() {
+        return color;
     }
 
     @Override

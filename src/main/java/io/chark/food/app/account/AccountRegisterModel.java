@@ -8,15 +8,13 @@ import javax.validation.constraints.Size;
 
 public class AccountRegisterModel {
 
-    public static final int MIN_LENGTH = 4;
-
-    @Size(min = MIN_LENGTH, max = Account.DEFAULT_LENGTH)
+    @Size(min = Account.MIN_LENGTH, max = Account.DEFAULT_LENGTH)
     private String username;
 
-    @Size(min = MIN_LENGTH, max = Account.DEFAULT_LENGTH)
+    @Size(min = Account.MIN_LENGTH, max = Account.DEFAULT_LENGTH)
     private String password;
 
-    @Size(min = MIN_LENGTH, max = Account.DEFAULT_LENGTH)
+    @Size(min = Account.MIN_LENGTH, max = Account.DEFAULT_LENGTH)
     private String repeatPassword;
 
     @NotEmpty

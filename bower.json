@@ -14,6 +14,7 @@
     "tests"
   ],
   "dependencies": {
+    "jquery-validation": "1.15.0",
     "bootswatch-dist": "3.3.6-paper",
     "jquery": "^2.2.3"
   }

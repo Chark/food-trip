@@ -1,0 +1,122 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layouts/default">
+
+<head>
+    <title>Profile</title>
+</head>
+
+<!-- User info fragment -->
+<th:block th:fragment="userInfo (name, value)">
+    <div class="row">
+        <div class="col-md-6">
+            <strong th:text="${name}"></strong>
+        </div>
+        <div class="col-md-6">
+            <th:block th:text="${value}"/>
+            <th:block th:if="${value == null or value == ''}">
+                <span class="label label-default">Not set</span>
+            </th:block>
+        </div>
+    </div>
+</th:block>
+
+<body>
+<th:block layout:fragment="content">
+
+    <!-- Account info panel -->
+    <div class="col-md-3" th:object="${account}">
+        <div class="panel panel-default">
+            <div class="panel-heading clearfix">
+                <div class="pull-left" th:text="*{prettyUsername}"></div>
+                <div class="pull-right" th:text="*{points} + ' points'"></div>
+            </div>
+            <div class="panel-body">
+                <img class="img-responsive img-rounded" th:src="@{images/default_avatar.jpg}"/>
+                <hr/>
+
+                <!-- User information -->
+                <h5>Details</h5>
+                <th:block th:include=":: userInfo('Username', *{prettyUsername})"/>
+                <th:block th:include=":: userInfo('Email', *{email})"/>
+                <th:block th:include=":: userInfo('First name', *{name})"/>
+                <th:block th:include=":: userInfo('Last name', *{lastName})"/>
+                <th:block th:include=":: userInfo('Phone', *{phone})"/>
+                <th:block th:include=":: userInfo('Website', *{website})"/>
+                <th:block th:include=":: userInfo('Registered', *{#dates.format(registrationDate, 'yyyy MMM dd')})"/>
+
+                <h5>Information</h5>
+                <th:block th:if="*{bio == null or bio == ''}">
+                    This user has not specified any adittional information about himself.
+                </th:block>
+                <p th:if="*{bio != null and bio != ''}" th:text="*{bio}"></p>
+
+                <h5>Roles</h5>
+                <th:block th:each="permission : *{permissions}">
+                    <th:block th:include="fragments/util :: permissionLabel(${permission})"/>
+                </th:block>
+            </div>
+        </div>
+    </div>
+
+    <!-- Profile editing panel -->
+    <div class="col-md-9">
+        <div class="alert alert-dismissible alert-danger" th:if="${error}">
+            <button data-dismiss="alert" class="close" type="button">×</button>
+            <strong>Error!</strong>
+            <th:block th:text="${error}"/>
+        </div>
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                Edit profile
+            </div>
+            <div class="panel-body">
+                <form name="profileForm" th:action="@{/profile}" th:object="${account}" method="POST">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <th:block th:include="fragments/forms :: input
+                            ('email', *{email}, 'email', 'Email address', 'Enter you email address')"/>
+
+                            <th:block th:include="fragments/forms :: input
+                            ('text', *{name}, 'name', 'First name' , 'Enter your first name')"/>
+
+                            <th:block th:include="fragments/forms :: input
+                            ('text', *{lastName}, 'lastName', 'Last name' , 'Enter your last name')"/>
+
+                            <th:block th:include="fragments/forms :: input
+                            ('text', *{phone}, 'phone', 'Phone number' , 'Enter your phone number')"/>
+
+                            <th:block th:include="fragments/forms :: input
+                            ('text', *{website}, 'website', 'Website' , 'Enter your webiste url')"/>
+
+                            <div class="form-group">
+                                <div class="row">
+                                    <label class="col-xs-12 control-label">
+                                        Information
+                                        <textarea th:text="*{bio}"
+                                                  name="bio"
+                                                  rows="3"
+                                                  class="form-control"
+                                                  placeholder="Write something about yourself"></textarea>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <th:block th:include="fragments/forms :: input
+                            ('password', '', 'password', 'Password' , 'Enter password to change')"/>
+
+                            <th:block th:include="fragments/forms :: input
+                            ('password', '', 'repeatPassword', 'Repeat password' , 'Repeat password')"/>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-sm btn-success">Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</th:block>
+
+</body>
+</html>

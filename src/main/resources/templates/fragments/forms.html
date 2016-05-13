@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<!-- Simple input fragment -->
+<th:block th:fragment="input (type, value, name, label, placeholder)">
+    <div class="form-group">
+        <div class="row">
+            <label class="col-xs-12 control-label">
+                <th:block th:text="${label}"/>
+                <input th:placeholder="${placeholder}"
+                       class="form-control"
+                       th:type="${type}"
+                       th:name="${name}"
+                       th:value="${value}"/>
+            </label>
+        </div>
+    </div>
+</th:block>
+
+</body>
+</html>
