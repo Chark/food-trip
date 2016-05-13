@@ -31,11 +31,11 @@ public class AccountServiceTest {
     @Resource
     private AccountRepository accountRepository;
 
-    private AccountService accountService;
+    private AccountService service;
 
     @Before
     public void setUp() {
-        accountService = new AccountService(
+        service = new AccountService(
                 permissionRepository,
                 accountRepository,
                 new BCryptPasswordEncoder());
@@ -48,7 +48,7 @@ public class AccountServiceTest {
 
     @Test
     public void registerAccount() {
-        Optional<Account> registered = accountService.register(
+        Optional<Account> registered = service.register(
                 TEST_USERNAME,
                 TEST_EMAIL,
                 TEST_PASSWORD);
@@ -66,11 +66,54 @@ public class AccountServiceTest {
 
     @Test
     public void registerFailed() {
-        accountService.register(TEST_USERNAME, TEST_EMAIL, TEST_PASSWORD);
+        service.register(TEST_USERNAME, TEST_EMAIL, TEST_PASSWORD);
 
-        Optional<Account> registered = accountService
+        Optional<Account> registered = service
                 .register(TEST_USERNAME, TEST_EMAIL, TEST_PASSWORD);
 
         assertThat(registered.isPresent()).isFalse();
+    }
+
+    @Test
+    public void updateFailed() {
+        String otherEmail = "other@other.com";
+        long id = service.register(TEST_USERNAME, TEST_EMAIL, TEST_PASSWORD)
+                .get().getId();
+
+        service.register("someUser", otherEmail, TEST_PASSWORD);
+
+        // Email taken.
+        Account account = new Account();
+        account.setEmail(otherEmail);
+
+        assertThat(service.update(id, account).isPresent()).isFalse();
+    }
+
+    @Test
+    public void updateDetails() {
+        long id = service.register(TEST_USERNAME, TEST_EMAIL, TEST_PASSWORD)
+                .get().getId();
+
+        Account account = new Account();
+        account.setEmail("other@other.com");
+        account.setName("name");
+        account.setLastName("lastName");
+        account.setPhone("1234");
+        account.setWebsite("www.google.com");
+        account.setBio("bio");
+
+        service.update(id, account);
+
+        // Get account from authentication.
+        Account auth = service.getAccount()
+                .get();
+
+        // Test if required fields have been updated.
+        assertThat(auth.getEmail()).isEqualTo(account.getEmail());
+        assertThat(auth.getName()).isEqualTo(account.getName());
+        assertThat(auth.getLastName()).isEqualTo(account.getLastName());
+        assertThat(auth.getBio()).isEqualTo(account.getBio());
+        assertThat(auth.getPhone()).isEqualTo(account.getPhone());
+        assertThat(auth.getWebsite()).isEqualTo(account.getWebsite());
     }
 }
