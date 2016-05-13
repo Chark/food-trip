@@ -1,6 +1,6 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorator="layouts/clean">
+      layout:decorator="layouts/default">
 
 <head>
     <title>Article Categories</title>
@@ -10,6 +10,14 @@
 <th:block layout:fragment="content">
     <div class="container">
         <div class="col-sm-offset-4 col-sm-4">
+
+            <ul>
+                <th:block th:each="category : ${categories}">
+                    <h3 th:text="${category.title}"></h3>
+                    <p th:text="${category.description}"></p>
+                </th:block>
+            </ul>
+
         </div>
     </div>
 </th:block>

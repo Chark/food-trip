@@ -1,7 +1,6 @@
 package io.chark.food.domain.article;
 
 import io.chark.food.domain.BaseEntity;
-import io.chark.food.domain.article_category.ArticleCategory;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

@@ -1,13 +1,12 @@
-package io.chark.food.app.article_category;
+package io.chark.food.app.article;
 
-import javafx.scene.shape.Arc;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
+@RequestMapping(value = "/articles")
 public class ArticleCategoryController {
 
     private final ArticleCategoryService categoryService;
@@ -21,7 +20,8 @@ public class ArticleCategoryController {
      * View article categories.
      */
     @RequestMapping(value = "/list")
-    public String list() {
-        return "articleCategory/list";
+    public String list(Model model) {
+        model.addAttribute("categories", categoryService.getCategories());
+        return "article/article_list";
     }
 }
