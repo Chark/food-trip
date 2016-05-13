@@ -4,35 +4,32 @@ import io.chark.food.domain.BaseEntity;
 import io.chark.food.domain.article_category.ArticleCategory;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+@Entity
 public class Article extends BaseEntity {
+
     @Column(nullable = false)
     private String title;
 
-    @Column
     private String description;
 
-    @Column
     private String shortDescription;
 
-    @Column
     private String metaKeywords;
 
-    @Column
     private String metaDescription;
 
     @Column(nullable = false)
     private Date creationDate;
 
-    @Column
     private Date editedDate;
 
-    @Column
     private long viewsNumber;
 
     @Column(nullable = false)
@@ -47,6 +44,7 @@ public class Article extends BaseEntity {
         this.description = description;
         this.shortDescription = shortDescription;
         this.metaKeywords = metaKeywords;
+        this.creationDate = new Date();
     }
 
     public String getTitle() {

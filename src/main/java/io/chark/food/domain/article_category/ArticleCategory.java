@@ -8,16 +8,15 @@ import java.util.Date;
 
 @Entity
 public class ArticleCategory extends BaseEntity {
+
     @Column(nullable = false)
     private String title;
 
-    @Column
     private String description;
 
     @Column(nullable = false)
     private Date creationDate;
 
-    @Column
     private Date editedDate;
 
     public ArticleCategory() {
@@ -26,6 +25,7 @@ public class ArticleCategory extends BaseEntity {
     public ArticleCategory(String title, String description) {
         this.title = title;
         this.description = description;
+        this.creationDate = new Date();
     }
 
     public String getTitle() {
