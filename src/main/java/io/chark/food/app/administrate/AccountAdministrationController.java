@@ -64,7 +64,7 @@ public class AccountAdministrationController {
 
         if (!administrationService.saveAccount(id, account, authorities).isPresent()) {
             model.addAttribute("error", "Failed to create account," +
-                    " please double check the details you've entered");
+                    " please double check the details you've entered. The email or username might already be taken");
 
             model.addAttribute("account", account);
             return "administrate/account";

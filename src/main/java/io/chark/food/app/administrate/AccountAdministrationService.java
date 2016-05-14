@@ -70,6 +70,7 @@ public class AccountAdministrationService {
 
         // Update other details editable only by admins.
         Account account = optional.get();
+        account.setUsername(accountDetails.getUsername());
         account.setEnabled(accountDetails.isEnabled());
         account.setPermissions(accountService.getPermissions(authorities));
 

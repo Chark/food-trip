@@ -77,10 +77,13 @@ public class AccountAdministrationServiceTest {
         Account account = accountService.register(TEST_USERNAME, TEST_EMAIL, TEST_PASSWORD)
                 .get();
 
+        String newUsername = "toptest";
         account.setEnabled(false);
+        account.setUsername(newUsername);
         account = service.saveAccount(account.getId(), account, Permission.Authority.ROLE_ADMIN)
                 .get();
 
+        assertThat(account.getUsername()).isEqualTo(newUsername);
         assertThat(account.isEnabled()).isFalse();
         assertThat(account.getAuthorities())
                 .containsExactly(permissionRepository.findByAuthority(Permission.Authority.ROLE_ADMIN));
