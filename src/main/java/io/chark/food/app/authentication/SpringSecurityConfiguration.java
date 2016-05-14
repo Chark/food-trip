@@ -1,12 +1,15 @@
 package io.chark.food.app.authentication;
 
 import io.chark.food.app.account.AccountService;
+import io.chark.food.domain.authentication.permission.Permission;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+
+import static io.chark.food.domain.authentication.permission.Permission.Authority.ROLE_MODERATOR;
 
 @Configuration
 @EnableWebSecurity
@@ -29,6 +32,7 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
                     "/articles/**",
                     "/compiled/**")
                 .permitAll()
+                .antMatchers("/moderate/**").hasRole(ROLE_MODERATOR.getName())
             .anyRequest()
             .authenticated()
                 .and()

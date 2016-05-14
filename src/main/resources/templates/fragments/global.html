@@ -1,0 +1,126 @@
+<!-- Page holding global includes for FoodTrip application -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.w3.org/1999/xhtml">
+<body>
+
+<!-- Header includes and meta tags -->
+<th:block th:fragment="head">
+    <meta charset="UTF-8"/>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+
+    <meta name="_csrf" th:content="${_csrf}? ${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf}? ${_csrf.headerName}"/>
+
+    <!-- Style files -->
+    <link rel="stylesheet" type="text/css" th:href="@{/compiled/plugins.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/compiled/app.css}"/>
+</th:block>
+
+<!-- Javascript files, footer -->
+<th:block th:fragment="footer">
+    <script type="application/javascript" th:src="@{/compiled/plugins.js}"></script>
+    <script type="application/javascript" th:src="@{/compiled/app.js}"></script>
+</th:block>
+
+<!-- Main page navbar with login modal -->
+<th:block th:fragment="navbar">
+
+    <!-- Main top navbar content -->
+    <div class="navbar navbar-default navbar-fixed-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a th:href="@{/}" class="navbar-brand">Food Trip</a>
+                <button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#navbar-main">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+            </div>
+            <div class="navbar-collapse collapse" id="navbar-main">
+                <ul class="nav navbar-nav navbar-right">
+
+                    <!-- Moderation (admin) dashboard, visible only to mods and admins -->
+                    <li><a th:href="@{/moderate}" sec:authorize="hasAuthority('ROLE_MODERATOR')">Dashboard</a></li>
+
+                    <!-- Login only visible to non-authenticated users -->
+                    <li sec:authorize="isAnonymous()">
+                        <button data-toggle="modal" data-target="#authenticateModal" class="btn navbar-btn btn-primary">
+                            Login
+                        </button>
+                    </li>
+
+                    <!-- Dropdown menu with to the left (profile controls and etc) -->
+                    <li class="dropdown" sec:authorize="isAuthenticated()">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <th:block sec:authentication="principal.prettyUsername"/>
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a th:href="@{/profile}">Profile</a></li>
+                            <li class="divider"></li>
+                            <li>
+                                <!-- Logout button, log-out must be via POST, have to fake it with a invisible form -->
+                                <a href="javascript: document.logoutForm.submit()">Logout</a>
+                                <form name="logoutForm" th:action="@{/logout}" method="POST" th:hidden="true"></form>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal to log-in or register -->
+    <div id="authenticateModal" class="modal fade" role="dialog" sec:authorize="isAnonymous()">
+        <div class="modal-dialog modal-sm">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Login</h4>
+                </div>
+                <form th:action="@{/login}" method="POST">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <div class="row">
+                                <label class="col-xs-12">
+                                    Username
+                                    <input class="form-control" required="required" type="text" name="username"/>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <label class="col-xs-12">
+                                    Password
+                                    <input class="form-control" required="required" type="password" name="password"/>
+                                </label>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-sm btn-success">Login</button>
+                        <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal">Close</button>
+                    </div>
+                    <div class="modal-footer">
+                        <div class="pull-left">
+                            Don't have an account? <a th:href="@{/register}">Register</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</th:block>
+
+<!-- Admin sidebar -->
+<th:block th:fragment="sidebar">
+    <div class="col-sm-3 col-md-2 sidebar">
+        <ul class="nav nav-sidebar">
+            <li><a th:href="@{/moderate}">Dashboard</a></li>
+        </ul>
+    </div>
+</th:block>
+
+</body>
+</html>

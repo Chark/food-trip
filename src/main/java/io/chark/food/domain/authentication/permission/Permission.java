@@ -11,10 +11,20 @@ import javax.persistence.Entity;
 public class Permission extends BaseEntity implements GrantedAuthority {
 
     public enum Authority {
-        ROLE_USER,
-        ROLE_WORKER,
-        ROLE_MODERATOR,
-        ROLE_ADMIN
+        ROLE_USER("USER"),
+        ROLE_WORKER("WORKER"),
+        ROLE_MODERATOR("MODERATOR"),
+        ROLE_ADMIN("ADMIN");
+
+        String name;
+
+        Authority(String name) {
+            this.name = name;
+        }
+
+        public String getName() {
+            return name;
+        }
     }
 
     @Column(nullable = false)

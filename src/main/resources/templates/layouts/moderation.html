@@ -1,4 +1,4 @@
-<!-- Clean layout which only includes dependencies and no navbar and such -->
+<!-- Moderation layout viewable by system managers -->
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
@@ -14,10 +14,20 @@
 </head>
 <body>
 
+<!-- Include main navbar -->
+<th:block th:include="fragments/global :: navbar"/>
+
+
 <!-- Page content -->
 <div class="container-fluid">
     <div class="row">
-        <th:block layout:fragment="content"/>
+
+        <!-- Admin sidebar with link and stuff -->
+        <th:block th:include="fragments/global :: sidebar"/>
+
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2">
+            <th:block layout:fragment="content"/>
+        </div>
     </div>
 </div>
 
