@@ -1,7 +1,8 @@
-package io.chark.food.app.administrate;
+package io.chark.food.app.administrate.account;
 
 import io.chark.food.FoodTripIntegrationTest;
 import io.chark.food.app.account.AccountService;
+import io.chark.food.app.administrate.account.AccountAdministrationService;
 import io.chark.food.domain.authentication.account.Account;
 import io.chark.food.domain.authentication.account.AccountRepository;
 import io.chark.food.domain.authentication.permission.Permission;

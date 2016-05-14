@@ -1,6 +1,7 @@
 package io.chark.food.app.account;
 
 import io.chark.food.domain.authentication.account.Account;
+import io.chark.food.util.authentication.AuthenticationUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -76,7 +77,7 @@ public class AccountController {
      */
     @RequestMapping(value = "/profile", method = RequestMethod.GET)
     public String profile(Model model) {
-        model.addAttribute("account", accountService.getAccount());
+        model.addAttribute("account", AuthenticationUtils.getAccount());
         return "account/profile";
     }
 

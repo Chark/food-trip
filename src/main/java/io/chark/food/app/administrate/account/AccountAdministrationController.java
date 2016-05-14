@@ -1,4 +1,4 @@
-package io.chark.food.app.administrate;
+package io.chark.food.app.administrate.account;
 
 import io.chark.food.domain.authentication.account.Account;
 import io.chark.food.domain.authentication.permission.Permission;

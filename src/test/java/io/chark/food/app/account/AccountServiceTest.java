@@ -3,10 +3,9 @@ package io.chark.food.app.account;
 import io.chark.food.FoodTripIntegrationTest;
 import io.chark.food.domain.authentication.account.Account;
 import io.chark.food.domain.authentication.account.AccountRepository;
-import io.chark.food.domain.authentication.permission.PermissionRepository;
 import io.chark.food.domain.authentication.permission.Permission;
+import io.chark.food.domain.authentication.permission.PermissionRepository;
 import io.chark.food.util.authentication.AuthenticationUtils;
-import io.chark.food.util.exception.UnauthorizedException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -95,11 +94,6 @@ public class AccountServiceTest {
         assertThat(service.update(updateDetails).isPresent()).isFalse();
     }
 
-    @Test(expected = UnauthorizedException.class)
-    public void unauthenticated() {
-        service.getAccount();
-    }
-
     @Test
     public void updateDetails() {
 
@@ -118,7 +112,7 @@ public class AccountServiceTest {
         service.update(updateDetails);
 
         // Get account from authentication.
-        Account account = service.getAccount();
+        Account account = AuthenticationUtils.getAccount();
 
         // Test if required fields have been updated.
         assertThat(account.getEmail()).isEqualTo(updateDetails.getEmail());
