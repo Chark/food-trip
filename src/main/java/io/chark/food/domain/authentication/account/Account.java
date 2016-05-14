@@ -1,5 +1,6 @@
 package io.chark.food.domain.authentication.account;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.chark.food.domain.BaseEntity;
 import io.chark.food.domain.authentication.permission.Permission;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -8,7 +9,9 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToMany;
-import java.util.*;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 public class Account extends BaseEntity implements UserDetails {
@@ -37,6 +40,7 @@ public class Account extends BaseEntity implements UserDetails {
     @Column(length = DEFAULT_LENGTH, nullable = false, unique = true)
     private String email;
 
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @Column(length = DEFAULT_LENGTH * 32, nullable = false)
     private String password;
 
@@ -160,6 +164,25 @@ public class Account extends BaseEntity implements UserDetails {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public void setLocked(boolean locked) {
+        this.locked = locked;
+    }
+
+    /**
+     * Check if this account has a permission based on authority.
+     *
+     * @param authority authority to check against.
+     * @return true if this account has this permission or false otherwise.
+     */
+    public boolean hasPermission(Permission.Authority authority) {
+        for (Permission permission : permissions) {
+            if (permission.getAuthority().equals(authority.toString())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override

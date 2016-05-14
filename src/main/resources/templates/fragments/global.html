@@ -118,6 +118,7 @@
     <div class="col-sm-3 col-md-2 sidebar">
         <ul class="nav nav-sidebar">
             <li><a th:href="@{/moderate}">Dashboard</a></li>
+            <li><a th:href="@{/administrate/accounts}" sec:authorize="hasAuthority('ROLE_ADMIN')">Accounts</a></li>
         </ul>
     </div>
 </th:block>

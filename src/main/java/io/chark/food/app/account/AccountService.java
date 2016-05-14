@@ -1,6 +1,6 @@
 package io.chark.food.app.account;
 
-import io.chark.food.app.exception.GenericException;
+import io.chark.food.util.exception.GenericException;
 import io.chark.food.domain.authentication.account.Account;
 import io.chark.food.domain.authentication.account.AccountRepository;
 import io.chark.food.domain.authentication.permission.Permission;

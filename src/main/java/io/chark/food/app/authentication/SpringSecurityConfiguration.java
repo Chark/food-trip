@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
+import static io.chark.food.domain.authentication.permission.Permission.Authority.ROLE_ADMIN;
 import static io.chark.food.domain.authentication.permission.Permission.Authority.ROLE_MODERATOR;
 
 @Configuration
@@ -32,6 +33,7 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
                     "/articles/**",
                     "/compiled/**")
                 .permitAll()
+                .antMatchers("/administrate/**").hasRole(ROLE_ADMIN.getName())
                 .antMatchers("/moderate/**").hasRole(ROLE_MODERATOR.getName())
             .anyRequest()
             .authenticated()
