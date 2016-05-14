@@ -1,7 +1,7 @@
-(function (Accounts, $, undefined) {
-    Accounts.init = function () {
+(function (AccountManagement, $, undefined) {
+    AccountManagement.init = function () {
         $.get('/administrate/api/accounts', function (accounts) {
             console.log(accounts);
         });
     };
-}(window.Accounts = window.Accounts || {}, jQuery));
+}(window.AccountManagement = window.AccountManagement || {}, jQuery));
