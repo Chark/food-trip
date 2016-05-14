@@ -48,7 +48,7 @@ module.exports = function (grunt) {
                 expand: true,
                 cwd: '<%= config.VENDOR_PATH  %>/bootswatch-dist/fonts/',
                 src: '**',
-                dest: '<%= config.DEPLOY_PATH  %>/themes/default/assets/fonts/',
+                dest: '<%= config.DEPLOY_PATH  %>/fonts/',
                 flatten: true,
                 filter: 'isFile'
             }
@@ -89,5 +89,5 @@ module.exports = function (grunt) {
         grunt.log.writeln("");
     });
 
-    grunt.registerTask('init', ['uglify:deps_js', 'concat:js_main', 'concat:css_deps', 'concat:css_main']);
+    grunt.registerTask('init', ['uglify:deps_js', 'concat:js_main', 'concat:css_deps', 'concat:css_main', 'copy:fonts']);
 };
