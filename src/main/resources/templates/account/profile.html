@@ -47,7 +47,7 @@
 
                 <h5>Information</h5>
                 <th:block th:if="*{bio == null or bio == ''}">
-                    This user has not specified any adittional information about himself.
+                    This user has not specified any additional information about himself.
                 </th:block>
                 <p th:if="*{bio != null and bio != ''}" th:text="*{bio}"></p>
 

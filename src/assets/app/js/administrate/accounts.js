@@ -3,6 +3,10 @@
     var accountsUrl = '/administrate/api/accounts';
     var accountTable;
 
+    AccountManagement.initAccount = function () {
+
+    };
+
     AccountManagement.initAccounts = function () {
 
         /**
@@ -13,10 +17,19 @@
                 url: accountsUrl,
                 dataSrc: ''
             },
+            order: [
+                [3, 'desc']
+            ],
             columns: [
                 {data: 'id'},
                 {data: 'prettyUsername'},
                 {data: 'email'},
+                {
+                    data: 'registrationDate',
+                    render: function (date) {
+                        return Utils.date(date);
+                    }
+                },
                 {
                     data: 'enabled',
                     render: function (enabled) {

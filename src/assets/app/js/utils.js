@@ -30,4 +30,26 @@
     Utils.urlButton = function (text, clazz, url, id) {
         return '<a href="' + url + '" class="btn btn-xs ' + clazz + '" data-id="' + id + '">' + text + '</a>';
     };
+
+    /**
+     * Create a fully formatted date from a timestamp.
+     */
+    Utils.date = function (date) {
+
+        function prependZero(value) {
+            if (value < 10) {
+                return '0' + value;
+            }
+            return value;
+        }
+
+        date = new Date(date);
+        return date.getFullYear() + '-' +
+            prependZero(date.getMonth()) + '-' +
+            prependZero(date.getDay()) + ' ' +
+            prependZero(date.getHours()) + ':' +
+            prependZero(date.getMinutes()) + ':' +
+            prependZero(date.getSeconds());
+    };
+
 }(window.Utils = window.Utils || {}, jQuery));

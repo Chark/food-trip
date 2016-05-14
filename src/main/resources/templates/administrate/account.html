@@ -3,20 +3,115 @@
       layout:decorator="layouts/moderation">
 
 <head>
-    <title>Accounts</title>
+    <title>Account</title>
 </head>
 
 <body>
 <th:block layout:fragment="content">
-    ACCOUNT
+    <form name="profileForm"
+          method="POST"
+          th:action="@{/administrate/accounts/__${account.id}__}"
+          th:object="${account}">
+
+        <div class="alert alert-dismissible alert-danger" th:if="${error}">
+            <button data-dismiss="alert" class="close" type="button">×</button>
+            <strong>Error!</strong>
+            <th:block th:text="${error}"/>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <h2>Account details</h2>
+                <div class="row">
+                    <div class="col-md-6">
+                        <th:block th:include="fragments/forms :: input
+                        ('username', *{username}, 'username', 'Username', 'Enter username')"/>
+
+                        <th:block th:include="fragments/forms :: input
+                        ('email', *{email}, 'email', 'Email address', 'Enter email address')"/>
+
+                        <th:block th:include="fragments/forms :: input
+                        ('password', '', 'password', 'Password' , 'Enter password to change')"/>
+
+                        <th:block th:include="fragments/forms :: input
+                        ('password', '', 'repeatPassword', 'Repeat password' , 'Repeat password')"/>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <div class="row">
+                                <label class="col-xs-12">
+                                    Account status
+                                    <select name="enabled" class="form-control">
+                                        <option th:selected="*{enabled}" value="true">Enabled</option>
+                                        <option th:selected="*{!enabled}" value="false">Disabled</option>
+                                    </select>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="row">
+                                <label class="col-xs-12">
+                                    Account permissions
+                                    <select name="authorities" class="form-control" multiple="multiple">
+                                        <option th:each="authority : ${T(io.chark.food.domain.authentication.permission.Permission.Authority).values()}"
+                                                th:text="${authority.prettyName}"
+                                                th:value="${authority}"
+                                                th:selected="*{hasPermission('__${authority}__')}"></option>
+                                    </select>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <h2>Other information</h2>
+                <div class="row">
+                    <div class="col-md-6">
+                        <th:block th:include="fragments/forms :: input
+                        ('text', *{name}, 'name', 'First name' , 'Enter first name')"/>
+
+                        <th:block th:include="fragments/forms :: input
+                        ('text', *{lastName}, 'lastName', 'Last name' , 'Enter last name')"/>
+
+                        <th:block th:include="fragments/forms :: input
+                        ('text', *{phone}, 'phone', 'Phone number' , 'Enter phone number')"/>
+
+                        <th:block th:include="fragments/forms :: input
+                        ('text', *{website}, 'website', 'Website' , 'Enter account website')"/>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <div class="row">
+                                <label class="col-xs-12 control-label">
+                                    Information
+                                    <textarea th:text="*{bio}"
+                                              name="bio"
+                                              rows="3"
+                                              class="form-control"
+                                              placeholder="Enter account description"></textarea>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Submit and back -->
+        <button type="submit" class="btn btn-success">Save</button>
+        <a th:href="@{/administrate/accounts}" class="btn btn-danger">Cancel</a>
+    </form>
 </th:block>
 
 <!-- Initialize javascript for this page -->
-<!--<script type="application/javascript" layout:fragment="javascript">
+<script type="application/javascript" layout:fragment="javascript">
     $(function () {
-        AccountManagement.initAccounts();
+        AccountManagement.initAccount();
     });
-</script>-->
+</script>
 
 </body>
 </html>

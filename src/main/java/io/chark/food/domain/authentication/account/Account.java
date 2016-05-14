@@ -181,6 +181,10 @@ public class Account extends BaseEntity implements UserDetails {
         return false;
     }
 
+    public void setPermissions(Set<Permission> permissions) {
+        this.permissions = permissions;
+    }
+
     @Override
     public Set<Permission> getAuthorities() {
         return permissions;

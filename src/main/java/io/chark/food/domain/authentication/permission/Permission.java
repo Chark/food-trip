@@ -11,17 +11,29 @@ import javax.persistence.Entity;
 public class Permission extends BaseEntity implements GrantedAuthority {
 
     public enum Authority {
-        ROLE_USER("USER"),
-        ROLE_WORKER("WORKER"),
-        ROLE_MODERATOR("MODERATOR"),
-        ROLE_ADMIN("ADMIN");
+        ROLE_USER("USER", "User"),
+        ROLE_WORKER("WORKER", "Worker"),
+        ROLE_MODERATOR("MODERATOR", "Moderator"),
+        ROLE_ADMIN("ADMIN", "Administrator");
 
         String name;
+        String prettyName;
 
-        Authority(String name) {
+        Authority(String name, String prettyName) {
             this.name = name;
+            this.prettyName = prettyName;
         }
 
+        /**
+         * Get authorities name used for displaying in UI.
+         */
+        public String getPrettyName() {
+            return prettyName;
+        }
+
+        /**
+         * Get name used by spring security authorization.
+         */
         public String getName() {
             return name;
         }

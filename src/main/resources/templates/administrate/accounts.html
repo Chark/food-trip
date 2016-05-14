@@ -8,13 +8,17 @@
 
 <body>
 <th:block layout:fragment="content">
-
+    <h2>Manage accounts</h2>
+    <p>
+        Administrate other user, moderator and administrator accounts or create a <a th:href="@{/administrate/accounts/0}">new</a> user account.
+    </p>
     <table class="account-table table table-striped table-bordered" cellspacing="0" width="100%">
         <thead>
         <tr>
             <th>#</th>
             <th>Username</th>
             <th>Email</th>
+            <th>Registered on</th>
             <th>Enabled</th>
             <th>Actions</th>
         </tr>

@@ -1,6 +1,7 @@
 package io.chark.food.app.administrate;
 
 import io.chark.food.domain.authentication.account.Account;
+import io.chark.food.domain.authentication.permission.Permission;
 import io.chark.food.util.exception.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -32,24 +33,51 @@ public class AccountAdministrationController {
     }
 
     /**
-     * Get a single account administration page.
+     * Get a single account administration page, if negative id is provided, a empty account template is returned.
      *
-     * @param id account id.
      * @return single account administration template.
      */
     @RequestMapping(value = "/accounts/{id}", method = RequestMethod.GET)
     public String getAccount(@PathVariable long id, Model model) {
-        Account account = administrationService.getAccount(id)
-                .orElseThrow(() -> new NotFoundException(Account.class, id));
+        Account account;
 
+        if (id <= 0) {
+            // Id below or equals to zero means this is a new account.
+            account = new Account();
+        } else {
+            // Id is above zero, existing account.
+            account = administrationService.getAccount(id)
+                    .orElseThrow(() -> new NotFoundException(Account.class, id));
+        }
         model.addAttribute("account", account);
         return "administrate/account";
     }
 
     /**
+     * Create a new user account or update an existing one based on provided id.
+     *
+     * @return account administration page or the same page if an error occurred.
+     */
+    @RequestMapping(value = "/accounts/{id}", method = RequestMethod.POST)
+    public String saveAccount(@PathVariable long id,
+                              Account account,
+                              Permission.Authority[] authorities,
+                              Model model) {
+
+        if (!administrationService.saveAccount(id, account, authorities).isPresent()) {
+            model.addAttribute("error", "Failed to create account," +
+                    " please double check the details you've entered");
+
+            model.addAttribute("account", account);
+            return "administrate/account";
+        }
+        return "redirect:/administrate/accounts";
+    }
+
+
+    /**
      * Get list of users, by also excluding or including currently authenticated account.
      *
-     * @param includeSelf should currently authenticated account be included.
      * @return list of accounts.
      */
     @ResponseBody
@@ -60,8 +88,6 @@ public class AccountAdministrationController {
 
     /**
      * Delete specified user account by id.
-     *
-     * @param id account id which is to be deleted.
      */
     @ResponseStatus(HttpStatus.OK)
     @RequestMapping(value = "/api/accounts/{id}", method = RequestMethod.DELETE)

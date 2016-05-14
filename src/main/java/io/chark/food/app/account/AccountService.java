@@ -19,7 +19,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import java.util.Collections;
 import java.util.Optional;
+import java.util.Set;
 
 import static io.chark.food.domain.authentication.permission.Permission.Authority.ROLE_USER;
 import static io.chark.food.domain.extras.Color.*;
@@ -100,22 +102,30 @@ public class AccountService implements UserDetailsService {
      *
      * @return updated account optional.
      */
-    public Optional<Account> update(Account updateDetails) {
+    Optional<Account> update(Account updateDetails) {
         Account account = getAccount()
                 .orElseThrow(() -> new GenericException("No authentication is found for account detail updating"));
 
-        return update(account.getId(), updateDetails);
+        Optional<Account> optional = update(accountRepository
+                .findOne(account.getId()), updateDetails);
+
+        // Update authentication, since we're using that for getting profile data.
+        if (optional.isPresent()) {
+            account = optional.get();
+            SecurityContextHolder.getContext().setAuthentication(
+                    new UsernamePasswordAuthenticationToken(account, account.getPassword(), account.getAuthorities()));
+        }
+        return optional;
     }
 
     /**
      * Update specified users account details.
      *
-     * @param id            account id which is to be updated.
+     * @param account       account which is to be updated.
      * @param updateDetails detail which are used in updating.
      * @return updated account optional.
      */
-    public Optional<Account> update(long id, Account updateDetails) {
-        Account account = accountRepository.findOne(id);
+    public Optional<Account> update(Account account, Account updateDetails) {
 
         // Update password only if specified.
         if (updateDetails.getPassword() != null && !updateDetails.getPassword().isEmpty()) {
@@ -134,13 +144,7 @@ public class AccountService implements UserDetailsService {
 
             // Email might duplicate, or other db exceptions.
             LOGGER.debug("Updating Account{id={}} details", account.getId());
-            account = accountRepository.save(account);
-
-            // Update authentication, since we're using that for getting profile data.
-            SecurityContextHolder.getContext().setAuthentication(
-                    new UsernamePasswordAuthenticationToken(account, account.getPassword(), account.getAuthorities()));
-
-            return Optional.of(account);
+            return Optional.of(accountRepository.save(account));
         } catch (DataIntegrityViolationException e) {
             LOGGER.error("Could not update account", e);
             return Optional.empty();
@@ -198,8 +202,21 @@ public class AccountService implements UserDetailsService {
      * @param authority authority to look the permission by.
      * @return the permission.
      */
-    private Permission getPermission(Permission.Authority authority) {
+    public Permission getPermission(Permission.Authority authority) {
         return permissionRepository.findByAuthority(authority);
+    }
+
+    /**
+     * Get a set of permissions by querying them by provided authority list.
+     *
+     * @param authorities authorities to query the permissions by.
+     * @return set of permissions, never null.
+     */
+    public Set<Permission> getPermissions(Permission.Authority... authorities) {
+        if (authorities == null || authorities.length == 0) {
+            return Collections.emptySet();
+        }
+        return permissionRepository.findByAuthorityIn(authorities);
     }
 
     /**

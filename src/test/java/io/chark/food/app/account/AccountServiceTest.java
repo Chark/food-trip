@@ -77,43 +77,43 @@ public class AccountServiceTest {
     @Test
     public void updateFailed() {
         String otherEmail = "other@other.com";
-        long id = service.register(TEST_USERNAME, TEST_EMAIL, TEST_PASSWORD)
-                .get().getId();
+        Account account = service.register(TEST_USERNAME, TEST_EMAIL, TEST_PASSWORD)
+                .get();
 
         service.register("someUser", otherEmail, TEST_PASSWORD);
 
         // Email taken.
-        Account account = new Account();
-        account.setEmail(otherEmail);
+        Account updateDetails = new Account();
+        updateDetails.setEmail(otherEmail);
 
-        assertThat(service.update(id, account).isPresent()).isFalse();
+        assertThat(service.update(account, updateDetails).isPresent()).isFalse();
     }
 
     @Test
     public void updateDetails() {
-        long id = service.register(TEST_USERNAME, TEST_EMAIL, TEST_PASSWORD)
-                .get().getId();
+        Account account = service.register(TEST_USERNAME, TEST_EMAIL, TEST_PASSWORD)
+                .get();
 
-        Account account = new Account();
-        account.setEmail("other@other.com");
-        account.setName("name");
-        account.setLastName("lastName");
-        account.setPhone("1234");
-        account.setWebsite("www.google.com");
-        account.setBio("bio");
+        Account updateDetails = new Account();
+        updateDetails.setEmail("other@other.com");
+        updateDetails.setName("name");
+        updateDetails.setLastName("lastName");
+        updateDetails.setPhone("1234");
+        updateDetails.setWebsite("www.google.com");
+        updateDetails.setBio("bio");
 
-        service.update(id, account);
+        service.update(account, updateDetails);
 
         // Get account from authentication.
-        Account auth = service.getAccount()
+        account = service.getAccount()
                 .get();
 
         // Test if required fields have been updated.
-        assertThat(auth.getEmail()).isEqualTo(account.getEmail());
-        assertThat(auth.getName()).isEqualTo(account.getName());
-        assertThat(auth.getLastName()).isEqualTo(account.getLastName());
-        assertThat(auth.getBio()).isEqualTo(account.getBio());
-        assertThat(auth.getPhone()).isEqualTo(account.getPhone());
-        assertThat(auth.getWebsite()).isEqualTo(account.getWebsite());
+        assertThat(account.getEmail()).isEqualTo(updateDetails.getEmail());
+        assertThat(account.getName()).isEqualTo(updateDetails.getName());
+        assertThat(account.getLastName()).isEqualTo(updateDetails.getLastName());
+        assertThat(account.getBio()).isEqualTo(updateDetails.getBio());
+        assertThat(account.getPhone()).isEqualTo(updateDetails.getPhone());
+        assertThat(account.getWebsite()).isEqualTo(updateDetails.getWebsite());
     }
 }
