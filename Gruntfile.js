@@ -48,7 +48,7 @@ module.exports = function (grunt) {
                 expand: true,
                 cwd: '<%= config.VENDOR_PATH  %>/bootswatch-dist/fonts/',
                 src: '**',
-                dest: '<%= config.DEPLOY_PATH  %>/fonts/',
+                dest: '<%= config.DEPLOY_PATH  %>/../fonts/',
                 flatten: true,
                 filter: 'isFile'
             }
