@@ -55,14 +55,14 @@ public class AccountController {
         }
 
         // Perform the actual register.
-        Account account = accountService.register(
+        boolean created = accountService.register(
                 register.getUsername(),
                 register.getEmail(),
                 register.getPassword())
-                .get();
+                .isPresent();
 
         // Email might be taken and etc.
-        if (account == null) {
+        if (!created) {
             model.addAttribute("error", "Invalid credentials, please try again");
             return "account/register";
         }

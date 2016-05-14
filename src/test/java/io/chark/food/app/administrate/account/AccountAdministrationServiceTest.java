@@ -2,7 +2,7 @@ package io.chark.food.app.administrate.account;
 
 import io.chark.food.FoodTripIntegrationTest;
 import io.chark.food.app.account.AccountService;
-import io.chark.food.app.administrate.account.AccountAdministrationService;
+import io.chark.food.app.administrate.audit.AuditService;
 import io.chark.food.domain.authentication.account.Account;
 import io.chark.food.domain.authentication.account.AccountRepository;
 import io.chark.food.domain.authentication.permission.Permission;
@@ -14,6 +14,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -42,7 +43,10 @@ public class AccountAdministrationServiceTest {
 
     @Before
     public void setUp() {
-        service = new AccountAdministrationService(accountRepository, accountService);
+        service = new AccountAdministrationService(
+                accountRepository,
+                accountService,
+                Mockito.mock(AuditService.class));
     }
 
     @After

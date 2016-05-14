@@ -4,6 +4,16 @@
 (function (Utils, $, undefined) {
 
     /**
+     * Create a label if the provided value is null or empty.
+     */
+    Utils.emptyLabel = function (value) {
+        if (!value || value.length == 0) {
+            return Utils.label('None', 'label-default');
+        }
+        return value;
+    };
+
+    /**
      * Create a 'yes/no' label for a value.
      */
     Utils.yesNoLabel = function (value) {

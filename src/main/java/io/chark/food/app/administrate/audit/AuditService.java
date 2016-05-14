@@ -4,9 +4,9 @@ import io.chark.food.domain.audit.AuditMessage;
 import io.chark.food.domain.audit.AuditMessageRepository;
 import io.chark.food.domain.extras.Color;
 import io.chark.food.util.authentication.AuthenticationUtils;
-import org.omg.CORBA.Object;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -68,6 +68,17 @@ public class AuditService {
      * @return created audit message.
      */
     public AuditMessage debug(String message, Object... args) {
+        return message(Color.GREEN, message, args);
+    }
+
+    /**
+     * Create a warning type audit message.
+     *
+     * @param message the message body.
+     * @param args    message arguments.
+     * @return created audit message.
+     */
+    public AuditMessage warn(String message, Object... args) {
         return message(Color.YELLOW, message, args);
     }
 

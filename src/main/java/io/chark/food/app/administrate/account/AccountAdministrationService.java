@@ -1,6 +1,7 @@
 package io.chark.food.app.administrate.account;
 
 import io.chark.food.app.account.AccountService;
+import io.chark.food.app.administrate.audit.AuditService;
 import io.chark.food.domain.authentication.account.Account;
 import io.chark.food.domain.authentication.account.AccountRepository;
 import io.chark.food.domain.authentication.permission.Permission;
@@ -23,13 +24,16 @@ public class AccountAdministrationService {
 
     private final AccountRepository accountRepository;
     private final AccountService accountService;
+    private final AuditService auditService;
 
     @Autowired
     public AccountAdministrationService(AccountRepository accountRepository,
-                                        AccountService accountService) {
+                                        AccountService accountService,
+                                        AuditService auditService) {
 
         this.accountRepository = accountRepository;
         this.accountService = accountService;
+        this.auditService = auditService;
     }
 
     /**
@@ -75,11 +79,16 @@ public class AccountAdministrationService {
         account.setPermissions(accountService.getPermissions(authorities));
 
         try {
-            optional = Optional.of(accountRepository.save(account));
-            LOGGER.debug("Save account Account{id={}}", account.getId());
-            return optional;
+
+            account = accountRepository.save(account);
+            LOGGER.debug("Saved Account{id={}}", account.getId());
+
+            auditService.info("Saved Account with id: %d via admin panel", account.getId());
+            return Optional.of(account);
         } catch (DataIntegrityViolationException e) {
             LOGGER.error("Could not save account", e);
+
+            auditService.error("Failed to save Account");
             return Optional.empty();
         }
     }
@@ -93,6 +102,8 @@ public class AccountAdministrationService {
     public Account getAccount(long id) {
         Account account = accountRepository.findOne(id);
         if (account == null) {
+
+            auditService.warn("Attempted to query non-existing Account with id: %d", id);
             throw new NotFoundException(Account.class, id);
         }
         return account;
@@ -118,8 +129,10 @@ public class AccountAdministrationService {
      */
     public void delete(long id) {
         if (AuthenticationUtils.getId() == id) {
+            auditService.warn("Attempted to delete own account");
             throw new UnauthorizedException("You cannot delete your own account");
         }
         accountRepository.delete(id);
+        auditService.info("Deleted Account with id: %d", id);
     }
 }

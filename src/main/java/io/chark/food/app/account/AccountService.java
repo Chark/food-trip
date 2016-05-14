@@ -1,5 +1,6 @@
 package io.chark.food.app.account;
 
+import io.chark.food.app.administrate.audit.AuditService;
 import io.chark.food.domain.authentication.account.Account;
 import io.chark.food.domain.authentication.account.AccountRepository;
 import io.chark.food.domain.authentication.permission.Permission;
@@ -31,16 +32,19 @@ public class AccountService implements UserDetailsService {
     private final PermissionRepository permissionRepository;
     private final AccountRepository accountRepository;
     private final PasswordEncoder passwordEncoder;
+    private final AuditService auditService;
 
     @Autowired
     public AccountService(PermissionRepository permissionRepository,
                           AccountRepository accountRepository,
-                          PasswordEncoder passwordEncoder) {
+                          PasswordEncoder passwordEncoder,
+                          AuditService auditService) {
 
         this.permissionRepository = permissionRepository;
 
         this.accountRepository = accountRepository;
         this.passwordEncoder = passwordEncoder;
+        this.auditService = auditService;
     }
 
     /**
@@ -85,10 +89,12 @@ public class AccountService implements UserDetailsService {
             LOGGER.debug("Created new user Account{username='{}', email='{}'}",
                     username, email);
 
+            auditService.info("Created a new Account using username: %s, email: %s", username, email);
         } catch (DataIntegrityViolationException e) {
             LOGGER.error("Failed while creating new user Account{username='{}', email='{}'}",
                     username, email, e);
 
+            auditService.error("Failed to create a new Account using username: %s, email: %s", username, email);
             return Optional.empty();
         }
         return Optional.of(account);
@@ -102,13 +108,20 @@ public class AccountService implements UserDetailsService {
     Optional<Account> update(Account updateDetails) {
         Account account = AuthenticationUtils.getAccount();
 
+        if (account == null) {
+            auditService.warn("Attempted to update account details while being non authenticated");
+            return Optional.empty();
+        }
+
         // Update details regularly.
         Optional<Account> optional = update(accountRepository
                 .findOne(account.getId()), updateDetails);
 
         // Update authentication, since we're using that for getting profile data.
-        optional.ifPresent(AuthenticationUtils::setAccount);
-
+        optional.ifPresent(a -> {
+            AuthenticationUtils.setAccount(a);
+            auditService.debug("Updated account details");
+        });
         return optional;
     }
 
@@ -138,9 +151,11 @@ public class AccountService implements UserDetailsService {
 
             // Email might duplicate, or other db exceptions.
             LOGGER.debug("Updating Account{id={}} details", account.getId());
-            return Optional.of(accountRepository.save(account));
+            return Optional.ofNullable(accountRepository.save(account));
         } catch (DataIntegrityViolationException e) {
             LOGGER.error("Could not update account", e);
+
+            auditService.error("Failed to update account details");
             return Optional.empty();
         }
     }

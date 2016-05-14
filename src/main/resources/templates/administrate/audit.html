@@ -8,7 +8,41 @@
 
 <body>
 <th:block layout:fragment="content">
-    AUDIT STUFF GOES HERE
+    <h2>Audit</h2>
+    <p>Statistics and audit data gathered from the entire application</p>
+    <table class="audit-table table table-striped table-bordered" cellspacing="0" width="100%">
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>Created on</th>
+            <th>Caused by</th>
+            <th>Message</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+    </table>
+
+    <!-- Modal for more info about an audit message -->
+    <div class="info-modal modal fade" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Information about audit message</h4>
+                </div>
+                <div class="modal-body">
+                    <p class="audit-message"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
 </th:block>
 
 <!-- Initialize javascript for this page -->
