@@ -1,4 +1,4 @@
-package io.chark.food.domain.moderation;
+package io.chark.food.app.moderation;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
