@@ -9,15 +9,13 @@
 <body>
 <th:block layout:fragment="content">
     <div class="container">
-        <div class="col-sm-offset-4 col-sm-4">
-
+        <div class="col-sm-12">
             <ul>
                 <th:block th:each="category : ${categories}">
                     <h3 th:text="${category.title}"></h3>
                     <p th:text="${category.description}"></p>
                 </th:block>
             </ul>
-
         </div>
     </div>
 </th:block>

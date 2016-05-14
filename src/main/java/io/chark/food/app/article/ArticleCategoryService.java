@@ -24,11 +24,12 @@ public class ArticleCategoryService {
     }
 
     /**
-     * Initialize roles used by the system.
+     * Initialize article categories used by the system.
      */
     @PostConstruct
     public void init() {
         addCategory("Lorem Ipsum", "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.");
+        addCategory("Sed ut perspiciatis", "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.");
     }
 
     public List<ArticleCategory> getCategories() {
