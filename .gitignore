@@ -1,6 +1,10 @@
+# Gralde and IntelliJ ignored files and dirs.
+classes/
 .gradle/
 .idea/
 *.iml
+
+# Assets created by grunt and node.
 node_modules/
 vendor/
 compiled/
