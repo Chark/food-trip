@@ -35,14 +35,14 @@ public class AccountAdministrationService {
     /**
      * Create a new account or update an existing one based on id.
      *
-     * @param id            account id.
-     * @param updateDetails details used in creation or updating.
-     * @param authorities   account authorities to set or update.
+     * @param id             account id.
+     * @param accountDetails details used in creation or updating.
+     * @param authorities    account authorities to set or update.
      * @return account optional.
      */
     public Optional<Account> saveAccount(long id,
-                                         Account updateDetails,
-                                         Permission.Authority[] authorities) {
+                                         Account accountDetails,
+                                         Permission.Authority... authorities) {
 
         // Below or equals means this is a new account.
         Optional<Account> optional;
@@ -50,9 +50,9 @@ public class AccountAdministrationService {
 
             // Reuse the register method to save a new account.
             optional = accountService.register(
-                    updateDetails.getUsername(),
-                    updateDetails.getEmail(),
-                    updateDetails.getPassword());
+                    accountDetails.getUsername(),
+                    accountDetails.getEmail(),
+                    accountDetails.getPassword());
 
         } else {
 
@@ -66,11 +66,11 @@ public class AccountAdministrationService {
         }
 
         // Update account details.
-        optional = accountService.update(optional.get(), updateDetails);
+        optional = accountService.update(optional.get(), accountDetails);
 
         // Update other details editable only by admins.
         Account account = optional.get();
-        account.setEnabled(updateDetails.isEnabled());
+        account.setEnabled(accountDetails.isEnabled());
         account.setPermissions(accountService.getPermissions(authorities));
 
         try {
