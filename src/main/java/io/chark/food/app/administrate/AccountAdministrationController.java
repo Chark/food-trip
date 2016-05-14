@@ -2,7 +2,6 @@ package io.chark.food.app.administrate;
 
 import io.chark.food.domain.authentication.account.Account;
 import io.chark.food.domain.authentication.permission.Permission;
-import io.chark.food.util.exception.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -46,8 +45,7 @@ public class AccountAdministrationController {
             account = new Account();
         } else {
             // Id is above zero, existing account.
-            account = administrationService.getAccount(id)
-                    .orElseThrow(() -> new NotFoundException(Account.class, id));
+            account = administrationService.getAccount(id);
         }
         model.addAttribute("account", account);
         return "administrate/account";

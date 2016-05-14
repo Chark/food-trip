@@ -5,10 +5,13 @@ import io.chark.food.domain.authentication.account.Account;
 import io.chark.food.domain.authentication.account.AccountRepository;
 import io.chark.food.domain.authentication.permission.PermissionRepository;
 import io.chark.food.domain.authentication.permission.Permission;
+import io.chark.food.util.authentication.AuthenticationUtils;
+import io.chark.food.util.exception.UnauthorizedException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -44,6 +47,7 @@ public class AccountServiceTest {
     @After
     public void tearDown() {
         accountRepository.deleteAll();
+        SecurityContextHolder.clearContext();
     }
 
     @Test
@@ -77,8 +81,10 @@ public class AccountServiceTest {
     @Test
     public void updateFailed() {
         String otherEmail = "other@other.com";
-        Account account = service.register(TEST_USERNAME, TEST_EMAIL, TEST_PASSWORD)
-                .get();
+
+        // Testing for authenticated users.
+        service.register(TEST_USERNAME, TEST_EMAIL, TEST_PASSWORD)
+                .ifPresent(AuthenticationUtils::setAccount);
 
         service.register("someUser", otherEmail, TEST_PASSWORD);
 
@@ -86,13 +92,20 @@ public class AccountServiceTest {
         Account updateDetails = new Account();
         updateDetails.setEmail(otherEmail);
 
-        assertThat(service.update(account, updateDetails).isPresent()).isFalse();
+        assertThat(service.update(updateDetails).isPresent()).isFalse();
+    }
+
+    @Test(expected = UnauthorizedException.class)
+    public void unauthenticated() {
+        service.getAccount();
     }
 
     @Test
     public void updateDetails() {
-        Account account = service.register(TEST_USERNAME, TEST_EMAIL, TEST_PASSWORD)
-                .get();
+
+        // Testing for authenticated users.
+        service.register(TEST_USERNAME, TEST_EMAIL, TEST_PASSWORD)
+                .ifPresent(AuthenticationUtils::setAccount);
 
         Account updateDetails = new Account();
         updateDetails.setEmail("other@other.com");
@@ -102,11 +115,10 @@ public class AccountServiceTest {
         updateDetails.setWebsite("www.google.com");
         updateDetails.setBio("bio");
 
-        service.update(account, updateDetails);
+        service.update(updateDetails);
 
         // Get account from authentication.
-        account = service.getAccount()
-                .get();
+        Account account = service.getAccount();
 
         // Test if required fields have been updated.
         assertThat(account.getEmail()).isEqualTo(updateDetails.getEmail());

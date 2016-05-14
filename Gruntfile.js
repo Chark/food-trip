@@ -10,7 +10,6 @@ module.exports = function (grunt) {
             DEPLOY_PATH: 'src/main/resources/static/compiled',
             VENDOR_PATH: 'src/assets/vendor'
         },
-
         uglify: {
             deps_js: {
                 files: {
@@ -22,7 +21,8 @@ module.exports = function (grunt) {
                         '<%= config.VENDOR_PATH  %>/datatables.net/js/jquery.dataTables.js',
                         '<%= config.VENDOR_PATH  %>/datatables.net-bs/js/dataTables.bootstrap.js',
                         '<%= config.VENDOR_PATH  %>/bootbox.js/bootbox.js',
-                        '<%= config.VENDOR_PATH  %>/toastr/toastr.js'
+                        '<%= config.VENDOR_PATH  %>/toastr/toastr.js',
+                        '<%= config.VENDOR_PATH  %>/select2/dist/js/select2.js'
                     ]
                 }
             }
@@ -33,7 +33,9 @@ module.exports = function (grunt) {
                     '<%= config.DEPLOY_PATH  %>/plugins.css': [
                         '<%= config.VENDOR_PATH  %>/bootswatch-dist/css/bootstrap.css',
                         '<%= config.VENDOR_PATH  %>/datatables.net-bs/css/dataTables.bootstrap.css',
-                        '<%= config.VENDOR_PATH  %>/toastr/toastr.css'
+                        '<%= config.VENDOR_PATH  %>/toastr/toastr.css',
+                        '<%= config.VENDOR_PATH  %>/select2/dist/css/select2.css',
+                        '<%= config.VENDOR_PATH  %>/select2-bootstrap-theme/dist/select2-bootstrap.css'
                     ]
                 }
             },
@@ -82,7 +84,9 @@ module.exports = function (grunt) {
         grunt.log.writeln("");
         grunt.log.writeln("");
 
-        grunt.log.writeln("If you are starting this project for the first time or you want to initialize this projects dependencies and other required files type:");
+        grunt.log.writeln("If you are starting this project for the first time or you want to initialize" +
+            " this projects dependencies and other required files type:");
+
         grunt.log.ok(["grunt init"]);
         grunt.log.writeln("");
         grunt.log.writeln("If you want to watch files type: ");
@@ -92,5 +96,12 @@ module.exports = function (grunt) {
         grunt.log.writeln("");
     });
 
-    grunt.registerTask('init', ['uglify:deps_js', 'concat:js_main', 'concat:css_deps', 'concat:css_main', 'copy:fonts']);
+    grunt.registerTask('init',
+        [
+            'uglify:deps_js',
+            'concat:js_main',
+            'concat:css_deps',
+            'concat:css_main',
+            'copy:fonts'
+        ]);
 };

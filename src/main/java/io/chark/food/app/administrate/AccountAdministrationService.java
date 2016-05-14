@@ -5,6 +5,7 @@ import io.chark.food.domain.authentication.account.Account;
 import io.chark.food.domain.authentication.account.AccountRepository;
 import io.chark.food.domain.authentication.permission.Permission;
 import io.chark.food.util.authentication.AuthenticationUtils;
+import io.chark.food.util.exception.NotFoundException;
 import io.chark.food.util.exception.UnauthorizedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -86,9 +87,14 @@ public class AccountAdministrationService {
      * Get a user account by id.
      *
      * @return user account optional.
+     * @throws NotFoundException if the account is not found.
      */
-    public Optional<Account> getAccount(long id) {
-        return Optional.of(accountRepository.findOne(id));
+    public Account getAccount(long id) {
+        Account account = accountRepository.findOne(id);
+        if (account == null) {
+            throw new NotFoundException(Account.class, id);
+        }
+        return account;
     }
 
     /**

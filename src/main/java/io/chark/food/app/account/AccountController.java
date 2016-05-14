@@ -76,7 +76,7 @@ public class AccountController {
      */
     @RequestMapping(value = "/profile", method = RequestMethod.GET)
     public String profile(Model model) {
-        model.addAttribute("account", accountService.getAccount().get());
+        model.addAttribute("account", accountService.getAccount());
         return "account/profile";
     }
 

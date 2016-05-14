@@ -1,18 +1,18 @@
 package io.chark.food.app.account;
 
-import io.chark.food.util.authentication.AuthenticationUtils;
-import io.chark.food.util.exception.GenericException;
 import io.chark.food.domain.authentication.account.Account;
 import io.chark.food.domain.authentication.account.AccountRepository;
 import io.chark.food.domain.authentication.permission.Permission;
 import io.chark.food.domain.authentication.permission.PermissionRepository;
 import io.chark.food.domain.extras.Color;
+import io.chark.food.util.authentication.AuthenticationUtils;
+import io.chark.food.util.exception.GenericException;
+import io.chark.food.util.exception.NotFoundException;
+import io.chark.food.util.exception.UnauthorizedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -103,18 +103,15 @@ public class AccountService implements UserDetailsService {
      * @return updated account optional.
      */
     Optional<Account> update(Account updateDetails) {
-        Account account = getAccount()
-                .orElseThrow(() -> new GenericException("No authentication is found for account detail updating"));
+        Account account = getAccount();
 
+        // Update details regularly.
         Optional<Account> optional = update(accountRepository
                 .findOne(account.getId()), updateDetails);
 
         // Update authentication, since we're using that for getting profile data.
-        if (optional.isPresent()) {
-            account = optional.get();
-            SecurityContextHolder.getContext().setAuthentication(
-                    new UsernamePasswordAuthenticationToken(account, account.getPassword(), account.getAuthorities()));
-        }
+        optional.ifPresent(AuthenticationUtils::setAccount);
+
         return optional;
     }
 
@@ -164,16 +161,16 @@ public class AccountService implements UserDetailsService {
      * Get currently authenticated user account.
      *
      * @return empty optional or optional holding account details.
+     * @throws UnauthorizedException if no authentication is found.
      */
-    public Optional<Account> getAccount() {
+    public Account getAccount() {
         Account account = AuthenticationUtils.getAccount();
 
         // Authentication might be null if called in the wrong context.
         if (account == null) {
-            LOGGER.warn("Account is null, called by non-authenticated user?");
-            return Optional.empty();
+            throw new UnauthorizedException("Not authentication is found");
         }
-        return Optional.of(account);
+        return account;
     }
 
     /**

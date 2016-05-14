@@ -1,8 +1,12 @@
 package io.chark.food.util.authentication;
 
 import io.chark.food.domain.authentication.account.Account;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.util.Assert;
+
+import java.util.Optional;
 
 public class AuthenticationUtils {
 
@@ -35,5 +39,18 @@ public class AuthenticationUtils {
 
         return (Account) authentication
                 .getPrincipal();
+    }
+
+    /**
+     * Put new account entity to current authentication context.
+     *
+     * @param account account to put to context.
+     */
+    public static void setAccount(Account account) {
+        Assert.notNull(account);
+        SecurityContextHolder.getContext()
+                .setAuthentication(new UsernamePasswordAuthenticationToken(
+                        account, account.getPassword(),
+                        account.getAuthorities()));
     }
 }

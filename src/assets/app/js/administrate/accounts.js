@@ -3,10 +3,73 @@
     var accountsUrl = '/administrate/api/accounts';
     var accountTable;
 
+    /**
+     * Single account management page.
+     */
     AccountManagement.initAccount = function () {
+
+        /**
+         * Initialize authority select.
+         */
+        $('select[name=authorities]').select2({
+            placeholder: 'Select account authorities',
+            theme: 'bootstrap'
+        });
+
+        var form = $('form[name=accountForm]');
+        var newAccount = form.data('account-id') <= 0;
+
+        /**
+         * Form validation.
+         */
+        form.validate({
+            errorElement: 'small',
+            rules: {
+                username: {
+                    minlength: 4,
+                    maxlength: 64,
+                    required: true
+                },
+                email: {
+                    required: true
+                },
+                password: {
+                    required: newAccount,
+                    minlength: 4,
+                    maxlength: 64
+                },
+                repeatPassword: {
+                    equalTo: 'input[name=password]'
+                },
+                bio: {
+                    maxlength: 1024
+                },
+                name: {
+                    maxlength: 64
+                },
+                firstName: {
+                    maxlength: 64
+                },
+                phone: {
+                    maxlength: 64
+                },
+                website: {
+                    maxlength: 64
+                }
+            },
+            highlight: function (element) {
+                $(element).closest('.form-group').addClass('has-error');
+            },
+            success: function (element) {
+                element.closest('.form-group').removeClass('has-error');
+            }
+        });
 
     };
 
+    /**
+     * All accounts management page.
+     */
     AccountManagement.initAccounts = function () {
 
         /**

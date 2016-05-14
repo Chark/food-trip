@@ -8,8 +8,9 @@
 
 <body>
 <th:block layout:fragment="content">
-    <form name="profileForm"
+    <form name="accountForm"
           method="POST"
+          th:attr="data-account-id=${account.id}"
           th:action="@{/administrate/accounts/__${account.id}__}"
           th:object="${account}">
 
@@ -31,7 +32,7 @@
                         ('email', *{email}, 'email', 'Email address', 'Enter email address')"/>
 
                         <th:block th:include="fragments/forms :: input
-                        ('password', '', 'password', 'Password' , 'Enter password to change')"/>
+                        ('password', '', 'password', 'Password' , 'Enter password')"/>
 
                         <th:block th:include="fragments/forms :: input
                         ('password', '', 'repeatPassword', 'Repeat password' , 'Repeat password')"/>
