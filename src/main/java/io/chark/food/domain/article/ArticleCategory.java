@@ -4,7 +4,9 @@ import io.chark.food.domain.BaseEntity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import java.util.Date;
+import javax.persistence.FetchType;
+import javax.persistence.ManyToMany;
+import java.util.*;
 
 @Entity
 public class ArticleCategory extends BaseEntity {
@@ -18,6 +20,9 @@ public class ArticleCategory extends BaseEntity {
     private Date creationDate;
 
     private Date editedDate;
+
+    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "categories")
+    private List<Article> articles = new ArrayList<>();
 
     public ArticleCategory() {
     }
@@ -58,5 +63,13 @@ public class ArticleCategory extends BaseEntity {
 
     public void setEditedDate(Date editedDate) {
         this.editedDate = editedDate;
+    }
+
+    public List<Article> getArticles() {
+        return articles;
+    }
+
+    public void setArticles(List<Article> articles) {
+        this.articles = articles;
     }
 }

@@ -28,7 +28,6 @@ public class Article extends BaseEntity {
 
     private long viewsNumber;
 
-    @Column(nullable = false)
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<ArticleCategory> categories = new HashSet<>();
 
