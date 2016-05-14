@@ -43,7 +43,7 @@ public class ArticleService {
         // Adds article category
         long num = articleRepository.count() % categoryRepository.count();
         ArticleCategory category = categoryRepository.findOne(num + 1);
-        //article.addCategory(category);
+        article.addCategory(category);
 
         articleRepository.save(article);
     }

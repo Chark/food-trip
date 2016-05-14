@@ -1,7 +1,9 @@
 package io.chark.food.app.administrate;
 
+import io.chark.food.app.account.AccountService;
 import io.chark.food.domain.authentication.account.Account;
 import io.chark.food.domain.authentication.account.AccountRepository;
+import io.chark.food.util.authentication.AuthenticationUtils;
 import io.chark.food.util.exception.NotFoundException;
 import io.chark.food.util.exception.UnauthorizedException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,15 +30,19 @@ public class AccountAdministrationService {
      * @return user account optional.
      */
     public Optional<Account> getAccount(long id) {
-        return Optional.of(accountRepository.getOne(id));
+        return Optional.of(accountRepository.findOne(id));
     }
 
     /**
      * Get all accounts.
      *
+     * @param includeSelf should currently authenticated users account be included.
      * @return list of accounts, never null.
      */
-    public List<Account> getAccounts() {
+    public List<Account> getAccounts(boolean includeSelf) {
+        if (!includeSelf) {
+            return accountRepository.findByIdNotIn(AuthenticationUtils.getId());
+        }
         return accountRepository.findAll();
     }
 
@@ -59,5 +65,17 @@ public class AccountAdministrationService {
         account.setLocked(locked);
         accountRepository.save(account);
         return account;
+    }
+
+    /**
+     * Delete specified user account.
+     *
+     * @param id user account id.
+     */
+    public void delete(long id) {
+        if (AuthenticationUtils.getId() == id) {
+            throw new UnauthorizedException("You cannot delete your own account");
+        }
+        accountRepository.delete(id);
     }
 }

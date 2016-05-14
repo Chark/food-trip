@@ -1,5 +1,6 @@
 package io.chark.food.app.account;
 
+import io.chark.food.util.authentication.AuthenticationUtils;
 import io.chark.food.util.exception.GenericException;
 import io.chark.food.domain.authentication.account.Account;
 import io.chark.food.domain.authentication.account.AccountRepository;
@@ -11,7 +12,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -56,6 +56,11 @@ public class AccountService implements UserDetailsService {
 
         // Init default admin account if there are no accounts defined.
         initAdmin();
+
+        // Register some dummy accounts.
+        for (int i = 0; i < 10; i++) {
+            register("dummy" + i, "dummy" + i + "@dummy.com", "password");
+        }
     }
 
     /**
@@ -157,17 +162,14 @@ public class AccountService implements UserDetailsService {
      * @return empty optional or optional holding account details.
      */
     public Optional<Account> getAccount() {
-        Authentication authentication = SecurityContextHolder
-                .getContext()
-                .getAuthentication();
+        Account account = AuthenticationUtils.getAccount();
 
         // Authentication might be null if called in the wrong context.
-        if (authentication == null) {
-            LOGGER.warn("Authentication is null, called by non-authenticated user?");
+        if (account == null) {
+            LOGGER.warn("Account is null, called by non-authenticated user?");
             return Optional.empty();
         }
-        return Optional.of((Account) authentication
-                .getPrincipal());
+        return Optional.of(account);
     }
 
     /**

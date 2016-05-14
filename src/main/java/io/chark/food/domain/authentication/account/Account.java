@@ -142,10 +142,6 @@ public class Account extends BaseEntity implements UserDetails {
         this.name = name;
     }
 
-    public Set<Permission> getPermissions() {
-        return permissions;
-    }
-
     public int getPoints() {
         return points;
     }

@@ -18,6 +18,8 @@
     "bootswatch-dist": "3.3.6-paper",
     "jquery": "^2.2.3",
     "datatables.net": "^1.10.11",
-    "datatables.net-bs": "^1.10.11"
+    "datatables.net-bs": "^1.10.11",
+    "bootbox.js": "bootbox#^4.4.0",
+    "toastr": "^2.1.2"
   }
 }
