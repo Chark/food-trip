@@ -4,10 +4,11 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonView;
 import io.chark.food.domain.BaseEntity;
-import io.chark.food.domain.audit.AuditMessage;
 import io.chark.food.domain.authentication.permission.Permission;
 import io.chark.food.domain.restaurant.Invitation;
 import io.chark.food.domain.restaurant.Restaurant;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
@@ -60,7 +61,8 @@ public class Account extends BaseEntity implements UserDetails {
     @ManyToOne
     private Restaurant restaurant;
 
-    @OneToMany(mappedBy = "account", fetch = FetchType.LAZY)
+    @Fetch(value = FetchMode.SELECT)
+    @OneToMany(mappedBy = "account", fetch = FetchType.EAGER)
     private List<Invitation> invitations = new ArrayList<>();
 
     public Account() {
