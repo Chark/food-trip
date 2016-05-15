@@ -7,6 +7,7 @@ import io.chark.food.domain.authentication.permission.Permission;
 import io.chark.food.domain.restaurant.Restaurant;
 import io.chark.food.domain.restaurant.RestaurantRepository;
 import io.chark.food.util.authentication.AuthenticationUtils;
+import io.chark.food.util.exception.NotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,5 +72,21 @@ public class RestaurantService {
             auditService.error("Could not create a new restaurant");
             return Optional.empty();
         }
+    }
+
+    /**
+     * Get restaurant which is assigned to the currently authenticated user.
+     *
+     * @return restaurant.
+     * @throws NotFoundException if use has no restaurant assigned to him.
+     */
+    public Restaurant getRestaurant() {
+        Restaurant restaurant = restaurantRepository
+                .findByAccountId(AuthenticationUtils.getIdOrThrow());
+
+        if (restaurant == null) {
+            throw new NotFoundException("No restaurant is found on this user");
+        }
+        return restaurant;
     }
 }

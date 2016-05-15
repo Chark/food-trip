@@ -1,14 +1,23 @@
 package io.chark.food.util.authentication;
 
 import io.chark.food.domain.authentication.account.Account;
+import io.chark.food.util.exception.UnauthorizedException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.Assert;
 
-import java.util.Optional;
-
 public class AuthenticationUtils {
+
+    /**
+     * Get account id or throw an exception if no authentication is found.
+     *
+     * @return currently authenticated accounts id.
+     * @throws UnauthorizedException if no authentication is found.
+     */
+    public static long getIdOrThrow() {
+        return getAccountOrThrow().getId();
+    }
 
     /**
      * Get currently authenticated users id.
@@ -21,6 +30,20 @@ public class AuthenticationUtils {
             return 0;
         }
         return account.getId();
+    }
+
+    /**
+     * Get currently authenticated user account or thrown a exception is there is not authentication.
+     *
+     * @return user account.
+     * @throws UnauthorizedException if no authentication is found.
+     */
+    public static Account getAccountOrThrow() {
+        Account account = getAccount();
+        if (account == null) {
+            throw new UnauthorizedException("No authentication is found");
+        }
+        return account;
     }
 
     /**

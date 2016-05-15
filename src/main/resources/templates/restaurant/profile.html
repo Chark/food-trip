@@ -1,0 +1,35 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layouts/default">
+
+<head>
+    <title>Profile</title>
+</head>
+
+<body>
+<th:block layout:fragment="content">
+    <div class="col-sm-offset-4 col-sm-4">
+
+        <!-- Display a success alert if needed -->
+        <div class="alert alert-dismissible alert-success" th:if="${success}">
+            <button data-dismiss="alert" class="close" type="button">×</button>
+            <strong>Success!</strong>
+            <th:block th:text="${success}"/>
+        </div>
+
+        <div>
+            profile stuff goes here
+        </div>
+
+    </div>
+</th:block>
+
+<!-- Initialize javascript for this page -->
+<script type="application/javascript" layout:fragment="javascript">
+    $(function () {
+        RestaurantProfile.init();
+    });
+</script>
+
+</body>
+</html>

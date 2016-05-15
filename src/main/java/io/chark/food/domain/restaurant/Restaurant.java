@@ -7,19 +7,23 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.Size;
 import java.util.Date;
 import java.util.List;
 
 @Entity
 public class Restaurant extends BaseEntity {
 
+    @Size(max = DEFAULT_LENGTH)
     @Column(unique = true, nullable = false, length = DEFAULT_LENGTH)
     private String email;
 
+    @Size(min = MIN_LENGTH, max = DEFAULT_LENGTH)
     @Column(unique = true, nullable = false, length = DEFAULT_LENGTH)
     private String name;
 
-    @Column(nullable = false, length = DEFAULT_LONG_LENGTH)
+    @Size(max = DEFAULT_LONG_LENGTH)
+    @Column(length = DEFAULT_LONG_LENGTH)
     private String description;
 
     private int rating;
@@ -65,7 +69,11 @@ public class Restaurant extends BaseEntity {
     }
 
     public void setEmail(String email) {
-        this.email = email;
+        if (email != null) {
+            this.email = email.toLowerCase();
+        } else {
+            this.email = null;
+        }
     }
 
     public void setName(String name) {

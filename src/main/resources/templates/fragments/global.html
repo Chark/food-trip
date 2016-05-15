@@ -66,6 +66,9 @@
                             <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu">
+                            <li th:if="${#authentication.principal.hasRestaurant()}">
+                                <a th:href="@{/restaurant}">Restaurant</a>
+                            </li>
                             <li><a th:href="@{/profile}">Profile</a></li>
                             <li class="divider"></li>
                             <li>

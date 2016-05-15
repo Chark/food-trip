@@ -8,6 +8,7 @@ import io.chark.food.domain.authentication.account.AccountRepository;
 import io.chark.food.domain.restaurant.Restaurant;
 import io.chark.food.domain.restaurant.RestaurantRepository;
 import io.chark.food.util.authentication.AuthenticationUtils;
+import io.chark.food.util.exception.NotFoundException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -71,7 +72,6 @@ public class RestaurantServiceTest {
     public void register() {
         Restaurant restaurant = new Restaurant();
         restaurant.setName("name");
-        restaurant.setDescription("desc");
         restaurant.setEmail("email@email.com");
         restaurant = service.register(restaurant).get();
 
@@ -87,7 +87,6 @@ public class RestaurantServiceTest {
         // No auth - failed.
         Restaurant restaurant = new Restaurant();
         restaurant.setName("name");
-        restaurant.setDescription("desc");
         restaurant.setEmail("email@email.com");
         assertThat(service.register(restaurant)).isNotPresent();
     }
@@ -99,15 +98,30 @@ public class RestaurantServiceTest {
         // Account has one restaurant.
         Restaurant restaurant = new Restaurant();
         restaurant.setName("name");
-        restaurant.setDescription("desc");
         restaurant.setEmail("email@email.com");
         assertThat(service.register(restaurant)).isPresent();
 
         // Attempt to register a second one - failed.
         restaurant = new Restaurant();
         restaurant.setName("name2");
-        restaurant.setDescription("desc2");
         restaurant.setEmail("email2@email.com");
         assertThat(service.register(restaurant)).isNotPresent();
+    }
+
+    @Test
+    public void getRestaurant() {
+        Restaurant restaurant = new Restaurant();
+        restaurant.setName("name");
+        restaurant.setEmail("email@email.com");
+        service.register(restaurant);
+
+        assertThat(service.getRestaurant()).isNotNull();
+    }
+
+    @Test(expected = NotFoundException.class)
+    public void getRestaurantFailed() {
+
+        // No restaurant assigned to this user.
+        service.getRestaurant();
     }
 }

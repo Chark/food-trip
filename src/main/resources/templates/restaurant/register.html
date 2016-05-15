@@ -21,8 +21,33 @@
                 Register new restaurant
             </div>
             <div class="panel-body">
-                <form name="registerForm" th:action="@{/restaurant/register}" th:object="${restaurant}" method="POST">
 
+                <!-- Form is validated via js -->
+                <form name="registerForm" th:action="@{/restaurant/register}" th:object="${restaurant}" method="POST">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <th:block th:include="fragments/forms :: input
+                            ('text', *{name}, 'name', 'Restaurant name', 'Enter unique restaurant name')"/>
+
+                            <th:block th:include="fragments/forms :: input
+                            ('email', *{email}, 'email', 'Email address', 'Enter unique restaurant email address')"/>
+
+                            <div class="form-group">
+                                <div class="row">
+                                    <label class="col-xs-12 control-label">
+                                        Description
+                                        <textarea th:text="*{description}"
+                                                  name="description"
+                                                  rows="3"
+                                                  class="form-control"
+                                                  placeholder="Restaurant description"></textarea>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-sm btn-success">Register</button>
+                    <a th:href="@{/}" class="btn btn-sm btn-danger">Cancel</a>
                 </form>
             </div>
         </div>
@@ -32,7 +57,7 @@
 <!-- Initialize javascript for this page -->
 <script type="application/javascript" layout:fragment="javascript">
     $(function () {
-        Restaurant.initRegister();
+        RestaurantRegister.init();
     });
 </script>
 
