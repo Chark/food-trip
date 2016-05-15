@@ -35,6 +35,31 @@ public class RestaurantService {
     }
 
     /**
+     * Update currently authenticated users restaurant.
+     *
+     * @param updateDetails update details.
+     * @return restaurant optional.
+     */
+    public Optional<Restaurant> update(Restaurant updateDetails) {
+        Restaurant restaurant = getRestaurant();
+
+        // Set required details.
+        restaurant.setEmail(updateDetails.getEmail());
+        restaurant.setName(updateDetails.getName());
+        restaurant.setDescription(updateDetails.getDescription());
+
+        try {
+            restaurant = restaurantRepository.save(restaurant);
+            auditService.info("Updated restaurant details");
+
+            return Optional.of(restaurant);
+        } catch (DataIntegrityViolationException e) {
+            LOGGER.error("Could not update restaurant details", e);
+            return Optional.empty();
+        }
+    }
+
+    /**
      * Register a new restaurant and set it to current user.
      *
      * @param restaurant restaurant to register.
@@ -55,6 +80,11 @@ public class RestaurantService {
         }
 
         try {
+
+            // Default restaurant rating and hygiene level.
+            restaurant.setRating(1);
+            restaurant.setHygieneLevel(5);
+
             restaurant = restaurantRepository.save(restaurant);
             LOGGER.debug("Created a new restaurant using Account{id={}}", account.getId());
 
@@ -68,8 +98,6 @@ public class RestaurantService {
             return Optional.of(restaurant);
         } catch (DataIntegrityViolationException e) {
             LOGGER.error("Failed to create a new Restaurant", e);
-
-            auditService.error("Could not create a new restaurant");
             return Optional.empty();
         }
     }

@@ -7,8 +7,52 @@
 </head>
 
 <body>
-<th:block layout:fragment="content">
-    <div class="col-sm-offset-4 col-sm-4">
+
+<!-- Restaurant info fragment -->
+<th:block th:fragment="restaurantInfo (name, value)">
+    <div class="row">
+        <div class="col-md-6">
+            <strong th:text="${name}"></strong>
+        </div>
+        <div class="col-md-6">
+            <th:block th:text="${value}"/>
+            <th:block th:if="${value == null or value == ''}">
+                <span class="label label-default">Not set</span>
+            </th:block>
+        </div>
+    </div>
+</th:block>
+
+<th:block layout:fragment="content" th:object="${restaurant}">
+
+    <!-- Details and navigation? -->
+    <div class="col-md-3">
+        <div class="panel panel-default">
+            <div class="panel-heading clearfix">
+                <div class="pull-left" th:text="*{name}"></div>
+            </div>
+            <div class="panel-body">
+
+                <h5>Information</h5>
+                <th:block th:include="this :: restaurantInfo('Name', *{name})"/>
+                <th:block th:include="this :: restaurantInfo('Email', *{email})"/>
+                <th:block th:include="this :: restaurantInfo('Created on', *{#dates.format(creationDate, 'yyyy MMM dd')})"/>
+                <th:block th:include="this :: restaurantInfo('Rating', *{rating})"/>
+                <th:block th:include="this :: restaurantInfo('Hygiene index', *{hygieneLevel})"/>
+                <th:block th:include="this :: restaurantInfo('Views', *{viewCount})"/>
+                <th:block th:include="this :: restaurantInfo('Employees', *{accounts.size()})"/>
+
+                <h5>Description</h5>
+                <th:block th:if="*{description == null or description == ''}">
+                    This restaurant has not yet filled out its description.
+                </th:block>
+                <p class="break-text" th:if="*{description != null and description != ''}" th:text="*{description}"></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main restaurant profile management -->
+    <div class="col-md-9">
 
         <!-- Display a success alert if needed -->
         <div class="alert alert-dismissible alert-success" th:if="${success}">
@@ -17,10 +61,47 @@
             <th:block th:text="${success}"/>
         </div>
 
-        <div>
-            profile stuff goes here
+        <!-- Or an error -->
+        <div class="alert alert-dismissible alert-danger" th:if="${error}">
+            <button data-dismiss="alert" class="close" type="button">×</button>
+            <strong>Error!</strong>
+            <th:block th:text="${error}"/>
         </div>
 
+        <!-- The main editing form -->
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                Edit restaurant profile
+            </div>
+            <div class="panel-body">
+                <form name="profileForm" th:action="@{/restaurant}" method="POST">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <th:block th:include="fragments/forms :: input
+                            ('text', *{name}, 'name', 'Restaurant name', 'Enter unique restaurant name')"/>
+
+                            <th:block th:include="fragments/forms :: input
+                            ('email', *{email}, 'email', 'Email address', 'Enter unique restaurant email address')"/>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <div class="row">
+                                    <label class="col-xs-12 control-label">
+                                        Description
+                                        <textarea th:text="*{description}"
+                                                  name="description"
+                                                  rows="3"
+                                                  class="form-control"
+                                                  placeholder="Restaurant description"></textarea>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-sm btn-success">Save</button>
+                </form>
+            </div>
+        </div>
     </div>
 </th:block>
 

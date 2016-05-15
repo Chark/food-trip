@@ -124,4 +124,29 @@ public class RestaurantServiceTest {
         // No restaurant assigned to this user.
         service.getRestaurant();
     }
+
+    @Test
+    public void update() {
+
+        // Register a new restaurant.
+        Restaurant restaurant = new Restaurant();
+        restaurant.setName("name");
+        restaurant.setEmail("email@email.com");
+        service.register(restaurant);
+
+        String name = "newName";
+        String email = "newEmail";
+        String description = "newDescription";
+
+        // Change vital properties.
+        restaurant.setEmail(email);
+        restaurant.setName(name);
+        restaurant.setDescription(description);
+
+        // Assert what was changed.
+        restaurant = service.update(restaurant).get();
+        assertThat(restaurant.getName()).isEqualTo(name);
+        assertThat(restaurant.getEmail()).isEqualToIgnoringCase(email);
+        assertThat(restaurant.getDescription()).isEqualTo(description);
+    }
 }

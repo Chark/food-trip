@@ -34,6 +34,27 @@ public class RestaurantController {
     }
 
     /**
+     * Edit restaurant profile.
+     *
+     * @return restaurant profile template.
+     */
+    @RequestMapping(method = RequestMethod.POST)
+    public String restaurant(Restaurant details, Model model) {
+
+        if (restaurantService.update(details).isPresent()) {
+            // Success, redirect to profile page.
+            return "redirect:/restaurant";
+        }
+
+        // Error, failed to update.
+        model.addAttribute("error", "Could not update restaurant details, " +
+                "please double check what you've entered");
+
+        model.addAttribute("restaurant", details);
+        return "restaurant/profile";
+    }
+
+    /**
      * Get the restaurant register template.
      *
      * @return restaurant register template.
