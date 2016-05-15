@@ -83,7 +83,9 @@ public class AccountAdministrationService {
             account = accountRepository.save(account);
             LOGGER.debug("Saved Account{id={}}", account.getId());
 
-            auditService.info("Saved Account with id: %d via admin panel", account.getId());
+            auditService.debug("%s Account with id: %d via admin panel",
+                    id <= 0 ? "Created new" : "Updated", account.getId());
+
             return Optional.of(account);
         } catch (DataIntegrityViolationException e) {
             LOGGER.error("Could not save account", e);
