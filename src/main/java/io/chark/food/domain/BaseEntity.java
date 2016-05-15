@@ -1,5 +1,7 @@
 package io.chark.food.domain;
 
+import com.fasterxml.jackson.annotation.JsonView;
+
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
@@ -26,7 +28,14 @@ public class BaseEntity {
     @GeneratedValue
     private long id;
 
+    @JsonView(MinimalView.class)
     public long getId() {
         return id;
+    }
+
+    /**
+     * Interface for minimal json view details.
+     */
+    public interface MinimalView {
     }
 }

@@ -75,10 +75,4 @@ public class AuditMessage extends BaseEntity {
     public long getId() {
         return super.getId();
     }
-
-    /**
-     * Json view for minimal audit info.
-     */
-    public interface MinimalView {
-    }
 }

@@ -2,15 +2,16 @@ package io.chark.food.domain.authentication.account;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonView;
 import io.chark.food.domain.BaseEntity;
+import io.chark.food.domain.audit.AuditMessage;
 import io.chark.food.domain.authentication.permission.Permission;
+import io.chark.food.domain.restaurant.Invitation;
 import io.chark.food.domain.restaurant.Restaurant;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 public class Account extends BaseEntity implements UserDetails {
@@ -59,6 +60,9 @@ public class Account extends BaseEntity implements UserDetails {
     @ManyToOne
     private Restaurant restaurant;
 
+    @OneToMany(mappedBy = "account", fetch = FetchType.LAZY)
+    private List<Invitation> invitations = new ArrayList<>();
+
     public Account() {
     }
 
@@ -93,6 +97,7 @@ public class Account extends BaseEntity implements UserDetails {
         return prettyUsername;
     }
 
+    @JsonView(MinimalView.class)
     public String getEmail() {
         return email;
     }
@@ -172,6 +177,10 @@ public class Account extends BaseEntity implements UserDetails {
         return false;
     }
 
+    public List<Invitation> getInvitations() {
+        return invitations;
+    }
+
     public void setPermissions(Set<Permission> permissions) {
         this.permissions = permissions;
     }
@@ -199,6 +208,7 @@ public class Account extends BaseEntity implements UserDetails {
     }
 
     @Override
+    @JsonView(MinimalView.class)
     public String getUsername() {
         return username;
     }

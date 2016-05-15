@@ -13,7 +13,7 @@
             <strong th:text="${name}"></strong>
         </div>
         <div class="col-md-6">
-            <th:block th:text="${value}"/>
+            <span class="break-text" th:text="${value}"></span>
             <th:block th:if="${value == null or value == ''}">
                 <span class="label label-default">Not set</span>
             </th:block>
@@ -25,7 +25,7 @@
 <th:block layout:fragment="content">
 
     <!-- Account info panel -->
-    <div class="col-md-3" th:object="${account}">
+    <div class="col-sm-5 col-md-3" th:object="${account}">
         <div class="panel panel-default">
             <div class="panel-heading clearfix">
                 <div class="pull-left" th:text="*{prettyUsername}"></div>
@@ -60,7 +60,7 @@
     </div>
 
     <!-- Profile editing panel -->
-    <div class="col-md-9">
+    <div class="col-sm-7 col-md-9">
         <div class="alert alert-dismissible alert-danger" th:if="${error}">
             <button data-dismiss="alert" class="close" type="button">×</button>
             <strong>Error!</strong>
@@ -116,6 +116,23 @@
             </div>
         </div>
     </div>
+
+    <!-- List of restaurant invitations -->
+    <div class="col-sm-7 col-md-9" th:object="${account}" th:if="${!account.invitations.isEmpty()}">
+        <h4>Invitations</h4>
+        <div class="list-group invitations">
+            <a class="list-group-item invitation"
+               href="javascript:;"
+               th:attr="data-id=*{id}"
+               th:each="invitation : *{invitations}"
+               th:object="${invitation}">
+                <h4 class="list-group-item-heading" th:text="*{restaurant.name}"></h4>
+                <p class="list-group-item-text" th:text="*{restaurant.description}"></p>
+            </a>
+        </div>
+    </div>
+
+
 </th:block>
 
 <!-- Initialize javascript for this page -->

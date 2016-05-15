@@ -1,6 +1,7 @@
 package io.chark.food.app.administrate.audit;
 
 import com.fasterxml.jackson.annotation.JsonView;
+import io.chark.food.domain.BaseEntity;
 import io.chark.food.domain.audit.AuditMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -36,7 +37,7 @@ public class AuditController {
      * @return list of audit messages.
      */
     @ResponseBody
-    @JsonView(AuditMessage.MinimalView.class)
+    @JsonView(BaseEntity.MinimalView.class)
     @RequestMapping(value = "/api/audit", method = RequestMethod.GET)
     public List<AuditMessage> getAuditMessages(@RequestParam(required = false) Long id) {
         if (id == null) {

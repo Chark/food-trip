@@ -57,6 +57,25 @@ $(function () {
     };
 
     /**
+     * Serialize form to javascript object (useful for serializing forms to json.
+     */
+    $.fn.serializeObject = function () {
+        var object = {};
+        var formData = this.serializeArray();
+        $.each(formData, function () {
+            if (object[this.name] !== undefined) {
+                if (!object[this.name].push) {
+                    object[this.name] = [object[this.name]];
+                }
+                object[this.name].push(this.value || '');
+            } else {
+                object[this.name] = this.value || '';
+            }
+        });
+        return object;
+    };
+
+    /**
      * Register additional ajax functions.
      */
     $.each(['put', 'delete'], function (i, method) {

@@ -6,6 +6,8 @@ import io.chark.food.domain.authentication.account.AccountRepository;
 import io.chark.food.domain.authentication.permission.Permission;
 import io.chark.food.domain.authentication.permission.PermissionRepository;
 import io.chark.food.domain.extras.Color;
+import io.chark.food.domain.restaurant.Invitation;
+import io.chark.food.domain.restaurant.InvitationRepository;
 import io.chark.food.util.authentication.AuthenticationUtils;
 import io.chark.food.util.exception.UnauthorizedException;
 import org.slf4j.Logger;
@@ -31,18 +33,20 @@ public class AccountService implements UserDetailsService {
     private static final Logger LOGGER = LoggerFactory.getLogger(AccountService.class);
 
     private final PermissionRepository permissionRepository;
+    private final InvitationRepository invitationRepository;
     private final AccountRepository accountRepository;
     private final PasswordEncoder passwordEncoder;
     private final AuditService auditService;
 
     @Autowired
     public AccountService(PermissionRepository permissionRepository,
+                          InvitationRepository invitationRepository,
                           AccountRepository accountRepository,
                           PasswordEncoder passwordEncoder,
                           AuditService auditService) {
 
         this.permissionRepository = permissionRepository;
-
+        this.invitationRepository = invitationRepository;
         this.accountRepository = accountRepository;
         this.passwordEncoder = passwordEncoder;
         this.auditService = auditService;
@@ -65,6 +69,16 @@ public class AccountService implements UserDetailsService {
         for (int i = 0; i < 10; i++) {
             register("dummy" + i, "dummy" + i + "@dummy.com", "password");
         }
+    }
+
+    /**
+     * Get currently authenticated user account.
+     *
+     * @return currently authenticated user account.
+     */
+    public Account getAccount() {
+        long id = AuthenticationUtils.getIdOrThrow();
+        return accountRepository.findOne(id);
     }
 
     /**
@@ -107,7 +121,7 @@ public class AccountService implements UserDetailsService {
      * @return updated account optional.
      */
     Optional<Account> update(Account updateDetails) {
-        Account account = AuthenticationUtils.getAccount();
+        Account account = getAccount();
 
         if (account == null) {
             auditService.warn("Attempted to update account details while being non authenticated");
@@ -220,13 +234,62 @@ public class AccountService implements UserDetailsService {
      * @throws UnauthorizedException if unauthenticated user called this method.
      */
     public void save(Account account) {
-        if (AuthenticationUtils.getAccount() == null) {
+        if (getAccount() == null) {
             throw new UnauthorizedException("Must be authenticated to call this method");
         }
 
         LOGGER.debug("Saving Account{id={}} and updating authentication", account.getId());
         account = accountRepository.save(account);
         AuthenticationUtils.setAccount(account);
+    }
+
+    /**
+     * Get account by username.
+     *
+     * @param username account username.
+     * @return account or null if account is not found.
+     */
+    public Account getAccount(String username) {
+        return accountRepository.findByUsername(username);
+    }
+
+
+    /**
+     * Ignore specified invitation.
+     *
+     * @param id invitation to ignore.
+     */
+    public void ignoreInvitation(long id) {
+        Invitation invitation = invitationRepository
+                .findByAccountIdAndId(AuthenticationUtils.getIdOrThrow(), id);
+
+        invitation.setAccount(null);
+        invitationRepository.save(invitation);
+    }
+
+    /**
+     * Accept invitation for this account.
+     *
+     * @param id invitation to accept.
+     */
+    public void acceptInvitation(long id) {
+        Account account = getAccount();
+
+        // Already have a restaurant, cannot accept.
+        if (account.hasRestaurant()) {
+            LOGGER.warn("Account{id={}} already has a restaurant, cannot accept invitation", id);
+            return;
+        }
+
+        Invitation invitation = invitationRepository
+                .findByAccountIdAndId(account.getId(), id);
+
+        // Assign account to restaurant.
+        account.setRestaurant(invitation.getRestaurant());
+        save(account);
+
+        // Accepted invitations get deleted.
+        invitationRepository.deleteByAccountId(account.getId());
     }
 
     /**

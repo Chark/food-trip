@@ -3,11 +3,9 @@ package io.chark.food.domain.restaurant;
 import io.chark.food.domain.BaseEntity;
 import io.chark.food.domain.authentication.account.Account;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import javax.validation.constraints.Size;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -37,7 +35,17 @@ public class Restaurant extends BaseEntity {
     @OneToMany(mappedBy = "restaurant", fetch = FetchType.EAGER)
     private List<Account> accounts;
 
+    // Invited accounts to this restaurant.
+    @OneToMany(mappedBy = "restaurant", orphanRemoval = true, fetch = FetchType.EAGER)
+    private List<Invitation> invitations = new ArrayList<>();
+
     public Restaurant() {
+    }
+
+    public Restaurant(String email, String name, String description) {
+        this.email = email;
+        this.name = name;
+        this.description = description;
     }
 
     public String getEmail() {
@@ -102,5 +110,9 @@ public class Restaurant extends BaseEntity {
 
     public List<Account> getAccounts() {
         return accounts;
+    }
+
+    public List<Invitation> getInvitations() {
+        return invitations;
     }
 }

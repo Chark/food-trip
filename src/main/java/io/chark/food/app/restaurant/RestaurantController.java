@@ -1,14 +1,20 @@
 package io.chark.food.app.restaurant;
 
+import com.fasterxml.jackson.annotation.JsonView;
+import io.chark.food.domain.BaseEntity;
+import io.chark.food.domain.authentication.account.Account;
+import io.chark.food.domain.restaurant.Invitation;
 import io.chark.food.domain.restaurant.Restaurant;
+import io.chark.food.util.exception.BadInputException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -89,5 +95,39 @@ public class RestaurantController {
                 " and email is not taken");
 
         return "restaurant/register";
+    }
+
+    /**
+     * Get invitations for the current restaurant.
+     *
+     * @return list of invitations.
+     */
+    @ResponseBody
+    @RequestMapping(value = "/api/invitations", method = RequestMethod.GET)
+    public List<Invitation> getInvitations() {
+        return restaurantService.getRestaurant().getInvitations();
+    }
+
+    /**
+     * Invite a user to restaurant.
+     *
+     * @param username user to invite.
+     */
+    @ResponseStatus(HttpStatus.OK)
+    @RequestMapping(value = "/api/invitations/invite", method = RequestMethod.POST)
+    public void invite(@RequestParam String username) {
+        restaurantService.invite(username)
+                .orElseThrow(() -> new BadInputException("Failed to invite this user"));
+    }
+
+    /**
+     * Delete sent invitation.
+     *
+     * @param id invitation id.
+     */
+    @ResponseStatus(HttpStatus.OK)
+    @RequestMapping(value = "/api/invitations/{id}", method = RequestMethod.DELETE)
+    public void deleteInvitation(@PathVariable long id) {
+        restaurantService.deleteInvitation(id);
     }
 }

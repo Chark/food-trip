@@ -5,6 +5,8 @@ import io.chark.food.app.administrate.audit.AuditService;
 import io.chark.food.domain.authentication.account.Account;
 import io.chark.food.domain.authentication.account.AccountRepository;
 import io.chark.food.domain.authentication.permission.Permission;
+import io.chark.food.domain.restaurant.Invitation;
+import io.chark.food.domain.restaurant.InvitationRepository;
 import io.chark.food.util.authentication.AuthenticationUtils;
 import io.chark.food.util.exception.NotFoundException;
 import io.chark.food.util.exception.UnauthorizedException;
@@ -22,15 +24,18 @@ public class AccountAdministrationService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AccountAdministrationService.class);
 
+    private final InvitationRepository invitationRepository;
     private final AccountRepository accountRepository;
     private final AccountService accountService;
     private final AuditService auditService;
 
     @Autowired
-    public AccountAdministrationService(AccountRepository accountRepository,
+    public AccountAdministrationService(InvitationRepository invitationRepository,
+                                        AccountRepository accountRepository,
                                         AccountService accountService,
                                         AuditService auditService) {
 
+        this.invitationRepository = invitationRepository;
         this.accountRepository = accountRepository;
         this.accountService = accountService;
         this.auditService = auditService;
@@ -134,7 +139,15 @@ public class AccountAdministrationService {
             auditService.warn("Attempted to delete own account");
             throw new UnauthorizedException("You cannot delete your own account");
         }
-        accountRepository.delete(id);
+        Account account = accountRepository.findOne(id);
+
+        // Detach invitations for the account.
+        for (Invitation invitation : account.getInvitations()) {
+            invitation.setAccount(null);
+        }
+        invitationRepository.save(account.getInvitations());
+
+        accountRepository.delete(account);
         auditService.info("Deleted Account with id: %d", id);
     }
 }

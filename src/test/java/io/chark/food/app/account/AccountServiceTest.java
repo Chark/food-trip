@@ -6,6 +6,10 @@ import io.chark.food.domain.authentication.account.Account;
 import io.chark.food.domain.authentication.account.AccountRepository;
 import io.chark.food.domain.authentication.permission.Permission;
 import io.chark.food.domain.authentication.permission.PermissionRepository;
+import io.chark.food.domain.restaurant.Invitation;
+import io.chark.food.domain.restaurant.InvitationRepository;
+import io.chark.food.domain.restaurant.Restaurant;
+import io.chark.food.domain.restaurant.RestaurantRepository;
 import io.chark.food.util.authentication.AuthenticationUtils;
 import org.junit.After;
 import org.junit.Before;
@@ -33,6 +37,12 @@ public class AccountServiceTest {
     private PermissionRepository permissionRepository;
 
     @Resource
+    private InvitationRepository invitationRepository;
+
+    @Resource
+    private RestaurantRepository restaurantRepository;
+
+    @Resource
     private AccountRepository accountRepository;
 
     private AccountService service;
@@ -41,6 +51,7 @@ public class AccountServiceTest {
     public void setUp() {
         service = new AccountService(
                 permissionRepository,
+                invitationRepository,
                 accountRepository,
                 new BCryptPasswordEncoder(),
                 Mockito.mock(AuditService.class));
@@ -48,7 +59,9 @@ public class AccountServiceTest {
 
     @After
     public void tearDown() {
+        invitationRepository.deleteAll();
         accountRepository.deleteAll();
+        restaurantRepository.deleteAll();
         SecurityContextHolder.clearContext();
     }
 
@@ -115,7 +128,7 @@ public class AccountServiceTest {
         service.update(updateDetails);
 
         // Get account from authentication.
-        Account account = AuthenticationUtils.getAccount();
+        Account account = accountRepository.findOne(AuthenticationUtils.getId());
 
         // Test if required fields have been updated.
         assertThat(account.getEmail()).isEqualTo(updateDetails.getEmail());
@@ -124,5 +137,44 @@ public class AccountServiceTest {
         assertThat(account.getBio()).isEqualTo(updateDetails.getBio());
         assertThat(account.getPhone()).isEqualTo(updateDetails.getPhone());
         assertThat(account.getWebsite()).isEqualTo(updateDetails.getWebsite());
+    }
+
+    @Test
+    public void acceptInvitation() {
+
+        Account account = service.register(TEST_USERNAME, TEST_EMAIL, TEST_PASSWORD).get();
+        AuthenticationUtils.setAccount(account);
+
+        // Add restaurant to add the invitations to.
+        Restaurant restaurant = restaurantRepository.save(new Restaurant("email@email.com", "name", "desc"));
+
+        // Add invitations to this account.
+        long id = invitationRepository.save(new Invitation(account.getUsername(), account, restaurant)).getId();
+        invitationRepository.save(new Invitation(account.getUsername(), account, restaurant));
+
+        service.acceptInvitation(id);
+
+        // All invitations should be cleared from account.
+        assertThat(accountRepository.findOne(account.getId()).hasRestaurant()).isTrue();
+        assertThat(accountRepository.findOne(account.getId()).getInvitations()).isEmpty();
+    }
+
+    @Test
+    public void ignoreInvitation() {
+
+        Account account = service.register(TEST_USERNAME, TEST_EMAIL, TEST_PASSWORD).get();
+        AuthenticationUtils.setAccount(account);
+
+        // Add restaurant to add the invitations to.
+        Restaurant restaurant = restaurantRepository.save(new Restaurant("email@email.com", "name", "desc"));
+
+        // Add invitations to this account.
+        long id = invitationRepository.save(new Invitation(account.getUsername(), account, restaurant)).getId();
+        assertThat(accountRepository.findOne(account.getId()).getInvitations()).isNotEmpty();
+
+        service.ignoreInvitation(id);
+
+        // Ignored invitation - no longer assigned to account.
+        assertThat(accountRepository.findOne(account.getId()).getInvitations()).isEmpty();
     }
 }

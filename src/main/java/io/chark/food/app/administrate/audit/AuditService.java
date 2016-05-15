@@ -2,11 +2,11 @@ package io.chark.food.app.administrate.audit;
 
 import io.chark.food.domain.audit.AuditMessage;
 import io.chark.food.domain.audit.AuditMessageRepository;
+import io.chark.food.domain.authentication.account.AccountRepository;
 import io.chark.food.domain.extras.Color;
 import io.chark.food.util.authentication.AuthenticationUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -14,10 +14,14 @@ import java.util.List;
 public class AuditService {
 
     private final AuditMessageRepository messageRepository;
+    private final AccountRepository accountRepository;
 
     @Autowired
-    public AuditService(AuditMessageRepository messageRepository) {
+    public AuditService(AuditMessageRepository messageRepository,
+                        AccountRepository accountRepository) {
+
         this.messageRepository = messageRepository;
+        this.accountRepository = accountRepository;
     }
 
     /**
@@ -103,7 +107,7 @@ public class AuditService {
      */
     public AuditMessage message(Color color, String message, Object... args) {
         AuditMessage auditMessage = new AuditMessage(
-                AuthenticationUtils.getAccount(),
+                accountRepository.findOne(AuthenticationUtils.getId()),
                 String.format(message, args),
                 color);
 

@@ -1,14 +1,12 @@
 package io.chark.food.app.account;
 
 import io.chark.food.domain.authentication.account.Account;
-import io.chark.food.util.authentication.AuthenticationUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
@@ -77,7 +75,7 @@ public class AccountController {
      */
     @RequestMapping(value = "/profile", method = RequestMethod.GET)
     public String profile(Model model) {
-        model.addAttribute("account", AuthenticationUtils.getAccount());
+        model.addAttribute("account", accountService.getAccount());
         return "account/profile";
     }
 
@@ -94,5 +92,23 @@ public class AccountController {
         }
         attributes.addFlashAttribute("profileTab", true);
         return "redirect:/profile";
+    }
+
+    /**
+     * Accept or ignore invitation to join a restaurant.
+     *
+     * @param id     invitation id.
+     * @param accept should the invitation be accepted or ignored.
+     */
+    @ResponseStatus(HttpStatus.OK)
+    @RequestMapping(value = "/profile/api/invitation/{id}", method = RequestMethod.POST)
+    public void invitation(@PathVariable long id, @RequestParam boolean accept) {
+
+        // Either accept or ignore the invitation.
+        if (accept) {
+            accountService.acceptInvitation(id);
+        } else {
+            accountService.ignoreInvitation(id);
+        }
     }
 }

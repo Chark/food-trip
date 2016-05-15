@@ -7,6 +7,10 @@ import io.chark.food.domain.authentication.account.Account;
 import io.chark.food.domain.authentication.account.AccountRepository;
 import io.chark.food.domain.authentication.permission.Permission;
 import io.chark.food.domain.authentication.permission.PermissionRepository;
+import io.chark.food.domain.restaurant.Invitation;
+import io.chark.food.domain.restaurant.InvitationRepository;
+import io.chark.food.domain.restaurant.Restaurant;
+import io.chark.food.domain.restaurant.RestaurantRepository;
 import io.chark.food.util.authentication.AuthenticationUtils;
 import io.chark.food.util.exception.NotFoundException;
 import io.chark.food.util.exception.UnauthorizedException;
@@ -31,6 +35,12 @@ public class AccountAdministrationServiceTest {
     private static final String TEST_EMAIL = "Test@test.com";
 
     @Resource
+    private RestaurantRepository restaurantRepository;
+
+    @Resource
+    private InvitationRepository invitationRepository;
+
+    @Resource
     private PermissionRepository permissionRepository;
 
     @Resource
@@ -44,13 +54,15 @@ public class AccountAdministrationServiceTest {
     @Before
     public void setUp() {
         service = new AccountAdministrationService(
-                accountRepository,
+                invitationRepository, accountRepository,
                 accountService,
                 Mockito.mock(AuditService.class));
     }
 
     @After
     public void tearDown() {
+        restaurantRepository.deleteAll();
+        invitationRepository.deleteAll();
         accountRepository.deleteAll();
         SecurityContextHolder.clearContext();
     }
@@ -98,10 +110,18 @@ public class AccountAdministrationServiceTest {
     public void delete() {
 
         long initial = accountRepository.count();
-        long id = accountService.register(TEST_USERNAME, TEST_EMAIL, TEST_PASSWORD)
-                .get().getId();
+        Account account = accountService.register(TEST_USERNAME, TEST_EMAIL, TEST_PASSWORD)
+                .get();
 
-        service.delete(id);
+        // Add restaurant to account.
+        Restaurant restaurant = restaurantRepository.save(new Restaurant("email@email.com", "name", "desc"));
+        account.setRestaurant(restaurant);
+        account = accountRepository.save(account);
+
+        // Add invitations to account.
+        invitationRepository.save(new Invitation("asd", account, restaurant));
+
+        service.delete(account.getId());
         assertThat(accountRepository.count()).isEqualTo(initial);
     }
 

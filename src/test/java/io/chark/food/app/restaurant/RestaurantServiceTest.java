@@ -5,10 +5,12 @@ import io.chark.food.app.account.AccountService;
 import io.chark.food.app.administrate.audit.AuditService;
 import io.chark.food.domain.authentication.account.Account;
 import io.chark.food.domain.authentication.account.AccountRepository;
+import io.chark.food.domain.restaurant.InvitationRepository;
 import io.chark.food.domain.restaurant.Restaurant;
 import io.chark.food.domain.restaurant.RestaurantRepository;
 import io.chark.food.util.authentication.AuthenticationUtils;
 import io.chark.food.util.exception.NotFoundException;
+import io.chark.food.util.exception.UnauthorizedException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -34,6 +36,9 @@ public class RestaurantServiceTest {
     private RestaurantRepository restaurantRepository;
 
     @Resource
+    private InvitationRepository invitationRepository;
+
+    @Resource
     private AccountRepository accountRepository;
 
     @Resource
@@ -56,6 +61,7 @@ public class RestaurantServiceTest {
         AuthenticationUtils.setAccount(account);
 
         service = new RestaurantService(
+                invitationRepository,
                 restaurantRepository,
                 accountService,
                 Mockito.mock(AuditService.class));
@@ -63,6 +69,7 @@ public class RestaurantServiceTest {
 
     @After
     public void tearDown() {
+        invitationRepository.deleteAll();
         accountRepository.deleteAll();
         restaurantRepository.deleteAll();
         SecurityContextHolder.clearContext();
@@ -75,11 +82,11 @@ public class RestaurantServiceTest {
         restaurant.setEmail("email@email.com");
         restaurant = service.register(restaurant).get();
 
-        assertThat(AuthenticationUtils.getAccount().getRestaurant()).isNotNull();
+        assertThat(accountService.getAccount().getRestaurant()).isNotNull();
         assertThat(restaurantRepository.findOne(restaurant.getId()).getAccounts()).hasSize(1);
     }
 
-    @Test
+    @Test(expected = UnauthorizedException.class)
     public void registerFailedNoAuth() {
 
         SecurityContextHolder.clearContext();
@@ -148,5 +155,43 @@ public class RestaurantServiceTest {
         assertThat(restaurant.getName()).isEqualTo(name);
         assertThat(restaurant.getEmail()).isEqualToIgnoringCase(email);
         assertThat(restaurant.getDescription()).isEqualTo(description);
+    }
+
+    @Test
+    public void invite() {
+
+        // Register a new restaurant.
+        Restaurant restaurant = new Restaurant();
+        restaurant.setName("name");
+        restaurant.setEmail("email@email.com");
+        service.register(restaurant);
+
+        String username = accountRepository.save(new Account("dummy", "dummy@dumm.com", "any"))
+                .getUsername();
+
+        assertThat(service.invite(username).get().getAccount()).isNotNull();
+    }
+
+    @Test
+    public void deleteInvitation() {
+
+        // Register a new restaurant.
+        Restaurant restaurant = new Restaurant();
+        restaurant.setName("name");
+        restaurant.setEmail("email@email.com");
+        service.register(restaurant);
+
+        // Dummy account.
+        String username = accountRepository.save(new Account("dummy", "dummy@dumm.com", "any"))
+                .getUsername();
+
+        // Invite dummy account.
+        long preInvite = invitationRepository.count();
+        long id = service.invite(username)
+                .get().getId();
+
+        // Remove invitation from restaurant.
+        service.deleteInvitation(id);
+        assertThat(invitationRepository.count()).isEqualTo(preInvite);
     }
 }

@@ -16,7 +16,11 @@ public class AuthenticationUtils {
      * @throws UnauthorizedException if no authentication is found.
      */
     public static long getIdOrThrow() {
-        return getAccountOrThrow().getId();
+        long id = getId();
+        if (id == 0) {
+            throw new UnauthorizedException("No authentication is found");
+        }
+        return id;
     }
 
     /**
@@ -33,38 +37,6 @@ public class AuthenticationUtils {
     }
 
     /**
-     * Get currently authenticated user account or thrown a exception is there is not authentication.
-     *
-     * @return user account.
-     * @throws UnauthorizedException if no authentication is found.
-     */
-    public static Account getAccountOrThrow() {
-        Account account = getAccount();
-        if (account == null) {
-            throw new UnauthorizedException("No authentication is found");
-        }
-        return account;
-    }
-
-    /**
-     * Get currently authenticated user account.
-     *
-     * @return currently authenticated user account or null if something failed.
-     */
-    public static Account getAccount() {
-        Authentication authentication = SecurityContextHolder
-                .getContext()
-                .getAuthentication();
-
-        if (authentication == null) {
-            return null;
-        }
-
-        return (Account) authentication
-                .getPrincipal();
-    }
-
-    /**
      * Put new account entity to current authentication context.
      *
      * @param account account to put to context.
@@ -75,5 +47,22 @@ public class AuthenticationUtils {
                 .setAuthentication(new UsernamePasswordAuthenticationToken(
                         account, account.getPassword(),
                         account.getAuthorities()));
+    }
+
+    /**
+     * Get currently authenticated user account.
+     *
+     * @return currently authenticated user account or null if something failed.
+     */
+    private static Account getAccount() {
+        Authentication authentication = SecurityContextHolder
+                .getContext()
+                .getAuthentication();
+
+        if (authentication == null || !(authentication.getPrincipal() instanceof Account)) {
+            return null;
+        }
+        return (Account) authentication
+                .getPrincipal();
     }
 }
