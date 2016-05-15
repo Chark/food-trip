@@ -1,35 +1,19 @@
 package io.chark.food.domain.authentication.account;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.chark.food.domain.BaseEntity;
 import io.chark.food.domain.authentication.permission.Permission;
+import io.chark.food.domain.restaurant.Restaurant;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.ManyToMany;
+import javax.persistence.*;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 public class Account extends BaseEntity implements UserDetails {
-
-    /**
-     * Default length for longer string fields.
-     */
-    public static final int DEFAULT_LONG_LENGTH = 1024;
-
-    /**
-     * Default length for various string values.
-     */
-    public static final int DEFAULT_LENGTH = 64;
-
-    /**
-     * Default min length for various string values.
-     */
-    public static final int MIN_LENGTH = 4;
 
     @Column(length = DEFAULT_LENGTH, nullable = false, unique = true)
     private String prettyUsername;
@@ -71,6 +55,9 @@ public class Account extends BaseEntity implements UserDetails {
     @Column(nullable = false)
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<Permission> permissions = new HashSet<>();
+
+    @ManyToOne
+    private Restaurant restaurant;
 
     public Account() {
     }
@@ -166,6 +153,10 @@ public class Account extends BaseEntity implements UserDetails {
         this.locked = locked;
     }
 
+    public void setRestaurant(Restaurant restaurant) {
+        this.restaurant = restaurant;
+    }
+
     /**
      * Check if this account has a permission based on authority.
      *
@@ -183,6 +174,18 @@ public class Account extends BaseEntity implements UserDetails {
 
     public void setPermissions(Set<Permission> permissions) {
         this.permissions = permissions;
+    }
+
+    @JsonIgnore
+    public Restaurant getRestaurant() {
+        return restaurant;
+    }
+
+    /**
+     * Check if this account entity has a restaurant attached to it.
+     */
+    public boolean hasRestaurant() {
+        return restaurant != null;
     }
 
     @Override

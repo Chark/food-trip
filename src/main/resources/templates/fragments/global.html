@@ -40,8 +40,17 @@
             <div class="navbar-collapse collapse" id="navbar-main">
                 <ul class="nav navbar-nav navbar-right">
 
-                    <!-- Moderation (admin) dashboard, visible only to mods and admins -->
-                    <li><a th:href="@{/moderate}" sec:authorize="hasAuthority('ROLE_MODERATOR')">Dashboard</a></li>
+                    <!-- Only visible for logged in users -->
+                    <th:block sec:authorize="isAuthenticated()">
+
+                        <!-- Can create restaurant only if you don't belong to one -->
+                        <th:block th:if="${!#authentication.principal.hasRestaurant()}">
+                            <li><a th:href="@{/restaurant/register}">New restaurant</a></li>
+                        </th:block>
+
+                        <!-- Moderation (admin) dashboard, visible only to mods and admins -->
+                        <li sec:authorize="hasAuthority('ROLE_MODERATOR')"><a th:href="@{/moderate}">Dashboard</a></li>
+                    </th:block>
 
                     <!-- Login only visible to non-authenticated users -->
                     <li sec:authorize="isAnonymous()">

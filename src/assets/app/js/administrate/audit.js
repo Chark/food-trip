@@ -65,7 +65,23 @@
             var id = $(this).data('id');
 
             $.get(auditUrl + '/' + id, function (auditMessage) {
+                infoModal.find('.audit-id').text(auditMessage.id);
                 infoModal.find('.audit-message').text(auditMessage.message);
+                infoModal.find('.audit-creation-date').text(Utils.date(auditMessage.creationDate));
+
+                // Hide or show account details if account is not null.
+                var account = auditMessage.account;
+
+                if (account) {
+                    infoModal.find('.audit-user-id').text(account.id);
+                    infoModal.find('.audit-username').html(
+                        '<a href="/administrate/accounts/' + account.id + '">' + account.username + '</a>');
+
+                    infoModal.find('.audit-email').text(account.email);
+                    infoModal.find('.account-details').show();
+                } else {
+                    infoModal.find('.account-details').hide();
+                }
                 infoModal.modal();
             })
         });

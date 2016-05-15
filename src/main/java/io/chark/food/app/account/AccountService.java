@@ -7,6 +7,7 @@ import io.chark.food.domain.authentication.permission.Permission;
 import io.chark.food.domain.authentication.permission.PermissionRepository;
 import io.chark.food.domain.extras.Color;
 import io.chark.food.util.authentication.AuthenticationUtils;
+import io.chark.food.util.exception.UnauthorizedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -210,6 +211,22 @@ public class AccountService implements UserDetailsService {
             return Collections.emptySet();
         }
         return permissionRepository.findByAuthorityIn(authorities);
+    }
+
+    /**
+     * Save provided account instance and put in authentication context.
+     *
+     * @param account account to save.
+     * @throws UnauthorizedException if unauthenticated user called this method.
+     */
+    public void save(Account account) {
+        if (AuthenticationUtils.getAccount() == null) {
+            throw new UnauthorizedException("Must be authenticated to call this method");
+        }
+
+        LOGGER.debug("Saving Account{id={}} and updating authentication", account.getId());
+        account = accountRepository.save(account);
+        AuthenticationUtils.setAccount(account);
     }
 
     /**

@@ -22,6 +22,20 @@
         </thead>
     </table>
 
+    <!--<th:block th:include=":: userInfo('Registered', *{#dates.format(registrationDate, 'yyyy MMM dd')})"/>-->
+
+    <!-- Fragment for create audit info modal content -->
+    <th:block th:fragment="auditInfo (name, clazz)">
+        <div class="row">
+            <div class="col-xs-4">
+                <strong th:text="${name}"></strong>
+            </div>
+            <div class="col-xs-8">
+                <span th:class="${clazz}"></span>
+            </div>
+        </div>
+    </th:block>
+
     <!-- Modal for more info about an audit message -->
     <div class="info-modal modal fade" role="dialog">
         <div class="modal-dialog">
@@ -30,10 +44,25 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Information about audit message</h4>
+                    <h6 class="modal-title">Information about audit message</h6>
                 </div>
                 <div class="modal-body">
-                    <p class="audit-message"></p>
+
+                    <!-- The actual audit message info which is to be replaced via ja -->
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h5>Details</h5>
+                            <th:block th:include="this :: auditInfo('Id', 'audit-id')"/>
+                            <th:block th:include="this :: auditInfo('Message', 'audit-message')"/>
+                            <th:block th:include="this :: auditInfo('Creation date', 'audit-creation-date')"/>
+                        </div>
+                        <div class="col-md-12 account-details">
+                            <h5>Created by</h5>
+                            <th:block th:include="this :: auditInfo('Id', 'audit-user-id')"/>
+                            <th:block th:include="this :: auditInfo('Username', 'audit-username')"/>
+                            <th:block th:include="this :: auditInfo('Email', 'audit-email')"/>
+                        </div>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

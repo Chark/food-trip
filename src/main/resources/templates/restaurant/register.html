@@ -1,0 +1,40 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layouts/default">
+
+<head>
+    <title>Register</title>
+</head>
+
+<body>
+<th:block layout:fragment="content">
+    <div class="col-sm-offset-4 col-sm-4">
+
+        <div class="alert alert-dismissible alert-danger" th:if="${error}">
+            <button data-dismiss="alert" class="close" type="button">×</button>
+            <strong>Error!</strong>
+            <th:block th:text="${error}"/>
+        </div>
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                Register new restaurant
+            </div>
+            <div class="panel-body">
+                <form name="registerForm" th:action="@{/restaurant/register}" th:object="${restaurant}" method="POST">
+
+                </form>
+            </div>
+        </div>
+    </div>
+</th:block>
+
+<!-- Initialize javascript for this page -->
+<script type="application/javascript" layout:fragment="javascript">
+    $(function () {
+        Restaurant.initRegister();
+    });
+</script>
+
+</body>
+</html>
