@@ -64,11 +64,6 @@ public class AccountService implements UserDetailsService {
 
         // Init default admin account if there are no accounts defined.
         initAdmin();
-
-        // Register some dummy accounts.
-        for (int i = 0; i < 10; i++) {
-            register("dummy" + i, "dummy" + i + "@dummy.com", "password");
-        }
     }
 
     /**
