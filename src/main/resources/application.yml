@@ -2,3 +2,6 @@
 server.port: 8080
 spring.thymeleaf.cache: false
 logging.level.io.chark: DEBUG
+
+# Dev profile, atm used only to exclude test data seeding during unit testing.
+spring.profiles.active: dev
