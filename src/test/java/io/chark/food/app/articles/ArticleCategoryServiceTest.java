@@ -3,6 +3,7 @@ package io.chark.food.app.articles;
 import io.chark.food.FoodTripIntegrationTest;
 import io.chark.food.app.article.ArticleCategoryService;
 import io.chark.food.domain.article.ArticleCategoryRepository;
+import io.chark.food.domain.article.ArticleRepository;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -16,9 +17,12 @@ import javax.annotation.Resource;
 public class ArticleCategoryServiceTest {
 
     @Resource
-    ArticleCategoryRepository categoryRepository;
+    private ArticleCategoryRepository categoryRepository;
 
-    ArticleCategoryService service;
+    @Resource
+    private ArticleRepository articleRepository;
+
+    private ArticleCategoryService service;
 
     @Before
     public void setUp() {
@@ -27,6 +31,7 @@ public class ArticleCategoryServiceTest {
 
     @After
     public void tearDown() {
+        articleRepository.deleteAll();
         categoryRepository.deleteAll();
     }
 

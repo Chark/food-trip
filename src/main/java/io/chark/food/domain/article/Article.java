@@ -3,9 +3,7 @@ package io.chark.food.domain.article;
 import io.chark.food.domain.BaseEntity;
 
 import javax.persistence.*;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 public class Article extends BaseEntity {
@@ -28,8 +26,8 @@ public class Article extends BaseEntity {
 
     private long viewsNumber;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    private Set<ArticleCategory> categories = new HashSet<>();
+    @ManyToMany
+    private List<ArticleCategory> categories = new ArrayList<>();
 
     public Article() {
     }
@@ -107,11 +105,11 @@ public class Article extends BaseEntity {
         this.viewsNumber = viewsNumber;
     }
 
-    public Set<ArticleCategory> getCategories() {
+    public List<ArticleCategory> getCategories() {
         return categories;
     }
 
-    public void setCategories(Set<ArticleCategory> categories) {
+    public void setCategories(List<ArticleCategory> categories) {
         this.categories = categories;
     }
 
