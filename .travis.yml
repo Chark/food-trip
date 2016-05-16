@@ -10,3 +10,6 @@ cache:
   - ~/.gradle
 after_success:
   - ./gradlew cobertura coveralls
+notifications:
+  email:
+    on_success: change
