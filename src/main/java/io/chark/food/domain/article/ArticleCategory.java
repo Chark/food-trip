@@ -1,5 +1,6 @@
 package io.chark.food.domain.article;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import io.chark.food.domain.BaseEntity;
 
 import javax.persistence.Column;
@@ -21,6 +22,7 @@ public class ArticleCategory extends BaseEntity {
 
     private Date editedDate;
 
+    @JsonManagedReference
     @ManyToMany(fetch = FetchType.EAGER, mappedBy = "categories")
     private List<Article> articles = new ArrayList<>();
 

@@ -17,9 +17,11 @@ public class TestDataService {
      * Fill database with test data.
      */
     @Async
-    public void initTestData() {
+    void initTestData() {
         LOGGER.info("Initializing test data");
         // todo add test data initialization.
         LOGGER.info("Finished initializing test data");
     }
+
+
 }

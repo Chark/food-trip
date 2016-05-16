@@ -20,11 +20,20 @@
         categoriesTable = $('table.article-category-table').DataTable({
             ajax: {
                 url: categoriesUrl,
-                dataSrc: '',
-                columns: [
-                    {data: 'id'}
-                ]
-            }
+                dataSrc: ''
+            },
+            columns: [
+                {data: 'id'},
+                {data: 'id'},
+                {data: 'id'},
+                {data: 'id'},
+                {
+                    data: 'id',
+                    render: function (id) {
+                        return 'top kek: ' + id;
+                    }
+                }
+            ]
         });
         console.log(categoriesTable);
     };

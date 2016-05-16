@@ -1,5 +1,6 @@
 package io.chark.food.domain.article;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import io.chark.food.domain.BaseEntity;
 
 import javax.persistence.*;
@@ -27,6 +28,7 @@ public class Article extends BaseEntity {
     private long viewsNumber;
 
     @ManyToMany
+    @JsonBackReference
     private List<ArticleCategory> categories = new ArrayList<>();
 
     public Article() {
