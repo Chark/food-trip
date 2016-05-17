@@ -146,7 +146,11 @@ public class AccountAdministrationService {
 
         // If locked is true, log-out that user.
         if (locked) {
-            LOGGER.debug("Logging out user: {}", account.getUsername());
+            String username = account.getUsername();
+
+            // Do we need this much logging?
+            LOGGER.debug("Logging out user: {}", username);
+            auditService.warn("Logging out user: %s", username);
 
             // Expire all sessions of a user.
             sessionRegistry
