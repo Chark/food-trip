@@ -82,7 +82,7 @@
                         callback: function () {
                             $.delete(categoriesUrl + '/' + id, function () {
                                 toastr.success('Deleted article category');
-                                accountTable.ajax.reload();
+                                categoriesTable.ajax.reload();
                             }).fail(function () {
                                 toastr.error('Failed to delete article category');
                             });

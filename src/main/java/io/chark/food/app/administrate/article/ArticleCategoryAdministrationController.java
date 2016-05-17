@@ -67,7 +67,7 @@ public class ArticleCategoryAdministrationController {
             model.addAttribute("category", category);
             return "administrate/article_category";
         }
-        return "redirect:/administrate/article_categories";
+        return "redirect:/administrate/articles/categories";
     }
 
     /**
