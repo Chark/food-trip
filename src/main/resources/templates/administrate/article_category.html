@@ -1,0 +1,51 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layouts/moderation">
+
+<head>
+    <title>Article Category</title>
+</head>
+
+<body>
+<th:block layout:fragment="content">
+    <form name="articleCategoryForm"
+          method="POST"
+          th:attr="data-article-category-id=${category.id}"
+          th:action="@{/administrate/articles/categories/__${category.id}__}"
+          th:object="${category}">
+
+
+        <div class="row">
+            <div class="col-md-12">
+                <h2>Account details</h2>
+                <div class="row">
+                    <div class="col-md-6">
+                        <th:block th:include="fragments/forms :: input
+                        ('title', *{title}, 'title', 'Title', 'Enter title')"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <label class="col-xs-12 control-label">
+                Description
+                <textarea th:text="*{description}" name="description" rows="3" class="form-control"
+                          placeholder="Enter article category description"></textarea>
+            </label>
+        </div>
+
+        <!-- Submit and back -->
+        <button type="submit" class="btn btn-success">Save</button>
+        <a th:href="@{/administrate/articles/categories}" class="btn btn-danger">Cancel</a>
+    </form>
+</th:block>
+
+<!-- Initialize javascript for this page -->
+<script type="application/javascript" layout:fragment="javascript">
+    $(function () {
+        ArticleCategoryManagement.initCategory();
+    });
+</script>
+
+</body>
+</html>

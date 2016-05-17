@@ -8,6 +8,31 @@
      */
     ArticleCategoryManagement.initCategory = function () {
 
+        var form = $('form[name=articleCategoryForm]');
+        var newAccount = form.data('article-category-id') <= 0;
+
+        /**
+         * Form validation.
+         */
+        form.validate({
+            errorElement: 'small',
+            rules: {
+                title: {
+                    minlength: 4,
+                    maxlength: 64,
+                    required: true
+                },
+                description: {
+                    maxlength: 1024
+                }
+            },
+            highlight: function (element) {
+                $(element).closest('.form-group').addClass('has-error');
+            },
+            success: function (element) {
+                element.closest('.form-group').removeClass('has-error');
+            }
+        });
     };
 
     /**
