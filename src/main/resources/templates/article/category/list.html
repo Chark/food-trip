@@ -9,19 +9,20 @@
 <body>
 <th:block layout:fragment="content">
     <div class="container">
-        <div class="col-sm-12">
-            <ul>
-                <th:block th:each="category : ${categories}">
-                    <h3 th:text="${category.title}"></h3>
-                    <p th:text="${category.description}"></p>
-                    <ul>
-                        <th:block th:each="article : ${category.articles}">
-                            <li th:text="${article.title}"></li>
-                        </th:block>
-                    </ul>
-                </th:block>
-            </ul>
+        <div class="page-header">
+            <h1>Article Categories</h1>
         </div>
+        <ul>
+            <th:block th:each="category : ${categories}">
+                <h3 th:text="${category.title}"></h3>
+                <p th:text="${category.description}"></p>
+                <ul>
+                    <th:block th:each="article : ${category.articles}">
+                        <li><a th:href="@{/articles/__${article.id}__}" th:text="${article.title}"></a></li>
+                    </th:block>
+                </ul>
+            </th:block>
+        </ul>
     </div>
 </th:block>
 

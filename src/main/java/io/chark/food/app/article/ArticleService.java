@@ -61,6 +61,8 @@ public class ArticleService {
         byte[] image = PhotoUtils.getImageBytes("static/images/default_avatar.JPG");
         ArticlePhoto photo = new ArticlePhoto(image, "Edvinas has the best dog.", "Good looking cool dog");
         article.addPhoto(photoRepository.save(photo));
+        photo = new ArticlePhoto(image, "Edvinas has the best dog.", "Good looking cool dog");
+        article.addPhoto(photoRepository.save(photo));
 
         //ArticlePhoto photo
         articleRepository.save(article);
