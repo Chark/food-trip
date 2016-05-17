@@ -1,6 +1,5 @@
 package io.chark.food.app.article;
 
-import io.chark.food.app.account.AccountService;
 import io.chark.food.app.administrate.audit.AuditService;
 import io.chark.food.domain.article.Article;
 import io.chark.food.domain.article.category.ArticleCategory;
@@ -19,7 +18,8 @@ import javax.annotation.PostConstruct;
 
 @Service
 public class ArticleService {
-    private static final Logger LOGGER = LoggerFactory.getLogger(AccountService.class);
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(ArticleService.class);
 
     private final ArticleRepository articleRepository;
     private final ArticleCategoryRepository categoryRepository;
