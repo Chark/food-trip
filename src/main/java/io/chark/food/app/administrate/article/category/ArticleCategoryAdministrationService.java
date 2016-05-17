@@ -18,7 +18,7 @@ import java.util.Optional;
 @Service
 public class ArticleCategoryAdministrationService {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(AccountAdministrationService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ArticleCategoryAdministrationService.class);
 
     private final ArticleCategoryRepository categoryRepository;
     private final ArticleCategoryService categoryService;
@@ -65,18 +65,17 @@ public class ArticleCategoryAdministrationService {
         category.setDescription(categoryDetails.getDescription());
 
         try {
-
             category = categoryRepository.save(category);
-            LOGGER.debug("Saved Article Category{id={}}", category.getId());
+            LOGGER.debug("Saved ArticleCategory{id={}}", category.getId());
 
-            auditService.debug("%s Article Category with id: %d via admin panel",
+            auditService.debug("%s ArticleCategory with id: %d via admin panel",
                     id <= 0 ? "Created new" : "Updated", category.getId());
 
             return Optional.of(category);
         } catch (DataIntegrityViolationException e) {
             LOGGER.error("Could not save article category", e);
 
-            auditService.error("Failed to save Article Category");
+            auditService.error("Failed to save ArticleCategory");
             return Optional.empty();
         }
     }
@@ -90,7 +89,7 @@ public class ArticleCategoryAdministrationService {
     public ArticleCategory getCategory(long id) {
         ArticleCategory category = categoryRepository.findOne(id);
         if (category == null) {
-            auditService.warn("Attempted to query non-existing Article Category with id: %d", id);
+            auditService.warn("Attempted to query non-existing ArticleCategory with id: %d", id);
             throw new NotFoundException(ArticleCategory.class, id);
         }
         return category;

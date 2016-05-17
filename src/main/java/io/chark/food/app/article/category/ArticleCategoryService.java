@@ -17,7 +17,7 @@ import java.util.Optional;
 @Service
 public class ArticleCategoryService {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(AccountService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ArticleCategoryService.class);
 
     private final ArticleCategoryRepository categoryRepository;
     private final AuditService auditService;

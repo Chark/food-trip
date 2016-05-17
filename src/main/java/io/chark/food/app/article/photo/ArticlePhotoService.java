@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class ArticlePhotoService {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(AccountService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ArticlePhotoService.class);
 
     private final ArticlePhotoRepository photoRepository;
     private final AuditService auditService;
