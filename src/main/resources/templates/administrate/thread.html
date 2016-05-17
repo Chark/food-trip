@@ -1,0 +1,36 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layouts/moderation">
+
+<head>
+    <title>Thread</title>
+</head>
+
+<body>
+<th:block layout:fragment="content">
+    <h2>Manage threads</h2>
+    <p>Administrate threads</p>
+    <table class="thread-table table table-striped table-bordered" cellspacing="0" width="100%">
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Viewed</th>
+            <th>Created</th>
+            <th>Created by</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+    </table>
+</th:block>
+
+<!-- Initialize javascript for this page -->
+<script type="application/javascript" layout:fragment="javascript">
+    $(function () {
+        Thread.initThread();
+    });
+</script>
+
+</body>
+</html>
