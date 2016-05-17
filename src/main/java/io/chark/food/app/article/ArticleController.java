@@ -35,15 +35,4 @@ public class ArticleController {
         return "article/article";
     }
 
-    @RequestMapping("/{id}/images/{imageId}")
-    public ResponseEntity<byte[]> photo(@PathVariable long id, @PathVariable int imageId) {
-
-        final HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.IMAGE_JPEG);
-
-        byte[] photo = articleService.getArticle(id).getPhoto(imageId).getPhoto();
-        return new ResponseEntity<byte[]>(photo, headers, HttpStatus.CREATED);
-    }
-
-
 }
