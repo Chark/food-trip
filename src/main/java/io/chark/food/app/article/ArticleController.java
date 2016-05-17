@@ -1,6 +1,7 @@
 package io.chark.food.app.article;
 
 import io.chark.food.domain.article.Article;
+import io.chark.food.domain.article.photo.ArticlePhoto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -39,8 +40,9 @@ public class ArticleController {
 
         final HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.IMAGE_JPEG);
-        System.out.println(articleService.getArticle(id).getPhotos().size());
-        return new ResponseEntity<byte[]>(new byte[5], headers, HttpStatus.CREATED);
+
+        byte[] photo = articleService.getArticle(id).getPhoto(imageId).getPhoto();
+        return new ResponseEntity<byte[]>(photo, headers, HttpStatus.CREATED);
     }
 
 
