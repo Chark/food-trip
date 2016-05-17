@@ -1,4 +1,4 @@
-package io.chark.food.app.article;
+package io.chark.food.app.article.category;
 
 import io.chark.food.app.account.AccountService;
 import io.chark.food.app.administrate.audit.AuditService;

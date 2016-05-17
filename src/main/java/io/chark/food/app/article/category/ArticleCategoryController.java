@@ -1,4 +1,4 @@
-package io.chark.food.app.article;
+package io.chark.food.app.article.category;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -6,7 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping(value = "/articles")
+@RequestMapping(value = "/articles/categories")
 public class ArticleCategoryController {
 
     private final ArticleCategoryService categoryService;
@@ -22,6 +22,6 @@ public class ArticleCategoryController {
     @RequestMapping(value = "/list")
     public String list(Model model) {
         model.addAttribute("categories", categoryService.getCategories());
-        return "article/article_list";
+        return "article/category/list";
     }
 }
