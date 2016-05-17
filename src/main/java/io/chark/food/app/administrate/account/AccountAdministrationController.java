@@ -85,11 +85,11 @@ public class AccountAdministrationController {
     }
 
     /**
-     * Delete specified user account by id.
+     * Change locked state for the specified user account by id.
      */
     @ResponseStatus(HttpStatus.OK)
-    @RequestMapping(value = "/api/accounts/{id}", method = RequestMethod.DELETE)
-    public void delete(@PathVariable long id) {
-        administrationService.delete(id);
+    @RequestMapping(value = "/api/accounts/{id}/locked", method = RequestMethod.POST)
+    public void setLocked(@PathVariable long id, @RequestParam boolean locked) {
+        administrationService.setLocked(id, locked);
     }
 }

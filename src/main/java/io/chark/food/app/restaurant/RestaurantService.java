@@ -16,24 +16,26 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
 public class RestaurantService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RestaurantService.class);
+    private final RestaurantAuditService restaurantAuditService;
     private final InvitationRepository invitationRepository;
     private final RestaurantRepository restaurantRepository;
     private final AccountService accountService;
     private final AuditService auditService;
 
     @Autowired
-    public RestaurantService(InvitationRepository invitationRepository,
+    public RestaurantService(RestaurantAuditService restaurantAuditService,
+                             InvitationRepository invitationRepository,
                              RestaurantRepository restaurantRepository,
                              AccountService accountService,
                              AuditService auditService) {
 
+        this.restaurantAuditService = restaurantAuditService;
         this.invitationRepository = invitationRepository;
         this.restaurantRepository = restaurantRepository;
         this.accountService = accountService;
@@ -56,11 +58,13 @@ public class RestaurantService {
 
         try {
             restaurant = restaurantRepository.save(restaurant);
-            auditService.info("Updated restaurant details");
+            restaurantAuditService.info("Updated restaurant details", "Update");
 
             return Optional.of(restaurant);
         } catch (DataIntegrityViolationException e) {
             LOGGER.error("Could not update restaurant details", e);
+
+            restaurantAuditService.warn("Failed to update restaurant details", "Update");
             return Optional.empty();
         }
     }
@@ -149,6 +153,7 @@ public class RestaurantService {
         }
 
         // Create invitation.
+        restaurantAuditService.info("Inviting %s to join the restaurant", "Invitation", username);
         return Optional.of(invitationRepository
                 .save(new Invitation(username, account, getRestaurant())));
     }
@@ -158,7 +163,8 @@ public class RestaurantService {
      *
      * @param id invitation id.
      */
-    public void deleteInvitation(long id) {
+    void deleteInvitation(long id) {
+        restaurantAuditService.warn("Deleting invitation with id: %d", "Invitation", id);
         invitationRepository.deleteByRestaurantAndId(getRestaurant().getId(), id);
     }
 }

@@ -61,6 +61,7 @@ public class RestaurantServiceTest {
         AuthenticationUtils.setAccount(account);
 
         service = new RestaurantService(
+                Mockito.mock(RestaurantAuditService.class),
                 invitationRepository,
                 restaurantRepository,
                 accountService,

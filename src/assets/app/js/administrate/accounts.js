@@ -101,9 +101,14 @@
                 },
                 {
                     data: 'id',
-                    render: function (id) {
+                    render: function (id, type, full) {
+                        var locked = !full.accountNonLocked;
                         return Utils.urlButton('Edit', 'btn-success edit', '/administrate/accounts/' + id, id) + ' ' +
-                            Utils.smallButton('Delete', 'btn-danger delete', id);
+                            Utils.smallButton(
+                                locked ? 'Unlock' : 'Lock',
+                                (locked ? 'btn-success' : 'btn-danger') + ' lock',
+                                id,
+                                'data-locked-to="' + !locked + '"');
                     }
                 }
             ]
@@ -112,21 +117,25 @@
         /**
          * Delete specified user account.
          */
-        accountTable.on('click', 'a.delete', function () {
+        accountTable.on('click', 'a.lock', function () {
+
+            // What state to set the locked to.
+            var locked = $(this).data('locked-to');
             var id = $(this).data('id');
+
             bootbox.dialog({
-                title: 'Delete account',
-                message: 'Are you sure you want to delete this account?',
+                title: (locked ? 'Lock' : 'Unlock') + ' account',
+                message: 'Are you sure you want to ' + (locked ? 'lock' : 'unlock') + ' this account?',
                 buttons: {
                     yes: {
-                        label: 'Delete',
+                        label: locked ? 'Lock' : 'Unlock',
                         className: 'btn-danger',
                         callback: function () {
-                            $.delete(accountsUrl + '/' + id, function () {
-                                toastr.success('Deleted user account');
-                                accountTable.ajax.reload();
+                            $.post(accountsUrl + '/' + id + '/locked?locked=' + locked, function () {
+                                toastr.success('Changed locked state');
+                                accountTable.ajax.reload(null, false);
                             }).fail(function () {
-                                toastr.error('Failed to delete user account');
+                                toastr.error('Failed to change the locked state for user account');
                             });
                         }
                     },

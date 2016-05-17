@@ -5,8 +5,6 @@ import io.chark.food.app.administrate.audit.AuditService;
 import io.chark.food.domain.authentication.account.Account;
 import io.chark.food.domain.authentication.account.AccountRepository;
 import io.chark.food.domain.authentication.permission.Permission;
-import io.chark.food.domain.restaurant.Invitation;
-import io.chark.food.domain.restaurant.InvitationRepository;
 import io.chark.food.util.authentication.AuthenticationUtils;
 import io.chark.food.util.exception.NotFoundException;
 import io.chark.food.util.exception.UnauthorizedException;
@@ -14,6 +12,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.core.session.SessionInformation;
+import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,19 +24,19 @@ public class AccountAdministrationService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AccountAdministrationService.class);
 
-    private final InvitationRepository invitationRepository;
     private final AccountRepository accountRepository;
+    private final SessionRegistry sessionRegistry;
     private final AccountService accountService;
     private final AuditService auditService;
 
     @Autowired
-    public AccountAdministrationService(InvitationRepository invitationRepository,
-                                        AccountRepository accountRepository,
+    public AccountAdministrationService(AccountRepository accountRepository,
+                                        SessionRegistry sessionRegistry,
                                         AccountService accountService,
                                         AuditService auditService) {
 
-        this.invitationRepository = invitationRepository;
         this.accountRepository = accountRepository;
+        this.sessionRegistry = sessionRegistry;
         this.accountService = accountService;
         this.auditService = auditService;
     }
@@ -49,9 +49,9 @@ public class AccountAdministrationService {
      * @param authorities    account authorities to set or update.
      * @return account optional.
      */
-    public Optional<Account> saveAccount(long id,
-                                         Account accountDetails,
-                                         Permission.Authority... authorities) {
+    Optional<Account> saveAccount(long id,
+                                  Account accountDetails,
+                                  Permission.Authority... authorities) {
 
         // Below or equals means this is a new account.
         Optional<Account> optional;
@@ -122,7 +122,7 @@ public class AccountAdministrationService {
      * @param includeSelf should currently authenticated users account be included.
      * @return list of accounts, never null.
      */
-    public List<Account> getAccounts(boolean includeSelf) {
+    List<Account> getAccounts(boolean includeSelf) {
         if (!includeSelf) {
             return accountRepository.findByIdNotIn(AuthenticationUtils.getId());
         }
@@ -130,24 +130,30 @@ public class AccountAdministrationService {
     }
 
     /**
-     * Delete specified user account.
+     * Set locked state for the specified account.
      *
-     * @param id user account id.
+     * @param locked should the account be locked or unlocked.
+     * @param id     user account id.
      */
-    public void delete(long id) {
+    void setLocked(long id, boolean locked) {
         if (AuthenticationUtils.getId() == id) {
-            auditService.warn("Attempted to delete own account");
-            throw new UnauthorizedException("You cannot delete your own account");
+            auditService.warn("Attempted to set locked on own account");
+            throw new UnauthorizedException("You cannot changed the locked state your own account");
         }
         Account account = accountRepository.findOne(id);
+        account.setLocked(locked);
+        accountRepository.save(account);
 
-        // Detach invitations for the account.
-        for (Invitation invitation : account.getInvitations()) {
-            invitation.setAccount(null);
+        // If locked is true, log-out that user.
+        if (locked) {
+            LOGGER.debug("Logging out user: {}", account.getUsername());
+
+            // Expire all sessions of a user.
+            sessionRegistry
+                    .getAllSessions(account, true)
+                    .forEach(SessionInformation::expireNow);
         }
-        invitationRepository.save(account.getInvitations());
-
-        accountRepository.delete(account);
-        auditService.info("Deleted Account with id: %d", id);
+        auditService.info("Set locked Account with id: %d, to locked: %s",
+                id, locked);
     }
 }

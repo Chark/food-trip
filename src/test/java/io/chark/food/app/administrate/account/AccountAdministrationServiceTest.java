@@ -20,6 +20,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.annotation.Resource;
@@ -34,11 +35,6 @@ public class AccountAdministrationServiceTest {
     private static final String TEST_PASSWORD = "password";
     private static final String TEST_EMAIL = "Test@test.com";
 
-    @Resource
-    private RestaurantRepository restaurantRepository;
-
-    @Resource
-    private InvitationRepository invitationRepository;
 
     @Resource
     private PermissionRepository permissionRepository;
@@ -49,20 +45,22 @@ public class AccountAdministrationServiceTest {
     @Resource
     private AccountService accountService;
 
+    @Resource
+    private SessionRegistry sessionRegistry;
+
     private AccountAdministrationService service;
 
     @Before
     public void setUp() {
         service = new AccountAdministrationService(
-                invitationRepository, accountRepository,
+                accountRepository,
+                sessionRegistry,
                 accountService,
                 Mockito.mock(AuditService.class));
     }
 
     @After
     public void tearDown() {
-        restaurantRepository.deleteAll();
-        invitationRepository.deleteAll();
         accountRepository.deleteAll();
         SecurityContextHolder.clearContext();
     }
@@ -107,32 +105,22 @@ public class AccountAdministrationServiceTest {
     }
 
     @Test
-    public void delete() {
-
-        long initial = accountRepository.count();
+    public void lock() {
         Account account = accountService.register(TEST_USERNAME, TEST_EMAIL, TEST_PASSWORD)
                 .get();
 
-        // Add restaurant to account.
-        Restaurant restaurant = restaurantRepository.save(new Restaurant("email@email.com", "name", "desc"));
-        account.setRestaurant(restaurant);
-        account = accountRepository.save(account);
-
-        // Add invitations to account.
-        invitationRepository.save(new Invitation("asd", account, restaurant));
-
-        service.delete(account.getId());
-        assertThat(accountRepository.count()).isEqualTo(initial);
+        service.setLocked(account.getId(), true);
+        assertThat(accountRepository.findOne(account.getId()).isAccountNonLocked()).isFalse();
     }
 
     @Test(expected = UnauthorizedException.class)
-    public void deleteFailed() {
+    public void lockSelf() {
         Account account = accountService.register(TEST_USERNAME, TEST_EMAIL, TEST_PASSWORD)
                 .get();
 
         AuthenticationUtils.setAccount(account);
 
-        // Attempt to delete self.
-        service.delete(account.getId());
+        // Attempt to setLocked self.
+        service.setLocked(account.getId(), true);
     }
 }

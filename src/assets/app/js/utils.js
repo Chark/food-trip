@@ -31,7 +31,14 @@
      * Create a small button using the 'a' tag.
      */
     Utils.smallButton = function (text, clazz, id) {
-        return Utils.urlButton(text, clazz, 'javascript:;', id);
+        return Utils.smallButton(text, clazz, id, '');
+    };
+
+    /**
+     * Create a small button using the 'a' tag and add adittional attributes.
+     */
+    Utils.smallButton = function (text, clazz, id, attr) {
+        return Utils.urlButton(text, clazz, 'javascript:;', id, attr);
     };
 
     /**
@@ -39,6 +46,20 @@
      */
     Utils.urlButton = function (text, clazz, url, id) {
         return '<a href="' + url + '" class="btn btn-xs ' + clazz + '" data-id="' + id + '">' + text + '</a>';
+    };
+
+    /**
+     * Create a url button with extra attributes.
+     */
+    Utils.urlButton = function (text, clazz, url, id, attr) {
+        return '<a href="'
+            + url
+            + '" class="btn btn-xs '
+            + clazz
+            + '" data-id="'
+            + id + '" '
+            + attr + '>'
+            + text + '</a>';
     };
 
     /**

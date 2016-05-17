@@ -234,4 +234,23 @@ public class Account extends BaseEntity implements UserDetails {
     public boolean isEnabled() {
         return enabled;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Account)) return false;
+
+        Account account = (Account) o;
+
+        return getId() == account.getId() &&
+                (username != null ? username.equals(account.username) : account.username == null);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = username != null ? username.hashCode() : 0;
+        result = 31 * result + (int) (getId() ^ (getId() >>> 32));
+        return result;
+    }
 }

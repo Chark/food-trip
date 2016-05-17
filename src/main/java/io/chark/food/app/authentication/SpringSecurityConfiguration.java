@@ -1,13 +1,17 @@
 package io.chark.food.app.authentication;
 
 import io.chark.food.app.account.AccountService;
-import io.chark.food.domain.authentication.permission.Permission;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.session.SessionRegistry;
+import org.springframework.security.core.session.SessionRegistryImpl;
+import org.springframework.security.web.session.HttpSessionEventPublisher;
 
 import static io.chark.food.domain.authentication.permission.Permission.Authority.ROLE_ADMIN;
 import static io.chark.food.domain.authentication.permission.Permission.Authority.ROLE_MODERATOR;
@@ -24,6 +28,15 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         // @formatter:off
         http
+            .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+                .sessionFixation()
+                    .migrateSession()
+                    .maximumSessions(10)
+                    .expiredUrl("/login")
+                    .sessionRegistry(sessionRegistry())
+                    .and()
+                .and()
             .authorizeRequests()
             .antMatchers(
                     "/",
@@ -53,5 +66,15 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected AccountService userDetailsService() {
         return accountService;
+    }
+
+    @Bean
+    public SessionRegistry sessionRegistry() {
+        return new SessionRegistryImpl();
+    }
+
+    @Bean
+    public HttpSessionEventPublisher httpSessionEventPublisher() {
+        return new HttpSessionEventPublisher();
     }
 }

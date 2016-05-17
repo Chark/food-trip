@@ -38,4 +38,10 @@ public class RestaurantAuditMessage extends AuditMessage {
     public Restaurant getRestaurant() {
         return restaurant;
     }
+
+    @Override
+    @JsonIgnore
+    public Account getAccount() {
+        return super.getAccount();
+    }
 }
