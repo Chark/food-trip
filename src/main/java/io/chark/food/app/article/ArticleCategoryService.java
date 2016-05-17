@@ -24,7 +24,9 @@ public class ArticleCategoryService {
     private final AuditService auditService;
 
     @Autowired
-    public ArticleCategoryService(ArticleCategoryRepository categoryRepository, AuditService auditService) {
+    public ArticleCategoryService(ArticleCategoryRepository categoryRepository,
+                                  AuditService auditService) {
+
         this.categoryRepository = categoryRepository;
         this.auditService = auditService;
     }
