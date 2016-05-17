@@ -1,6 +1,7 @@
 package io.chark.food.domain.article;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.chark.food.domain.BaseEntity;
 import io.chark.food.domain.article.category.ArticleCategory;
 import io.chark.food.domain.article.photo.ArticlePhoto;
@@ -114,6 +115,7 @@ public class Article extends BaseEntity {
         categories.add(category);
     }
 
+    @JsonIgnore
     public List<ArticlePhoto> getPhotos() {
         return photos;
     }
