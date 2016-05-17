@@ -41,7 +41,7 @@ public class ArticleService {
     /**
      * Initialize articles used by the system.
      */
-    @PostConstruct
+//    @PostConstruct todo disabled for now
     public void init() {
         addArticle("Pirmas straipsnis", "Pilnas straipsnio aprašymas.", "Trumpas straipsnio aprašymas", null, null);
         addArticle("Antras straipsnis", "Pilnas straipsnio aprašymas.", "Trumpas straipsnio aprašymas", null, null);

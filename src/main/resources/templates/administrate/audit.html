@@ -8,19 +8,50 @@
 
 <body>
 <th:block layout:fragment="content">
+
     <h2>Audit</h2>
     <p>Statistics and audit data gathered from the entire application</p>
-    <table class="audit-table table table-striped table-bordered" cellspacing="0" width="100%">
-        <thead>
-        <tr>
-            <th>#</th>
-            <th>Created on</th>
-            <th>Caused by</th>
-            <th>Message</th>
-            <th>Actions</th>
-        </tr>
-        </thead>
-    </table>
+    <hr/>
+
+    <div class="row">
+
+        <!-- General stats -->
+        <div class="col-md-6" th:object="${auditPackage}">
+            <h4>General information</h4>
+            <p>
+                In total there are <code th:text="*{totalAccountCount}"></code> accounts registered on your website.
+                Your website also has <code th:text="*{totalRestaurantCount}"></code> registered restaurants.
+            </p>
+            <p>
+                You can manage registered accounts <a th:href="@{/administrate/accounts}">here</a>.
+            </p>
+        </div>
+
+        <!-- Account graph -->
+        <div class="col-md-6">
+            <h4>User graph</h4>
+            <p>This graph represents registered user count per each day.</p>
+            <canvas class="user-chart" height="100"></canvas>
+        </div>
+
+        <!-- Audit logs -->
+        <div class="col-md-12">
+            <hr/>
+            <h4>General audit</h4>
+            <p>Audit data gathered from various internal service actions and error.</p>
+            <table class="audit-table table table-striped table-bordered" cellspacing="0" width="100%">
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Created on</th>
+                    <th>Caused by</th>
+                    <th>Message</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
 
     <!--<th:block th:include=":: userInfo('Registered', *{#dates.format(registrationDate, 'yyyy MMM dd')})"/>-->
 
@@ -75,11 +106,17 @@
 </th:block>
 
 <!-- Initialize javascript for this page -->
-<script type="application/javascript" layout:fragment="javascript">
-    $(function () {
-        Audit.initAudit();
-    });
-</script>
+<th:block layout:fragment="javascript">
+
+    <!-- Need to use this to get some data from model -->
+    <script type="application/javascript" th:inline="javascript">
+        $(function () {
+            /*<![CDATA[*/
+            Audit.initAudit([[${auditPackage.accountCounts}]]);
+            /*]]>*/
+        });
+    </script>
+</th:block>
 
 </body>
 </html>

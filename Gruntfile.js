@@ -22,7 +22,8 @@ module.exports = function (grunt) {
                         '<%= config.VENDOR_PATH  %>/datatables.net-bs/js/dataTables.bootstrap.js',
                         '<%= config.VENDOR_PATH  %>/bootbox.js/bootbox.js',
                         '<%= config.VENDOR_PATH  %>/toastr/toastr.js',
-                        '<%= config.VENDOR_PATH  %>/select2/dist/js/select2.js'
+                        '<%= config.VENDOR_PATH  %>/select2/dist/js/select2.js',
+                        '<%= config.VENDOR_PATH  %>/Chart.js/dist/Chart.js'
                     ]
                 }
             }

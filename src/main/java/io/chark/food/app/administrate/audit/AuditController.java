@@ -5,6 +5,7 @@ import io.chark.food.domain.BaseEntity;
 import io.chark.food.domain.audit.AuditMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,7 +27,8 @@ public class AuditController {
      * @return audit message template.
      */
     @RequestMapping(value = "/audit", method = RequestMethod.GET)
-    public String audit() {
+    public String audit(Model model) {
+        model.addAttribute("auditPackage", auditService.getAuditPackage());
         return "administrate/audit";
     }
 

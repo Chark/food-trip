@@ -4,6 +4,7 @@ import io.chark.food.domain.BaseRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
 import java.util.List;
 
 @Repository
@@ -25,4 +26,15 @@ public interface AccountRepository extends BaseRepository<Account> {
      * @return account list
      */
     List<Account> findByIdNotIn(long... ids);
+
+    /**
+     * Count registered number of accounts for date interval.
+     *
+     * @param start date interval start.
+     * @param end   date interval end.
+     * @return count of accounts per day.
+     */
+    @Query("SELECT COUNT(a) FROM Account a " +
+            "WHERE a.registrationDate BETWEEN ?1 AND ?2")
+    Long countAccountsByDate(Date start, Date end);
 }

@@ -2,12 +2,13 @@
 
     var auditUrl = '/administrate/api/audit';
     var auditTable;
+    var userChart;
     var infoModal;
 
     /**
      * Initialize audit page.
      */
-    Audit.initAudit = function () {
+    Audit.initAudit = function (accountArray) {
 
         // Row colors based on message colors.
         var rowColors = {
@@ -84,6 +85,32 @@
                 }
                 infoModal.modal();
             })
+        });
+
+        /**
+         * Initialize user chart.
+         */
+
+
+        userChart = new Chart($('.user-chart'), {
+            type: 'line',
+            data: {
+                labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+                datasets: [
+                    {
+                        label: 'New accounts per day of the week',
+                        fill: false,
+                        lineTension: 0,
+                        backgroundColor: "rgba(75,192,192,0.4)",
+                        borderColor: "rgba(75,192,192,1)",
+                        pointBorderColor: "rgba(75,192,192,1)",
+                        pointHoverBackgroundColor: "rgba(75,192,192,1)",
+                        pointHoverBorderColor: "rgba(220,220,220,1)",
+                        pointHitRadius: 10,
+                        data: accountArray
+                    }
+                ]
+            }
         });
     };
 
