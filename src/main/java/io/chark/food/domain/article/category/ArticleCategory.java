@@ -1,7 +1,8 @@
-package io.chark.food.domain.article;
+package io.chark.food.domain.article.category;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import io.chark.food.domain.BaseEntity;
+import io.chark.food.domain.article.Article;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -19,8 +20,6 @@ public class ArticleCategory extends BaseEntity {
 
     @Column(nullable = false)
     private Date creationDate;
-
-    private Date editedDate;
 
     @JsonManagedReference
     @ManyToMany(fetch = FetchType.EAGER, mappedBy = "categories")
@@ -57,14 +56,6 @@ public class ArticleCategory extends BaseEntity {
 
     public void setCreationDate(Date creationDate) {
         this.creationDate = creationDate;
-    }
-
-    public Date getEditedDate() {
-        return editedDate;
-    }
-
-    public void setEditedDate(Date editedDate) {
-        this.editedDate = editedDate;
     }
 
     public List<Article> getArticles() {

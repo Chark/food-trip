@@ -2,8 +2,8 @@ package io.chark.food.app.article.category;
 
 import io.chark.food.app.account.AccountService;
 import io.chark.food.app.administrate.audit.AuditService;
-import io.chark.food.domain.article.ArticleCategory;
-import io.chark.food.domain.article.ArticleCategoryRepository;
+import io.chark.food.domain.article.category.ArticleCategory;
+import io.chark.food.domain.article.category.ArticleCategoryRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
-import java.util.Locale;
 import java.util.Optional;
 
 @Service

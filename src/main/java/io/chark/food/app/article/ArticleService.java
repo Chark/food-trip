@@ -1,14 +1,17 @@
 package io.chark.food.app.article;
 
 import io.chark.food.app.account.AccountService;
+import io.chark.food.app.administrate.audit.AuditService;
 import io.chark.food.domain.article.Article;
-import io.chark.food.domain.article.ArticleCategory;
-import io.chark.food.domain.article.ArticleCategoryRepository;
+import io.chark.food.domain.article.category.ArticleCategory;
+import io.chark.food.domain.article.category.ArticleCategoryRepository;
 import io.chark.food.domain.article.ArticleRepository;
+import io.chark.food.domain.article.photo.ArticlePhoto;
+import io.chark.food.util.exception.NotFoundException;
+import io.chark.food.util.photo.PhotoUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.web.ResourceProperties;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -19,11 +22,16 @@ public class ArticleService {
 
     private final ArticleRepository articleRepository;
     private final ArticleCategoryRepository categoryRepository;
+    private final AuditService auditService;
 
     @Autowired
-    public ArticleService(ArticleRepository articleRepository, ArticleCategoryRepository categoryRepository) {
+    public ArticleService(ArticleRepository articleRepository,
+                          ArticleCategoryRepository categoryRepository,
+                          AuditService auditService) {
+
         this.articleRepository = articleRepository;
         this.categoryRepository = categoryRepository;
+        this.auditService = auditService;
     }
 
     /**
@@ -45,6 +53,27 @@ public class ArticleService {
         ArticleCategory category = categoryRepository.findOne(num + 1);
         article.addCategory(category);
 
+        // Adds photo of the article
+        byte[] image = PhotoUtils.getImageBytes("static/images/default_avatar.JPG");
+        ArticlePhoto photo = new ArticlePhoto(image, "Edvinas has a nice dog.", "Dog");
+        article.addPhoto(photo);
+
+        //ArticlePhoto photo
         articleRepository.save(article);
+    }
+
+    /**
+     * Get an article by id.
+     *
+     * @return article category.
+     * @throws NotFoundException if the article category is not found.
+     */
+    public Article getArticle(long id) {
+        Article article = articleRepository.findOne(id);
+        if (article == null) {
+            auditService.warn("Attempted to query non-existing Article with id: %d", id);
+            throw new NotFoundException(Article.class, id);
+        }
+        return article;
     }
 }

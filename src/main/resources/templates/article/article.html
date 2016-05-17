@@ -1,0 +1,22 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layouts/default">
+
+<head>
+    <title>Article</title>
+</head>
+
+<body>
+<th:block layout:fragment="content">
+    <div class="col-lg-12">
+        <div class="page-header">
+            <h1 th:text="${article.title}"></h1>
+        </div>
+        <img th:src="${article.shortDescription}"/>
+        <strong th:text="${article.shortDescription}"></strong>
+        <p th:text="${article.description}"></p>
+    </div>
+</th:block>
+
+</body>
+</html>

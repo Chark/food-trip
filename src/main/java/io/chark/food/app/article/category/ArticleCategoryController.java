@@ -19,7 +19,7 @@ public class ArticleCategoryController {
     /**
      * View article categories.
      */
-    @RequestMapping(value = "/list")
+    @RequestMapping(value = "")
     public String list(Model model) {
         model.addAttribute("categories", categoryService.getCategories());
         return "article/category/list";

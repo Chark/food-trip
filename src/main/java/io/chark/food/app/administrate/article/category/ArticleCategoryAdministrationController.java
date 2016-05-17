@@ -1,6 +1,6 @@
-package io.chark.food.app.administrate.article;
+package io.chark.food.app.administrate.article.category;
 
-import io.chark.food.domain.article.ArticleCategory;
+import io.chark.food.domain.article.category.ArticleCategory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;

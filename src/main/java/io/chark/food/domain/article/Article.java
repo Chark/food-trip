@@ -2,6 +2,8 @@ package io.chark.food.domain.article;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import io.chark.food.domain.BaseEntity;
+import io.chark.food.domain.article.category.ArticleCategory;
+import io.chark.food.domain.article.photo.ArticlePhoto;
 
 import javax.persistence.*;
 import java.util.*;
@@ -23,13 +25,14 @@ public class Article extends BaseEntity {
     @Column(nullable = false)
     private Date creationDate;
 
-    private Date editedDate;
-
     private long viewsNumber;
 
     @ManyToMany
     @JsonBackReference
     private List<ArticleCategory> categories = new ArrayList<>();
+
+    @OneToMany
+    private List<ArticlePhoto> photos = new ArrayList<>();
 
     public Article() {
     }
@@ -91,14 +94,6 @@ public class Article extends BaseEntity {
         this.creationDate = creationDate;
     }
 
-    public Date getEditedDate() {
-        return editedDate;
-    }
-
-    public void setEditedDate(Date editedDate) {
-        this.editedDate = editedDate;
-    }
-
     public long getViewsNumber() {
         return viewsNumber;
     }
@@ -117,5 +112,21 @@ public class Article extends BaseEntity {
 
     public void addCategory(ArticleCategory category) {
         categories.add(category);
+    }
+
+    public List<ArticlePhoto> getPhotos() {
+        return photos;
+    }
+
+    public ArticlePhoto getPhoto(int id) {
+        return photos.get(id);
+    }
+
+    public void setPhotos(List<ArticlePhoto> photos) {
+        this.photos = photos;
+    }
+
+    public void addPhoto(ArticlePhoto photo) {
+        photos.add(photo);
     }
 }

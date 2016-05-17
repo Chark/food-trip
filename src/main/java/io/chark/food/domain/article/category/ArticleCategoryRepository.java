@@ -1,4 +1,4 @@
-package io.chark.food.domain.article;
+package io.chark.food.domain.article.category;
 
 import io.chark.food.domain.BaseRepository;
 import org.springframework.stereotype.Repository;

@@ -3,7 +3,7 @@ package io.chark.food.app.articles;
 import io.chark.food.FoodTripIntegrationTest;
 import io.chark.food.app.administrate.audit.AuditService;
 import io.chark.food.app.article.category.ArticleCategoryService;
-import io.chark.food.domain.article.ArticleCategoryRepository;
+import io.chark.food.domain.article.category.ArticleCategoryRepository;
 import io.chark.food.domain.article.ArticleRepository;
 import org.junit.After;
 import org.junit.Before;
