@@ -31,7 +31,7 @@ public class Article extends BaseEntity {
     @JsonBackReference
     private List<ArticleCategory> categories = new ArrayList<>();
 
-    @OneToMany
+    @OneToMany(orphanRemoval = true)
     private List<ArticlePhoto> photos = new ArrayList<>();
 
     public Article() {

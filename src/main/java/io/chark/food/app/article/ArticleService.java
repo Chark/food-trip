@@ -7,6 +7,7 @@ import io.chark.food.domain.article.category.ArticleCategory;
 import io.chark.food.domain.article.category.ArticleCategoryRepository;
 import io.chark.food.domain.article.ArticleRepository;
 import io.chark.food.domain.article.photo.ArticlePhoto;
+import io.chark.food.domain.article.photo.ArticlePhotoRepository;
 import io.chark.food.util.exception.NotFoundException;
 import io.chark.food.util.photo.PhotoUtils;
 import org.slf4j.Logger;
@@ -22,15 +23,18 @@ public class ArticleService {
 
     private final ArticleRepository articleRepository;
     private final ArticleCategoryRepository categoryRepository;
+    private final ArticlePhotoRepository photoRepository;
     private final AuditService auditService;
 
     @Autowired
     public ArticleService(ArticleRepository articleRepository,
                           ArticleCategoryRepository categoryRepository,
+                          ArticlePhotoRepository photoRepository,
                           AuditService auditService) {
 
         this.articleRepository = articleRepository;
         this.categoryRepository = categoryRepository;
+        this.photoRepository = photoRepository;
         this.auditService = auditService;
     }
 
@@ -55,8 +59,8 @@ public class ArticleService {
 
         // Adds photo of the article
         byte[] image = PhotoUtils.getImageBytes("static/images/default_avatar.JPG");
-        ArticlePhoto photo = new ArticlePhoto(image, "Edvinas has a nice dog.", "Dog");
-        article.addPhoto(photo);
+        ArticlePhoto photo = new ArticlePhoto(image, "Edvinas has the best dog.", "Good looking cool dog");
+        article.addPhoto(photoRepository.save(photo));
 
         //ArticlePhoto photo
         articleRepository.save(article);
