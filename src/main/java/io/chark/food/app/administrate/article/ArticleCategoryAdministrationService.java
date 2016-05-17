@@ -24,7 +24,8 @@ public class ArticleCategoryAdministrationService {
     private final ArticleCategoryRepository categoryRepository;
     private final ArticleCategoryService categoryService;
     private final AuditService auditService;
-
+    
+    @Autowired
     public ArticleCategoryAdministrationService(ArticleCategoryRepository categoryRepository,
                                                 ArticleCategoryService categoryService,
                                                 AuditService auditService) {
@@ -33,9 +34,6 @@ public class ArticleCategoryAdministrationService {
         this.categoryService = categoryService;
         this.auditService = auditService;
     }
-
-    @Autowired
-
 
     public Optional<ArticleCategory> saveCategory(long id, ArticleCategory categoryDetails) {
 
