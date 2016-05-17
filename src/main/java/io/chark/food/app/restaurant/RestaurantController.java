@@ -1,8 +1,6 @@
 package io.chark.food.app.restaurant;
 
-import com.fasterxml.jackson.annotation.JsonView;
-import io.chark.food.domain.BaseEntity;
-import io.chark.food.domain.authentication.account.Account;
+import io.chark.food.domain.audit.RestaurantAuditMessage;
 import io.chark.food.domain.restaurant.Invitation;
 import io.chark.food.domain.restaurant.Restaurant;
 import io.chark.food.util.exception.BadInputException;
@@ -22,10 +20,14 @@ import java.util.Optional;
 public class RestaurantController {
 
     private final RestaurantService restaurantService;
+    private final RestaurantAuditService auditService;
 
     @Autowired
-    public RestaurantController(RestaurantService restaurantService) {
+    public RestaurantController(RestaurantService restaurantService,
+                                RestaurantAuditService auditService) {
+
         this.restaurantService = restaurantService;
+        this.auditService = auditService;
     }
 
     /**
@@ -129,5 +131,16 @@ public class RestaurantController {
     @RequestMapping(value = "/api/invitations/{id}", method = RequestMethod.DELETE)
     public void deleteInvitation(@PathVariable long id) {
         restaurantService.deleteInvitation(id);
+    }
+
+    /**
+     * Get audit messages assigned to currently authenticated users restaurant.
+     *
+     * @return list of audit messages.
+     */
+    @ResponseBody
+    @RequestMapping(value = "/api/audit", method = RequestMethod.GET)
+    public List<RestaurantAuditMessage> getAuditMessages() {
+        return auditService.getRestaurantAuditMessages();
     }
 }

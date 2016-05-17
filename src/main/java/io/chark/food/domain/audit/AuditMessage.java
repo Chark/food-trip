@@ -5,13 +5,11 @@ import io.chark.food.domain.BaseEntity;
 import io.chark.food.domain.authentication.account.Account;
 import io.chark.food.domain.extras.Color;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 import java.util.Date;
 
 @Entity
+@Inheritance(strategy = InheritanceType.JOINED)
 public class AuditMessage extends BaseEntity {
 
     @OneToOne
