@@ -27,7 +27,8 @@
                 </p>
                 <p>
                     The hygiene index of this restaurant is: <span class="text-primary" th:text="*{hygieneLevel}"></span>.
-                    This restaurant has a rating of <span class="text-primary" th:text="*{rating}"></span>.
+                    This restaurant has a rating of <span class="text-primary" th:text="*{rating}"></span> restaurant
+                    points.
                 </p>
                 <h4>Contact info</h4>
                 <p>
@@ -52,7 +53,10 @@
         <div class="panel panel-default">
             <div class="panel-body">
                 <div class="row">
-                    <div class="col-md-12" th:each="article : *{articles}" th:object="${article}">
+                    <div th:if="*{articles.isEmpty()}" class="col-md-12">
+                        Looks like this restaurant has not posted anything just yet.
+                    </div>
+                    <div th:if="*{!articles.isEmpty()}" class="col-md-12" th:each="article : *{articles}" th:object="${article}">
                         <h4>
                             <a th:href="@{/articles/{id}(id=*{id})}" th:text="*{title}"></a>
                         </h4>
