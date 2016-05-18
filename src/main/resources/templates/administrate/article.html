@@ -3,21 +3,21 @@
       layout:decorator="layouts/moderation">
 
 <head>
-    <title>Article Category</title>
+    <title>Article</title>
 </head>
 
 <body>
 <th:block layout:fragment="content">
     <form name="articleCategoryForm"
           method="POST"
-          th:attr="data-article-category-id=${category.id}"
-          th:action="@{/administrate/articles/categories/__${category.id}__}"
-          th:object="${category}">
+          th:attr="data-article-category-id=${article.id}"
+          th:action="@{/administrate/articles/__${article.id}__}"
+          th:object="${article}">
 
 
         <div class="row">
             <div class="col-md-12">
-                <h2>Article Category</h2>
+                <h2>Article</h2>
                 <div class="row">
                     <div class="col-md-6">
                         <th:block th:include="fragments/forms :: input
@@ -29,14 +29,21 @@
         <div class="row">
             <label class="col-xs-12 control-label">
                 Description
+                <textarea th:text="*{shortDescription}" name="shortDescription" rows="3" class="form-control"
+                          placeholder="Enter article  short description"></textarea>
+            </label>
+        </div>
+        <div class="row">
+            <label class="col-xs-12 control-label">
+                Description
                 <textarea th:text="*{description}" name="description" rows="3" class="form-control"
-                          placeholder="Enter article category description"></textarea>
+                          placeholder="Enter article description"></textarea>
             </label>
         </div>
 
         <!-- Submit and back -->
         <button type="submit" class="btn btn-success">Save</button>
-        <a th:href="@{/administrate/articles/categories}" class="btn btn-danger">Cancel</a>
+        <a th:href="@{/administrate/articles}" class="btn btn-danger">Cancel</a>
     </form>
 </th:block>
 

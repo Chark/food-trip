@@ -1,1 +1,37 @@
-it works!
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layouts/moderation">
+
+<head>
+    <title>Articles</title>
+</head>
+
+<body>
+<th:block layout:fragment="content">
+    <h2>Manage articles</h2>
+    <p>
+        Administrate articles or create a <a th:href="@{/administrate/articles/0}">new</a> article.
+    </p>
+    <table class="article-table table table-striped table-bordered" cellspacing="0" width="100%">
+        <thead>
+        <tr>
+            <th class="col-md-1">#</th>
+            <th class="col-md-2">Title</th>
+            <th class="col-md-5">Short Description</th>
+            <th class="col-md-2">Creation Date</th>
+            <th class="col-md-2">Actions</th>
+        </tr>
+        </thead>
+    </table>
+
+</th:block>
+
+<!-- Initialize javascript for this page -->
+<script type="application/javascript" layout:fragment="javascript">
+    $(function () {
+        ArticleManagement.initArticles();
+    });
+</script>
+
+</body>
+</html>

@@ -3,10 +3,8 @@ package io.chark.food.app.article;
 import io.chark.food.app.administrate.audit.AuditService;
 import io.chark.food.domain.article.Article;
 import io.chark.food.domain.article.category.ArticleCategory;
-import io.chark.food.domain.article.category.ArticleCategoryRepository;
 import io.chark.food.domain.article.ArticleRepository;
 import io.chark.food.domain.article.photo.ArticlePhoto;
-import io.chark.food.domain.article.photo.ArticlePhotoRepository;
 import io.chark.food.util.exception.NotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,31 +20,25 @@ public class ArticleService {
     private static final Logger LOGGER = LoggerFactory.getLogger(ArticleService.class);
 
     private final ArticleRepository articleRepository;
-    private final ArticleCategoryRepository categoryRepository;
-    private final ArticlePhotoRepository photoRepository;
     private final AuditService auditService;
 
     @Autowired
     public ArticleService(ArticleRepository articleRepository,
-                          ArticleCategoryRepository categoryRepository,
-                          ArticlePhotoRepository photoRepository,
                           AuditService auditService) {
 
         this.articleRepository = articleRepository;
-        this.categoryRepository = categoryRepository;
-        this.photoRepository = photoRepository;
         this.auditService = auditService;
     }
 
     /**
      * Register a new Article.
      *
-     * @param title             title of the article.
-     * @param description       description of the article.
-     * @param shortDescription  short description of the article.
-     * @param metaKeywords      meta keywords of the article.
-     * @param metaDescription   meta description of the article.
-     * @return  created article or empty optional.
+     * @param title            title of the article.
+     * @param description      description of the article.
+     * @param shortDescription short description of the article.
+     * @param metaKeywords     meta keywords of the article.
+     * @param metaDescription  meta description of the article.
+     * @return created article or empty optional.
      */
     public Optional<Article> register(String title,
                                       String description,
@@ -76,11 +68,38 @@ public class ArticleService {
     }
 
     /**
+     * Update specified article details.
+     *
+     * @param article        article which is to be updated.
+     * @param articleDetails details which are used in updating.
+     * @return updated article optional.
+     */
+    public Optional<Article> update(Article article, Article articleDetails) {
+
+        // Update other stuff.
+        article.setTitle(articleDetails.getTitle());
+        article.setDescription(articleDetails.getDescription());
+        article.setShortDescription(articleDetails.getShortDescription());
+        article.setMetaKeywords(articleDetails.getMetaKeywords());
+        article.setMetaDescription(articleDetails.getMetaDescription());
+
+        try {
+            LOGGER.debug("Updating Article{id={}} details", article.getId());
+            return Optional.ofNullable(articleRepository.save(article));
+        } catch (DataIntegrityViolationException e) {
+            LOGGER.error("Could not update article", e);
+
+            auditService.error("Failed to update article details");
+            return Optional.empty();
+        }
+    }
+
+    /**
      * Add specified article category to specified article.
      *
-     * @param article   article.
-     * @param category  article category.
-     * @return          article optional with added category.
+     * @param article  article.
+     * @param category article category.
+     * @return article optional with added category.
      */
     public Optional<Article> addCategory(Article article, ArticleCategory category) {
         article.addCategory(category);
@@ -99,9 +118,9 @@ public class ArticleService {
     /**
      * Add specified article photo to specified article.
      *
-     * @param article   article.
-     * @param photo  article photo.
-     * @return          article optional with added photo.
+     * @param article article.
+     * @param photo   article photo.
+     * @return article optional with added photo.
      */
     public Optional<Article> addPhoto(Article article, ArticlePhoto photo) {
         article.addPhoto(photo);

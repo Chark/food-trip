@@ -57,12 +57,12 @@ public class ArticleCategoryAdministrationController {
      */
     @RequestMapping(value = "/articles/categories/{id}", method = RequestMethod.POST)
     public String saveCategory(@PathVariable long id,
-                              ArticleCategory category,
-                              Model model) {
+                               ArticleCategory category,
+                               Model model) {
 
         if (!administrationService.saveCategory(id, category).isPresent()) {
-            model.addAttribute("error", "Failed to create account," +
-                    " please double check the details you've entered. The email or username might already be taken");
+            model.addAttribute("error", "Failed to create article category," +
+                    " please double check the details you've entered.");
 
             model.addAttribute("category", category);
             return "administrate/article_category";

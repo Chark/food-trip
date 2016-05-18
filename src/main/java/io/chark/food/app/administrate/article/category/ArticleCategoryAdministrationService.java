@@ -43,7 +43,8 @@ public class ArticleCategoryAdministrationService {
             // Reuse the register method to save a new account.
             optional = categoryService.register(
                     categoryDetails.getTitle(),
-                    categoryDetails.getDescription());
+                    categoryDetails.getDescription()
+            );
 
         } else {
 
