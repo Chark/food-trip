@@ -2,10 +2,9 @@ package io.chark.food.app.moderate.thread;
 
 import io.chark.food.app.account.AccountService;
 import io.chark.food.app.administrate.audit.AuditService;
-import io.chark.food.app.comment.ThreadService;
-import io.chark.food.domain.article.category.ArticleCategory;
-import io.chark.food.domain.comment.Thread;
-import io.chark.food.domain.comment.ThreadRepository;
+import io.chark.food.app.thread.ThreadService;
+import io.chark.food.domain.thread.Thread;
+import io.chark.food.domain.thread.ThreadRepository;
 import io.chark.food.util.exception.NotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -60,7 +59,8 @@ public class ThreadAdministrationService {
                     threadDetails.getAccount(),
                     threadDetails.getTitle(),
                     threadDetails.getDescription(),
-                    threadDetails.isRegistrationRequired()
+                    threadDetails.isRegistrationRequired(),
+                    threadDetails.getThreadCategory()
                     );
 
         } else {
@@ -96,5 +96,11 @@ public class ThreadAdministrationService {
             auditService.error("Failed to save thread");
             return Optional.empty();
         }
+    }
+
+    public void delete(long id) {
+        Thread thread = threadRepository.findOne(id);
+        threadRepository.delete(thread);
+        auditService.info("Deleted Thread with id: %d", id);
     }
 }

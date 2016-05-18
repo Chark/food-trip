@@ -1,0 +1,54 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layouts/default">
+
+<head>
+    <title>Threads</title>
+</head>
+
+<body>
+
+<th:block layout:fragment="content">
+    <div class="container">
+        <div class="page-header">
+            <h1>Threads</h1>
+        </div>
+
+
+        <th:block th:each="category : ${categories}">
+            <table class="table forum table-striped">
+                <thead>
+                <tr>
+                    <th class="cell-stat"></th>
+                    <th>
+                        <h3 th:text="${category.name}"></h3>
+                        <h5 th:text="${category.description}"></h5>
+                    </th>
+                    <th class="cell-stat text-center hidden-xs hidden-sm">Topics</th>
+                    <th class="cell-stat text-center hidden-xs hidden-sm">Posts</th>
+                    <th class="cell-stat-2x hidden-xs hidden-sm">Last Post</th>
+                </tr>
+                </thead>
+                <tbody>
+                <th:block th:each="thread : ${category.threads}">
+                    <tr>
+                        <td class="text-center"><i class="fa fa-question fa-2x text-primary"></i></td>
+                        <td>
+                            <h4><a th:text="${thread.title}"></a></h4>
+                        </td>
+                        <td class="text-center hidden-xs hidden-sm"><a href="#">9 542</a></td>
+                        <td class="text-center hidden-xs hidden-sm"><a href="#">89 897</a></td>
+                        <td class="hidden-xs hidden-sm">by <a href="#">John Doe</a><br></br>
+                            <small><i class="fa fa-clock-o"></i> 3 months ago</small>
+                        </td>
+                    </tr>
+                </th:block>
+                </tbody>
+            </table>
+        </th:block>
+
+    </div>
+</th:block>
+
+</body>
+</html>

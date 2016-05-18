@@ -1,6 +1,7 @@
 package io.chark.food.domain.comment;
 
 import io.chark.food.domain.BaseEntity;
+import io.chark.food.domain.thread.Thread;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,6 +13,7 @@ public class Comment extends BaseEntity {
 
     @ManyToOne
     private Thread thread;
+
 
     private String text;
     private String link;

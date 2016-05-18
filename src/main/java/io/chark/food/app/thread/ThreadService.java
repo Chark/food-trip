@@ -1,10 +1,12 @@
-package io.chark.food.app.comment;
+package io.chark.food.app.thread;
 
 import io.chark.food.app.account.AccountService;
 import io.chark.food.app.administrate.audit.AuditService;
 import io.chark.food.domain.authentication.account.Account;
-import io.chark.food.domain.comment.Thread;
-import io.chark.food.domain.comment.ThreadRepository;
+import io.chark.food.domain.thread.Thread;
+import io.chark.food.domain.thread.ThreadRepository;
+import io.chark.food.domain.thread.category.ThreadCategory;
+import io.chark.food.domain.thread.category.ThreadCategoryRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.PostConstruct;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 @Service
 public class ThreadService {
@@ -21,28 +24,21 @@ public class ThreadService {
     private static final Logger LOGGER = LoggerFactory.getLogger(ThreadService.class);
 
     private final ThreadRepository threadRepository;
+    private final ThreadCategoryRepository threadCategoryRepository;
     private final AccountService accountService;
     private final AuditService auditService;
 
     @Autowired
-    public ThreadService(ThreadRepository threadRepository, AccountService accountService, AuditService auditService) {
+    public ThreadService(ThreadRepository threadRepository, AccountService accountService, AuditService auditService, ThreadCategoryRepository threadCategoryRepository) {
         this.threadRepository = threadRepository;
         this.accountService = accountService;
         this.auditService = auditService;
+        this.threadCategoryRepository = threadCategoryRepository;
     }
 
     @PostConstruct
     public void init() {
-        Account account = accountService.getAccount("admin");
-        if (account == null) {
-            return;
-        }
 
-        addThread(account, "test title1", "test description 1", false);
-        addThread(account, "test title2", "test description 2", false);
-        addThread(account, "test title3", "test description 3", false);
-        addThread(account, "test title4", "test description 4", false);
-        addThread(account, "test title5", "test description 5", false);
     }
 
     public Optional<Thread> update(Thread thread, Thread threadDetails) {
@@ -62,11 +58,12 @@ public class ThreadService {
         }
     }
 
-    public Optional<Thread> register(Account account,String title, String description,boolean registrationRequired) {
+    public Optional<Thread> register(Account account, String title, String description, boolean registrationRequired, ThreadCategory threadCategory) {
         Thread thread = new Thread(account,
                 title,
                 description,
-                registrationRequired);
+                registrationRequired,
+                threadCategory);
 
         try {
             thread = threadRepository.save(thread);
@@ -82,11 +79,11 @@ public class ThreadService {
         return Optional.of(thread);
     }
 
-    private Optional<Thread> addThread(String title, String description, boolean registrationRequired) {
-        return addThread(null, title, description, registrationRequired);
+    private Optional<Thread> addThread(String title, String description, boolean registrationRequired, ThreadCategory threadCategory) {
+        return addThread(null, title, description, registrationRequired, threadCategory);
     }
 
-    private Optional<Thread> addThread(Account account, String title, String description, boolean registrationRequired) {
+    private Optional<Thread> addThread(Account account, String title, String description, boolean registrationRequired, ThreadCategory threadCategory) {
         LOGGER.debug("Creating new Thread{title='{}'}", title);
 
         // accountService.getAccount(); Do not use account from authentication!
@@ -98,7 +95,7 @@ public class ThreadService {
         }
 
         try {
-            Thread thread = new Thread(account, title, description, registrationRequired);
+            Thread thread = new Thread(account, title, description, registrationRequired, threadCategory);
             Optional<Thread> optional = Optional.of(threadRepository.save(thread));
             auditService.info("Thread '%s' successfully created by '%s'", title, account.getUsername());
             LOGGER.debug("Thread created successfully{username='{}', title='{}'}", account.getUsername(), title);

@@ -72,9 +72,9 @@
                         label: 'Delete',
                         className: 'btn-danger',
                         callback: function () {
-                            $.delete(categoriesUrl + '/' + id, function () {
+                            $.delete(threadUrl + '/' + id, function () {
                                 toastr.success('Deleted thread');
-                                categoriesTable.ajax.reload();
+                                threadTable.ajax.reload();
                             }).fail(function () {
                                 toastr.error('Failed to delete thread');
                             });

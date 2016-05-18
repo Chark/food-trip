@@ -1,7 +1,9 @@
-package io.chark.food.domain.comment;
+package io.chark.food.domain.thread;
 
 import io.chark.food.domain.BaseEntity;
 import io.chark.food.domain.authentication.account.Account;
+import io.chark.food.domain.comment.Comment;
+import io.chark.food.domain.thread.category.ThreadCategory;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -29,17 +31,22 @@ public class Thread extends BaseEntity {
 
     private boolean registrationRequired;
 
+    @ManyToOne
+    private ThreadCategory threadCategory;
+
     @OneToMany
+    @Column(nullable = false)
     private List<Comment> comments;
 
     public Thread() {
     }
 
-    public Thread(Account account, String title, String description, boolean registrationRequired) {
+    public Thread(Account account, String title, String description, boolean registrationRequired, ThreadCategory threadCategory) {
         this.account = account;
         this.title = title;
         this.description = description;
         this.registrationRequired = registrationRequired;
+        this.threadCategory = threadCategory;
     }
 
     public void setDescription(String description) {
@@ -105,5 +112,9 @@ public class Thread extends BaseEntity {
 
     public String getTitle() {
         return title;
+    }
+
+    public ThreadCategory getThreadCategory() {
+        return threadCategory;
     }
 }

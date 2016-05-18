@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonView;
 import io.chark.food.domain.BaseEntity;
 import io.chark.food.domain.authentication.permission.Permission;
-import io.chark.food.domain.comment.Thread;
+import io.chark.food.domain.thread.Thread;
 import io.chark.food.domain.restaurant.Invitation;
 import io.chark.food.domain.restaurant.Restaurant;
 import org.hibernate.annotations.Fetch;

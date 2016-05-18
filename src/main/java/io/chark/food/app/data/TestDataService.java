@@ -5,11 +5,15 @@ import io.chark.food.app.article.ArticleService;
 import io.chark.food.app.article.category.ArticleCategoryService;
 import io.chark.food.app.article.photo.ArticlePhotoService;
 import io.chark.food.app.restaurant.RestaurantService;
+import io.chark.food.app.thread.ThreadService;
+import io.chark.food.app.thread.categories.ThreadCategoryService;
 import io.chark.food.domain.article.Article;
 import io.chark.food.domain.article.category.ArticleCategory;
 import io.chark.food.domain.article.photo.ArticlePhoto;
 import io.chark.food.domain.authentication.account.Account;
 import io.chark.food.domain.restaurant.Restaurant;
+import io.chark.food.domain.thread.Thread;
+import io.chark.food.domain.thread.category.ThreadCategory;
 import io.chark.food.util.authentication.AuthenticationUtils;
 import io.chark.food.util.photo.PhotoUtils;
 import org.slf4j.Logger;
@@ -57,6 +61,8 @@ public class TestDataService {
     private final ArticleCategoryService articleCategoryService;
     private final ArticlePhotoService articlePhotoService;
     private final ArticleService articleService;
+    private final ThreadCategoryService threadCategoryService;
+    private final ThreadService threadService;
 
     // Username's to initialize.
     private final List<String> usernameList;
@@ -81,13 +87,18 @@ public class TestDataService {
                            AccountService accountService,
                            ArticleCategoryService articleCategoryService,
                            ArticlePhotoService articlePhotoService,
-                           ArticleService articleService) {
+                           ArticleService articleService,
+                           ThreadCategoryService threadCategoryService,
+                           ThreadService threadService
+    ) {
 
         this.restaurantService = restaurantService;
         this.accountService = accountService;
         this.articleCategoryService = articleCategoryService;
         this.articlePhotoService = articlePhotoService;
         this.articleService = articleService;
+        this.threadCategoryService = threadCategoryService;
+        this.threadService = threadService;
         this.random = new Random();
 
         // Test username's.
@@ -168,6 +179,14 @@ public class TestDataService {
         // Initialize main articles and their article categories.
         initTestArticles(articleCategories, articlePhotos);
 
+        // Initializes test thread categories
+        initTestThreadCategories();
+
+
+        //Initializes test threads with categories
+        //initTestThreadCategories(); is required
+        initTestThreads();
+
         LOGGER.info("Finished initializing test data");
         return new AsyncResult<>(null);
     }
@@ -187,6 +206,37 @@ public class TestDataService {
             account.ifPresent(accounts::add);
         }
         return accounts;
+    }
+
+
+    /***
+     * Creates a list of test thread categories.
+     *
+     * @return list of thread categories
+     */
+    private List<ThreadCategory> initTestThreadCategories(){
+        List<ThreadCategory> threadCategories = new ArrayList<>();
+        for(int i = 1; i < 8; i++){
+            Optional<ThreadCategory> threadCategory = threadCategoryService.register("Test name: " + i, "Test description: " + i);
+            threadCategory.ifPresent(threadCategories::add);
+        }
+        return  threadCategories;
+    }
+
+
+    private List<Thread> initTestThreads(){
+        List<Thread> threads = new ArrayList<>();
+        Account account = accountService.getAccount("admin");
+
+        for(int i = 1; i < 30; i++){
+            int rand = random.nextInt(threadCategoryService.getThreadCategories().size());
+            ThreadCategory threadCategory = threadCategoryService.getThreadCategories().get(rand);
+            Optional<Thread> thread = threadService.register(account, "Test title: " + i ,"Test description: " + i, false,threadCategory);
+            thread.ifPresent(threads::add);
+        }
+
+        return threads;
+
     }
 
     /**

@@ -1,14 +1,11 @@
 package io.chark.food.app.moderate.thread;
 
-import io.chark.food.domain.article.category.ArticleCategory;
-import io.chark.food.domain.comment.Thread;
+import io.chark.food.domain.thread.Thread;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -66,7 +63,11 @@ public class ThreadAdministrationController {
         return threadAdministrationService.getThreads();
     }
 
-
+    @ResponseStatus(HttpStatus.OK)
+    @RequestMapping(value = "/api/threads/{id}", method = RequestMethod.DELETE)
+    public void delete(@PathVariable long id) {
+        threadAdministrationService.delete(id);
+    }
 
 
 }

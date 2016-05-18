@@ -39,6 +39,7 @@
             </div>
             <div class="navbar-collapse collapse" id="navbar-main">
                 <ul class="nav navbar-nav navbar-right">
+                    <li><a th:href="@{/threads/list}">Threads</a></li>
                     <li><a th:href="@{/articles/categories}">Categories</a></li>
                     <!-- Only visible for logged in users -->
                     <th:block sec:authorize="isAuthenticated()">
