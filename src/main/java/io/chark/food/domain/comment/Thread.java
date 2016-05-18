@@ -42,6 +42,31 @@ public class Thread extends BaseEntity {
         this.registrationRequired = registrationRequired;
     }
 
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setTitle(String title) {
+
+        this.title = title;
+    }
+
+    public void setThreadLink(String threadLink) {
+        this.threadLink = threadLink;
+    }
+
+    public void setAccount(Account account) {
+        this.account = account;
+    }
+
+    public void setRegistrationRequired(boolean registrationRequired) {
+        this.registrationRequired = registrationRequired;
+    }
+
+    public void setEditDate(Date editDate) {
+        this.editDate = editDate;
+    }
+
     public Account getAccount() {
         return account;
     }
