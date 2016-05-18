@@ -278,7 +278,9 @@ public class AccountService implements UserDetailsService {
         LOGGER.info("Creating new Permission{name='{}', authority='{}'}",
                 name, authority);
 
-        permissionRepository.save(new Permission(name, authority, color));
+        if (permissionRepository.findByAuthority(authority) == null) {
+            permissionRepository.save(new Permission(name, authority, color));
+        }
     }
 
     /**

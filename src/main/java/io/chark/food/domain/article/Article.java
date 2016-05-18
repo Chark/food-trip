@@ -130,10 +130,6 @@ public class Article extends BaseEntity {
         return photos;
     }
 
-    public ArticlePhoto getPhoto(int id) {
-        return photos.get(id);
-    }
-
     public void setPhotos(List<ArticlePhoto> photos) {
         this.photos = photos;
     }

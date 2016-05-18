@@ -3,18 +3,18 @@ package io.chark.food.app.administrate.audit;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.util.List;
+import java.util.Map;
 
 public class AuditPackage {
 
-    private final List<Long> accountCounts;
+    private final Map<Integer, Long> accountCounts;
 
     private final long totalRestaurantCount;
     private final long totalAccountCount;
     private final long loggedInUserCount;
 
     @JsonCreator
-    public AuditPackage(@JsonProperty("accountCounts") List<Long> accountCounts,
+    public AuditPackage(@JsonProperty("accountCounts") Map<Integer, Long> accountCounts,
                         @JsonProperty("totalRestaurantCount") long totalRestaurantCount,
                         @JsonProperty("totalAccountCount") long totalAccountCount,
                         @JsonProperty("loggedInUserCount") long loggedInUserCount) {
@@ -25,7 +25,7 @@ public class AuditPackage {
         this.loggedInUserCount = loggedInUserCount;
     }
 
-    public List<Long> getAccountCounts() {
+    public Map<Integer, Long> getAccountCounts() {
         return accountCounts;
     }
 

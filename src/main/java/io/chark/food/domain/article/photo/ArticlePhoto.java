@@ -2,15 +2,13 @@ package io.chark.food.domain.article.photo;
 
 import io.chark.food.domain.BaseEntity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Lob;
+import javax.persistence.*;
 import java.util.Date;
 
 @Entity
 public class ArticlePhoto extends BaseEntity {
 
-    @Lob
+    @Basic(fetch = FetchType.EAGER)
     @Column(nullable = false)
     private byte[] photo;
 

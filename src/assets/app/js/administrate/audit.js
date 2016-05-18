@@ -90,15 +90,17 @@
         /**
          * Initialize user chart.
          */
-
+        var values = Object.keys(accountArray).map(function (key) {
+            return accountArray[key]
+        });
 
         userChart = new Chart($('.user-chart'), {
             type: 'line',
             data: {
-                labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+                labels: Object.keys(accountArray),
                 datasets: [
                     {
-                        label: 'New accounts per day of the week',
+                        label: 'New accounts',
                         fill: false,
                         lineTension: 0,
                         backgroundColor: "rgba(75,192,192,0.4)",
@@ -106,10 +108,16 @@
                         pointBorderColor: "rgba(75,192,192,1)",
                         pointHoverBackgroundColor: "rgba(75,192,192,1)",
                         pointHoverBorderColor: "rgba(220,220,220,1)",
+                        pointHoverRadius: 5,
+                        pointHoverBorderWidth: 2,
                         pointHitRadius: 10,
-                        data: accountArray
+                        data: values
                     }
                 ]
+            },
+            options: {
+                scaleOverride: true,
+                scaleIntegersOnly: true
             }
         });
     };
