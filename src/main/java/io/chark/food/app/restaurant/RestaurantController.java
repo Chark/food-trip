@@ -31,6 +31,18 @@ public class RestaurantController {
     }
 
     /**
+     * Get restaurant page that doesn't belong to the current user - view details.
+     *
+     * @param id restaurant id.
+     * @return restaurant page template.
+     */
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    public String restaurant(@PathVariable long id, Model model) {
+        model.addAttribute("restaurant", restaurantService.getRestaurant(id));
+        return "restaurant/restaurant";
+    }
+
+    /**
      * Get the restaurant template to which the account belongs to.
      *
      * @return restaurant profile template.

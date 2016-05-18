@@ -5,6 +5,7 @@ import io.chark.food.domain.article.Article;
 import io.chark.food.domain.article.category.ArticleCategory;
 import io.chark.food.domain.article.ArticleRepository;
 import io.chark.food.domain.article.photo.ArticlePhoto;
+import io.chark.food.domain.restaurant.Restaurant;
 import io.chark.food.util.exception.NotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,13 +42,15 @@ public class ArticleService {
      * @param metaDescription  meta description of the article.
      * @return created article or empty optional.
      */
-    public Optional<Article> register(String title,
+    public Optional<Article> register(Restaurant restaurant,
+                                      String title,
                                       String description,
                                       String shortDescription,
                                       String metaKeywords,
                                       String metaDescription) {
 
         Article article = new Article(
+                restaurant,
                 title,
                 description,
                 shortDescription,

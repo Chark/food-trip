@@ -1,6 +1,7 @@
 package io.chark.food.domain.restaurant;
 
 import io.chark.food.domain.BaseEntity;
+import io.chark.food.domain.article.Article;
 import io.chark.food.domain.authentication.account.Account;
 
 import javax.persistence.*;
@@ -32,12 +33,15 @@ public class Restaurant extends BaseEntity {
     @Column(nullable = false)
     private Date creationDate = new Date();
 
-    @OneToMany(mappedBy = "restaurant", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "restaurant")
     private List<Account> accounts;
 
     // Invited accounts to this restaurant.
     @OneToMany(mappedBy = "restaurant", orphanRemoval = true, fetch = FetchType.EAGER)
     private List<Invitation> invitations = new ArrayList<>();
+
+    @OneToMany(mappedBy = "restaurant", orphanRemoval = true)
+    private List<Article> articles;
 
     public Restaurant() {
     }
@@ -114,5 +118,9 @@ public class Restaurant extends BaseEntity {
 
     public List<Invitation> getInvitations() {
         return invitations;
+    }
+
+    public List<Article> getArticles() {
+        return articles;
     }
 }

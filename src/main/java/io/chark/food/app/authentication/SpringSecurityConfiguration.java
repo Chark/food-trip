@@ -45,6 +45,7 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
                     "/fonts/**",
                     "/images/**",
                     "/articles/**",
+                    "/restaurant/**",
                     "/compiled/**")
                 .permitAll()
                 .antMatchers("/administrate/**").hasRole(ROLE_ADMIN.getName())
