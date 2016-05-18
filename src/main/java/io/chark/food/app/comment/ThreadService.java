@@ -45,6 +45,43 @@ public class ThreadService {
         addThread(account, "test title5", "test description 5", false);
     }
 
+    public Optional<Thread> update(Thread thread, Thread threadDetails) {
+
+        // Update other stuff.
+        thread.setTitle(threadDetails.getTitle());
+        thread.setDescription(threadDetails.getDescription());
+
+        try {
+            LOGGER.debug("Updating Thread{id={}} details", thread.getId());
+            return Optional.ofNullable(threadRepository.save(thread));
+        } catch (DataIntegrityViolationException e) {
+            LOGGER.error("Could not update thread", e);
+
+            auditService.error("Failed to update thread details");
+            return Optional.empty();
+        }
+    }
+
+    public Optional<Thread> register(Account account,String title, String description,boolean registrationRequired) {
+        Thread thread = new Thread(account,
+                title,
+                description,
+                registrationRequired);
+
+        try {
+            thread = threadRepository.save(thread);
+            LOGGER.debug("Created new Thread{title='{}'}", title);
+
+            auditService.info("Created a new Thread using title: %s", title);
+        } catch (DataIntegrityViolationException e) {
+            LOGGER.error("Failed while creating new Thread{title='{}'}", title, e);
+
+            auditService.error("Failed to create a Thread using title: %s", title);
+            return Optional.empty();
+        }
+        return Optional.of(thread);
+    }
+
     private Optional<Thread> addThread(String title, String description, boolean registrationRequired) {
         return addThread(null, title, description, registrationRequired);
     }

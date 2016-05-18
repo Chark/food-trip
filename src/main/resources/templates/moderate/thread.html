@@ -1,0 +1,63 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layouts/moderation">
+
+<head>
+    <title>Thread</title>
+</head>
+
+<body>
+<th:block layout:fragment="content">
+    <form name="threadForm"
+          method="POST"
+          th:attr="data-thread-id=${thread.id}"
+          th:action="@{/moderate/threads/edit/__${thread.id}__}"
+          th:object="${thread}">
+        <h2>Thread Details</h2>
+        <div class="row">
+
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-12">
+                        <th:block th:include="fragments/forms :: input
+                        ('title', *{title}, 'title', 'Title', 'Enter title')"/>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <label class="col-xs-12 control-label">
+                        Description
+                <textarea th:text="*{description}" name="description" rows="3" class="form-control"
+                          placeholder="Enter thread description"></textarea>
+                    </label>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <div class="row">
+                        <label class="col-xs-12">
+                            Registration required
+                            <select name="registrationRequired" class="form-control">
+                                <option th:selected="*{registrationRequired}" value="true">Enabled</option>
+                                <option th:selected="*{!registrationRequired}" value="false">Disabled</option>
+                            </select>
+                        </label>
+                        <div class="col-md-12">
+                            <th:block th:include="fragments/forms :: input
+                        ('threadLink', *{threadLink}, 'threadLink', 'Thread link', 'Enter thread link')"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-success">Save</button>
+        <a th:href="@{/moderate/threads}" class="btn btn-danger">Cancel</a>
+    </form>
+</th:block>
+
+<!-- Initialize javascript for this page -->
+<script type="application/javascript" layout:fragment="javascript">
+</script>
+</body>
+</html>
