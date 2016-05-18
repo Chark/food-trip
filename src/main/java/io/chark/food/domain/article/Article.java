@@ -107,6 +107,10 @@ public class Article extends BaseEntity {
         return categories;
     }
 
+    public ArticleCategory getCategory(int id) {
+        return categories.get(id);
+    }
+
     public void setCategories(List<ArticleCategory> categories) {
         this.categories = categories;
     }
@@ -130,5 +134,20 @@ public class Article extends BaseEntity {
 
     public void addPhoto(ArticlePhoto photo) {
         photos.add(photo);
+    }
+
+    /**
+     * Check if article has this article category.
+     *
+     * @param articleCategory article category to check.
+     * @return true if article has this category or false otherwise.
+     */
+    public boolean hasCategory(ArticleCategory articleCategory) {
+        for (ArticleCategory category : categories) {
+            if (category.equals(articleCategory)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

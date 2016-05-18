@@ -1,6 +1,8 @@
 package io.chark.food.app.administrate.article;
 
+import io.chark.food.app.administrate.article.category.ArticleCategoryAdministrationController;
 import io.chark.food.domain.article.Article;
+import io.chark.food.domain.article.category.ArticleCategory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -14,10 +16,13 @@ import java.util.List;
 public class ArticleAdministrationController {
 
     private final ArticleAdministrationService administrationService;
+    private final ArticleCategoryAdministrationController categoryAdministrationController;
 
     @Autowired
-    public ArticleAdministrationController(ArticleAdministrationService administrationService) {
+    public ArticleAdministrationController(ArticleAdministrationService administrationService,
+                                           ArticleCategoryAdministrationController categoryAdministrationController) {
         this.administrationService = administrationService;
+        this.categoryAdministrationController = categoryAdministrationController;
     }
 
     /**
@@ -47,6 +52,10 @@ public class ArticleAdministrationController {
             article = administrationService.getArticle(id);
         }
         model.addAttribute("article", article);
+
+        List<ArticleCategory> categories = categoryAdministrationController.getCategories();
+        model.addAttribute("categories", categories);
+
         return "administrate/article";
     }
 
@@ -58,15 +67,22 @@ public class ArticleAdministrationController {
     @RequestMapping(value = "/articles/{id}", method = RequestMethod.POST)
     public String saveCategory(@PathVariable long id,
                                Article article,
+                               ArticleCategory category,
                                Model model) {
 
-        if (!administrationService.saveArticle(id, article).isPresent()) {
+        System.out.println("ugnius");
+        //System.out.println(article.getCategories().size());
+        /*if (!administrationService.saveArticle(id, article).isPresent()) {
             model.addAttribute("error", "Failed to create article," +
                     " please double check the details you've entered.");
 
             model.addAttribute("article", article);
+
+            categories = categoryAdministrationController.getCategories();
+            model.addAttribute("categories", categories);
+
             return "administrate/article";
-        }
+        }*/
         return "redirect:/administrate/articles";
     }
 

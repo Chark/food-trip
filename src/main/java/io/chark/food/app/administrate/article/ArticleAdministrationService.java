@@ -4,6 +4,7 @@ import io.chark.food.app.administrate.audit.AuditService;
 import io.chark.food.app.article.ArticleService;
 import io.chark.food.domain.article.Article;
 import io.chark.food.domain.article.ArticleRepository;
+import io.chark.food.domain.article.category.ArticleCategory;
 import io.chark.food.util.exception.NotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,7 +34,9 @@ public class ArticleAdministrationService {
         this.auditService = auditService;
     }
 
-    public Optional<Article> saveArticle(long id, Article articleDetails) {
+    public Optional<Article> saveArticle(long id,
+                                         Article articleDetails) {
+                                         //List<ArticleCategory> categories) {
 
         // Below or equals means this is a new account.
         Optional<Article> optional;
@@ -69,6 +72,7 @@ public class ArticleAdministrationService {
         article.setShortDescription(articleDetails.getShortDescription());
         article.setMetaKeywords(articleDetails.getMetaKeywords());
         article.setMetaDescription(articleDetails.getMetaDescription());
+        //article.setCategories(categories);
 
         try {
             article = articleRepository.save(article);
