@@ -163,7 +163,7 @@ public class TestDataService {
         List<ArticleCategory> articleCategories = initTestArticleCategories();
 
         // Initialize main article photos.
-        List<ArticlePhoto> articlePhotos = initTestArticlePhotos();
+        List<ArticlePhoto> articlePhotos = initTestArticlePhotos(this.articleTitleList.size());
 
         // Initialize main articles and their article categories.
         initTestArticles(articleCategories, articlePhotos);
@@ -257,7 +257,7 @@ public class TestDataService {
      *
      * @param articleCategories list of article categories.
      * @param articlePhotos     list of article photos.
-     * @return                  list of test articles.
+     * @return list of test articles.
      */
     private List<Article> initTestArticles(List<ArticleCategory> articleCategories,
                                            List<ArticlePhoto> articlePhotos) {
@@ -281,13 +281,21 @@ public class TestDataService {
         // Add article categories to articles
         for (int i = 0; i < articles.size(); i++) {
             int num = i % articleCategories.size();
-            articleService.addCategory(articles.get(i), articleCategories.get(num));
+
+            Optional<Article> optional = articleService.addCategory(articles.get(i), articleCategories.get(num));
+            if (optional.isPresent()) {
+                articles.set(i, optional.get());
+            }
         }
 
         // Add article photos to articles
         for (int i = 0; i < articles.size(); i++) {
             int num = i % articlePhotos.size();
-            articleService.addPhoto(articles.get(i), articlePhotos.get(num));
+
+            Optional<Article> optional = articleService.addPhoto(articles.get(i), articlePhotos.get(num));
+            if (optional.isPresent()) {
+                articles.set(i, optional.get());
+            }
         }
 
         return articles;
@@ -298,10 +306,10 @@ public class TestDataService {
      *
      * @return list of test article photos.
      */
-    private List<ArticlePhoto> initTestArticlePhotos() {
+    private List<ArticlePhoto> initTestArticlePhotos(int count) {
         List<ArticlePhoto> articlePhotos = new ArrayList<>();
 
-        for (String title : this.articleTitleList) {
+        for (int i = 0; i < count; i++) {
             for (String path : this.articlePhotoPathList) {
                 Optional<ArticlePhoto> articlePhoto = articlePhotoService
                         .register(PhotoUtils.getImageBytes(path), DEFAULT_SHORT_DESCRIPTION, DEFAULT_ALTERNATE_TEXT);
