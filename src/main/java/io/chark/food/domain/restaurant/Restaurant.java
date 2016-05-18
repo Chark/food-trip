@@ -1,5 +1,6 @@
 package io.chark.food.domain.restaurant;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.chark.food.domain.BaseEntity;
 import io.chark.food.domain.article.Article;
 import io.chark.food.domain.authentication.account.Account;
@@ -120,6 +121,7 @@ public class Restaurant extends BaseEntity {
         return invitations;
     }
 
+    @JsonIgnore
     public List<Article> getArticles() {
         return articles;
     }
