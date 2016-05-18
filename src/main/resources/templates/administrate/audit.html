@@ -25,6 +25,9 @@
             <p>
                 You can manage registered accounts <a th:href="@{/administrate/accounts}">here</a>.
             </p>
+            <p>
+                At the moment there are <code th:text="*{loggedInUserCount}"></code> users using the website.
+            </p>
         </div>
 
         <!-- Account graph -->

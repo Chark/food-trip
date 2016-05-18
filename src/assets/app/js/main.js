@@ -27,7 +27,7 @@ $(function () {
         .addClass('active');
 
     $('ul.nav a').filter(function () {
-        return url.href.indexOf(this.href) == 0;
+        return this.href == url;
     }).parent().addClass('active');
 
     /**

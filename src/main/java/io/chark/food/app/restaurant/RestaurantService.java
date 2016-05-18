@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -156,6 +157,15 @@ public class RestaurantService {
         restaurantAuditService.info("Inviting %s to join the restaurant", "Invitation", username);
         return Optional.of(invitationRepository
                 .save(new Invitation(username, account, getRestaurant())));
+    }
+
+    /**
+     * Get all available restaurants.
+     *
+     * @return restaurant list.
+     */
+    public List<Restaurant> getRestaurants() {
+        return restaurantRepository.findAll();
     }
 
     /**

@@ -8,24 +8,49 @@
 
 <body>
 <th:block layout:fragment="content">
-    <div class="container">
-        <div class="page-header">
-            <h1>Example home page with layouts</h1>
+
+    <!-- List of all articles -->
+    <div class="col-md-8">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <h3>Articles</h3>
+                <hr/>
+                <div class="row" th:each="article : ${articles}" th:object="${article}">
+                    <div class="col-md-4">
+                        <div class="card">
+                            <th:block th:if="*{!photos.isEmpty()}" th:with="photo=*{photos[0]}">
+                                <img class="img-responsive img-rounded" th:alt="${photo.alt}" th:src="@{/articles/photos/__${photo.id}__}"/>
+                            </th:block>
+                            <th:block th:if="*{photos.isEmpty()}">
+                                <img class="img-responsive img-rounded" th:src="@{images/placeholder.svg}"/>
+                            </th:block>
+                        </div>
+                        <p class="text-center">
+                            Published on <th:block th:text="*{#dates.format(creationDate, 'yyyy MMM dd HH:mm')}"/>
+                        </p>
+                    </div>
+                    <div class="col-md-8">
+                        <h4>
+                            <a th:href="@{/articles/{id}(id=*{id})}" th:text="*{title}"></a>
+                        </h4>
+                        <p th:text="*{shortDescription}"></p>
+                        <p th:text="*{description}"></p>
+                    </div>
+                    <div class="col-md-12">
+                        <hr/>
+                    </div>
+                </div>
+            </div>
         </div>
-        <ul style="font-size: 2em; height: 800;">
-            <li th:each="var : ${variables}">
-                <th:block th:text="${var}"/>
-            </li>
-        </ul>
-        <p>
-            You can log-in and register an account, a default account with such details is always created:
-        </p>
-<pre>username: admin
-password: admin
-</pre>
-        <div>
-            Using this theme:
-            <a href="https://bootswatch.com/paper/">https://bootswatch.com/paper/</a>
+    </div>
+
+    <!-- Restaurant panel -->
+    <div class="col-md-4">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <h4>Explore restaurants</h4>
+                <p>Check out these restaurants and their offers.</p>
+            </div>
         </div>
     </div>
 </th:block>

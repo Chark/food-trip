@@ -8,6 +8,7 @@ import io.chark.food.domain.restaurant.RestaurantRepository;
 import io.chark.food.util.authentication.AuthenticationUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -21,17 +22,20 @@ public class AuditService {
     private final RestaurantRepository restaurantRepository;
     private final AuditMessageRepository messageRepository;
     private final AccountRepository accountRepository;
+    private final SessionRegistry sessionRegistry;
 
     private static final int SEVEN_DAYS = 7;
 
     @Autowired
     public AuditService(RestaurantRepository restaurantRepository,
                         AuditMessageRepository messageRepository,
-                        AccountRepository accountRepository) {
+                        AccountRepository accountRepository,
+                        SessionRegistry sessionRegistry) {
 
         this.restaurantRepository = restaurantRepository;
         this.messageRepository = messageRepository;
         this.accountRepository = accountRepository;
+        this.sessionRegistry = sessionRegistry;
     }
 
     /**
@@ -43,7 +47,8 @@ public class AuditService {
         return new AuditPackage(
                 getAccountCountsPerDay(SEVEN_DAYS),
                 restaurantRepository.count(),
-                accountRepository.count());
+                accountRepository.count(),
+                sessionRegistry.getAllPrincipals().size());
     }
 
     /**

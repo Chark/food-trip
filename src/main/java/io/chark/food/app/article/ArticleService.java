@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -149,5 +150,14 @@ public class ArticleService {
             throw new NotFoundException(Article.class, id);
         }
         return article;
+    }
+
+    /**
+     * Get all articles.
+     *
+     * @return list of articles.
+     */
+    public List<Article> getArticles() {
+        return articleRepository.findAll();
     }
 }
