@@ -1,6 +1,5 @@
 package io.chark.food.app.comment;
 
-
 import io.chark.food.app.account.AccountService;
 import io.chark.food.app.administrate.audit.AuditService;
 import io.chark.food.domain.authentication.account.Account;
@@ -34,27 +33,26 @@ public class ThreadService {
 
     @PostConstruct
     public void init() {
-        Account acc = accountService.getAccount("admin");
-        addThread(acc,"test title1", "test description 1", false);
-        addThread(acc,"test title2", "test description 2", false);
-        addThread(acc,"test title3", "test description 3", false);
-        addThread(acc,"test title4", "test description 4", false);
-        addThread(acc,"test title5", "test description 5", false);
+        Account account = accountService.getAccount("admin");
+        if (account == null) {
+            return;
+        }
+
+        addThread(account, "test title1", "test description 1", false);
+        addThread(account, "test title2", "test description 2", false);
+        addThread(account, "test title3", "test description 3", false);
+        addThread(account, "test title4", "test description 4", false);
+        addThread(account, "test title5", "test description 5", false);
     }
 
     private Optional<Thread> addThread(String title, String description, boolean registrationRequired) {
         return addThread(null, title, description, registrationRequired);
     }
 
-    private Optional<Thread> addThread(Account acc, String title, String description, boolean registrationRequired) {
+    private Optional<Thread> addThread(Account account, String title, String description, boolean registrationRequired) {
         LOGGER.debug("Creating new Thread{title='{}'}", title);
-        Account account;
 
-        if (acc == null) {
-            account = accountService.getAccount();
-        } else {
-            account = acc;
-        }
+        // accountService.getAccount(); Do not use account from authentication!
 
         if (account == null) {
             LOGGER.error("Attempted to create a thread. But user is not logged in or not valid.");
@@ -64,10 +62,10 @@ public class ThreadService {
 
         try {
             Thread thread = new Thread(account, title, description, registrationRequired);
-            threadRepository.save(thread);
+            Optional<Thread> optional = Optional.of(threadRepository.save(thread));
             auditService.info("Thread '%s' successfully created by '%s'", title, account.getUsername());
             LOGGER.debug("Thread created successfully{username='{}', title='{}'}", account.getUsername(), title);
-            return Optional.of(thread);
+            return optional;
 
         } catch (DataIntegrityViolationException e) {
             LOGGER.error("Error in creating a thread", e);

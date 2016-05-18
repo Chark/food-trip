@@ -24,7 +24,7 @@ import java.util.Collections;
 import java.util.Optional;
 import java.util.Set;
 
-import static io.chark.food.domain.authentication.permission.Permission.Authority.ROLE_USER;
+import static io.chark.food.domain.authentication.permission.Permission.Authority.*;
 import static io.chark.food.domain.extras.Color.*;
 
 @Service
@@ -63,7 +63,7 @@ public class AccountService implements UserDetailsService {
         addPermission("Administrator", Permission.Authority.ROLE_ADMIN, RED);
 
         // Init default admin account if there are no accounts defined.
-        initAdmin();
+        initMods();
     }
 
     /**
@@ -180,26 +180,6 @@ public class AccountService implements UserDetailsService {
     }
 
     /**
-     * Initialize an admin account if there are no account accounts.
-     */
-    private void initAdmin() {
-        if (accountRepository.count() == 0) {
-            Account account = register("Admin", "admin@admin.com", "admin")
-                    .get();
-
-            account.setEnabled(true);
-
-            // Admin has all authorities.
-            for (Permission.Authority authority : Permission.Authority.values()) {
-                account.addPermission(getPermission(authority));
-            }
-
-            LOGGER.info("Initializing default admin account");
-            accountRepository.save(account);
-        }
-    }
-
-    /**
      * Get permission by authority.
      *
      * @param authority authority to look the permission by.
@@ -299,5 +279,38 @@ public class AccountService implements UserDetailsService {
                 name, authority);
 
         permissionRepository.save(new Permission(name, authority, color));
+    }
+
+    /**
+     * Initialize one admin and one moderator account if there are none.
+     */
+    private void initMods() {
+        initAccount("admin", ROLE_ADMIN, ROLE_MODERATOR, ROLE_USER, ROLE_WORKER);
+        initAccount("moderator", ROLE_MODERATOR, ROLE_USER, ROLE_WORKER);
+    }
+
+    /**
+     * Initialize some account with authorities.
+     *
+     * @param username    account username.
+     * @param authorities authorities to assign to account.
+     */
+    private void initAccount(String username, Permission.Authority... authorities) {
+        if (accountRepository.findByUsername(username) == null) {
+            LOGGER.info("Initializing default: {} account", username);
+
+            Account account = register(username, String.format("%s@%s.com", username, username), username)
+                    .get();
+
+            account.setEnabled(true);
+
+            // Add permissions to account.
+            for (Permission.Authority authority : authorities) {
+                account.addPermission(getPermission(authority));
+            }
+            accountRepository.save(account);
+        } else {
+            LOGGER.warn("Default account: {} already exists", username);
+        }
     }
 }

@@ -66,6 +66,9 @@ public class Account extends BaseEntity implements UserDetails {
     @OneToMany(mappedBy = "account", fetch = FetchType.EAGER)
     private List<Invitation> invitations = new ArrayList<>();
 
+    @OneToMany(mappedBy = "account", orphanRemoval = true)
+    private List<Thread> threads = new ArrayList<>();
+
     public Account() {
     }
 

@@ -9,7 +9,6 @@ import java.util.List;
 
 @Entity
 public class Thread extends BaseEntity {
-
     //TODO Add title column to entities diagram
 
     @ManyToOne
@@ -18,43 +17,33 @@ public class Thread extends BaseEntity {
     @Column(nullable = false)
     private String title;
 
-    @Column(nullable = false)
-    private Date creationDate;
-
     private String description;
+    private String threadLink;
 
-    private int viewsCount;
-
-    private Date editDate;
-
-    private boolean registrationRequired;
+    @Column(nullable = false)
+    private Date creationDate = new Date();
+    private Date editDate = new Date();
 
     private int currentlyViewing;
+    private int viewCount;
 
-    private String threadLink;
+    private boolean registrationRequired;
 
     @OneToMany
     private List<Comment> comments;
 
-    public Thread(){
-
+    public Thread() {
     }
 
-    public Thread(Account account,String title, String description, boolean registrationRequired) {
+    public Thread(Account account, String title, String description, boolean registrationRequired) {
         this.account = account;
         this.title = title;
         this.description = description;
-        this.creationDate = new Date();
-        this.viewsCount = 0;
         this.registrationRequired = registrationRequired;
     }
 
     public Account getAccount() {
         return account;
-    }
-
-    public void setAccount(Account account) {
-        this.account = account;
     }
 
     public Date getCreationDate() {
@@ -65,12 +54,8 @@ public class Thread extends BaseEntity {
         return description;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public int getViewsCount() {
-        return viewsCount;
+    public int getViewCount() {
+        return viewCount;
     }
 
     public Date getEditDate() {
@@ -93,15 +78,7 @@ public class Thread extends BaseEntity {
         return comments;
     }
 
-    public void setComments(List<Comment> comments) {
-        this.comments = comments;
-    }
-
     public String getTitle() {
         return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
     }
 }
