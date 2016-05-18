@@ -5,3 +5,17 @@ logging.level.io.chark: DEBUG
 
 # Dev profile, atm used only to exclude test data seeding during unit testing.
 spring.profiles.active: dev
+
+---
+
+# Database connection settings, active only on db profile.
+spring:
+  profiles: db
+  datasource:
+    url: jdbc:postgresql://localhost:5432/food
+    username: food
+    password: food
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    show-sql: false
+    hibernate.ddl-auto: update
