@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.chark.food.domain.BaseEntity;
 import io.chark.food.domain.article.category.ArticleCategory;
 import io.chark.food.domain.article.photo.ArticlePhoto;
+import io.chark.food.domain.restaurant.Restaurant;
 
 import javax.persistence.*;
 import java.util.*;
@@ -24,7 +25,7 @@ public class Article extends BaseEntity {
     private String metaDescription;
 
     @Column(nullable = false)
-    private Date creationDate;
+    private Date creationDate = new Date();
 
     private long viewsNumber;
 
@@ -35,16 +36,25 @@ public class Article extends BaseEntity {
     @OneToMany(orphanRemoval = true)
     private List<ArticlePhoto> photos = new ArrayList<>();
 
+    @ManyToOne
+    private Restaurant restaurant;
+
     public Article() {
     }
 
-    public Article(String title, String description, String shortDescription, String metaKeywords, String metaDescription) {
+    public Article(Restaurant restaurant,
+                   String title,
+                   String description,
+                   String shortDescription,
+                   String metaKeywords,
+                   String metaDescription) {
+
+        this.restaurant = restaurant;
         this.title = title;
         this.description = description;
         this.shortDescription = shortDescription;
         this.metaKeywords = metaKeywords;
         this.metaDescription = metaDescription;
-        this.creationDate = new Date();
     }
 
     public String getTitle() {
@@ -91,10 +101,6 @@ public class Article extends BaseEntity {
         return creationDate;
     }
 
-    public void setCreationDate(Date creationDate) {
-        this.creationDate = creationDate;
-    }
-
     public long getViewsNumber() {
         return viewsNumber;
     }
@@ -124,16 +130,16 @@ public class Article extends BaseEntity {
         return photos;
     }
 
-    public ArticlePhoto getPhoto(int id) {
-        return photos.get(id);
-    }
-
     public void setPhotos(List<ArticlePhoto> photos) {
         this.photos = photos;
     }
 
     public void addPhoto(ArticlePhoto photo) {
         photos.add(photo);
+    }
+
+    public Restaurant getRestaurant() {
+        return restaurant;
     }
 
     /**

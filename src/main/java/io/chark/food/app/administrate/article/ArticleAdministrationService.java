@@ -2,9 +2,9 @@ package io.chark.food.app.administrate.article;
 
 import io.chark.food.app.administrate.audit.AuditService;
 import io.chark.food.app.article.ArticleService;
+import io.chark.food.app.restaurant.RestaurantService;
 import io.chark.food.domain.article.Article;
 import io.chark.food.domain.article.ArticleRepository;
-import io.chark.food.domain.article.category.ArticleCategory;
 import io.chark.food.util.exception.NotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,15 +21,18 @@ public class ArticleAdministrationService {
     private static final Logger LOGGER = LoggerFactory.getLogger(ArticleAdministrationService.class);
 
     private final ArticleRepository articleRepository;
+    private final RestaurantService restaurantService;
     private final ArticleService articleService;
     private final AuditService auditService;
 
     @Autowired
     public ArticleAdministrationService(ArticleRepository articleRepository,
+                                        RestaurantService restaurantService,
                                         ArticleService articleService,
                                         AuditService auditService) {
 
         this.articleRepository = articleRepository;
+        this.restaurantService = restaurantService;
         this.articleService = articleService;
         this.auditService = auditService;
     }
@@ -44,7 +47,8 @@ public class ArticleAdministrationService {
 
             // Reuse the register method to save a new account.
             optional = articleService.register(
-                    articleDetails.getTitle(),
+                    restaurantService.getRestaurant(), // Get restaurant from currently authenticated user, NOTE
+                    articleDetails.getTitle(),         // that the user must have a restaurant! Read method javadoc.
                     articleDetails.getDescription(),
                     articleDetails.getShortDescription(),
                     articleDetails.getMetaKeywords(),

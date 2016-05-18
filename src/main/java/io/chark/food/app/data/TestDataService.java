@@ -168,7 +168,7 @@ public class TestDataService {
         List<Account> accounts = initTestAccounts();
 
         // Initialize main restaurants and their test accounts.
-        initTestRestaurants(accounts);
+        List<Restaurant> restaurants = initTestRestaurants(accounts);
 
         // Initialize main article categories.
         List<ArticleCategory> articleCategories = initTestArticleCategories();
@@ -177,7 +177,7 @@ public class TestDataService {
         List<ArticlePhoto> articlePhotos = initTestArticlePhotos(this.articleTitleList.size());
 
         // Initialize main articles and their article categories.
-        initTestArticles(articleCategories, articlePhotos);
+        initTestArticles(articleCategories, articlePhotos, restaurants);
 
         // Initializes test thread categories
         initTestThreadCategories();
@@ -310,19 +310,24 @@ public class TestDataService {
      * @return list of test articles.
      */
     private List<Article> initTestArticles(List<ArticleCategory> articleCategories,
-                                           List<ArticlePhoto> articlePhotos) {
+                                           List<ArticlePhoto> articlePhotos,
+                                           List<Restaurant> restaurants) {
+
+        // No restaurants, need at least a few.
+        if (restaurants.isEmpty()) {
+            return Collections.emptyList();
+        }
 
         List<Article> articles = new ArrayList<>();
-
         for (String title : this.articleTitleList) {
             Optional<Article> article = articleService
                     .register(
+                            restaurants.get(0), // take the first one
                             title,
                             DEFAULT_DESCRIPTION,
                             DEFAULT_SHORT_DESCRIPTION,
                             "meta keywords",
-                            "meta description"
-                    );
+                            "meta description");
 
             // Add article to article list if present.
             article.ifPresent(articles::add);

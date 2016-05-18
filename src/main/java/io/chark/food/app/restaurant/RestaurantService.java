@@ -117,9 +117,10 @@ public class RestaurantService {
      * Get restaurant which is assigned to the currently authenticated user.
      *
      * @return restaurant.
-     * @throws NotFoundException if use has no restaurant assigned to him.
+     * @throws NotFoundException if user has no restaurant assigned to him.
      */
     public Restaurant getRestaurant() {
+
         Restaurant restaurant = restaurantRepository
                 .findByAccountId(AuthenticationUtils.getIdOrThrow());
 
@@ -166,6 +167,20 @@ public class RestaurantService {
      */
     public List<Restaurant> getRestaurants() {
         return restaurantRepository.findAll();
+    }
+
+    /**
+     * Get restaurant by id.
+     *
+     * @param id restaurant id.
+     * @return restaurant.
+     */
+    public Restaurant getRestaurant(long id) {
+        Restaurant restaurant = restaurantRepository.findOne(id);
+        if (restaurant == null) {
+            throw new NotFoundException("No restaurant found with id: %s", id);
+        }
+        return restaurant;
     }
 
     /**

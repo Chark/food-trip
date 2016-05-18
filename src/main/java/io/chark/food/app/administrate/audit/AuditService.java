@@ -11,10 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class AuditService {
@@ -147,10 +144,10 @@ public class AuditService {
      * @param days list of days to go back.
      * @return list of account counts for each day.
      */
-    private List<Long> getAccountCountsPerDay(int days) {
+    private Map<Integer, Long> getAccountCountsPerDay(int days) {
 
         // Full counts.
-        List<Long> counts = new ArrayList<>();
+        Map<Integer, Long> counts = new TreeMap<>();
 
         // Start counting from some time back.
         Calendar startFrom = Calendar.getInstance();
@@ -168,7 +165,8 @@ public class AuditService {
         while (startFrom.getTime().compareTo(current) <= 0) {
 
             // Find time in-between dates (really hackish).
-            counts.add(accountRepository.countAccountsByDate(startFrom.getTime(), ahead.getTime()));
+            counts.put(startFrom.get(Calendar.DAY_OF_MONTH),
+                    accountRepository.countAccountsByDate(startFrom.getTime(), ahead.getTime()));
 
             // Shift time forward.
             startFrom.add(Calendar.DAY_OF_YEAR, 1);

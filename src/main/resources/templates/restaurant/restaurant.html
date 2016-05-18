@@ -1,0 +1,74 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layouts/default">
+
+<head>
+    <title>Restaurant</title>
+</head>
+
+<body>
+<th:block layout:fragment="content" th:object="${restaurant}">
+
+    <div class="col-md-3">
+        <h4>
+            Information about
+            <th:block th:text="*{name}"/>
+        </h4>
+        <p>General restaurant information</p>
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <h4>Description</h4>
+                <p th:text="*{description}"></p>
+
+                <h4>Adittional information</h4>
+                <p>
+                    This restaurant has a total count of <span class="text-primary" th:text="*{accounts.size()}"></span>
+                    employees.
+                </p>
+                <p>
+                    The hygiene index of this restaurant is: <span class="text-primary" th:text="*{hygieneLevel}"></span>.
+                    This restaurant has a rating of <span class="text-primary" th:text="*{rating}"></span> restaurant
+                    points.
+                </p>
+                <h4>Contact info</h4>
+                <p>
+                    You can contact this restaurant via e-mail: <span class="text-primary" th:text="*{email}"></span>
+                </p>
+
+                <small class="text-muted">
+                    Founded on
+                    <th:block th:text="*{#dates.format(creationDate, 'yyyy MMM dd HH:mm')}"/>
+                </small>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-9">
+        <h4>Explore</h4>
+        <p>Follow
+            <th:block th:text="*{name}"/>
+            , read articles and track discounts.
+        </p>
+
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="row">
+                    <div th:if="*{articles.isEmpty()}" class="col-md-12">
+                        Looks like this restaurant has not posted anything just yet.
+                    </div>
+                    <div th:if="*{!articles.isEmpty()}" class="col-md-12" th:each="article : *{articles}" th:object="${article}">
+                        <h4>
+                            <a th:href="@{/articles/{id}(id=*{id})}" th:text="*{title}"></a>
+                        </h4>
+                        <p th:text="*{shortDescription}"></p>
+                        <p th:text="*{description}"></p>
+                        <hr/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</th:block>
+
+</body>
+</html>

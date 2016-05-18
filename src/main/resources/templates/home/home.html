@@ -11,22 +11,24 @@
 
     <!-- List of all articles -->
     <div class="col-md-8">
+        <h4>Articles</h4>
+        <p>Read latest news from the website, restaurant owners and moderators.</p>
         <div class="panel panel-default">
             <div class="panel-body">
-                <h3>Articles</h3>
-                <hr/>
                 <div class="row" th:each="article : ${articles}" th:object="${article}">
                     <div class="col-md-4">
                         <div class="card">
                             <th:block th:if="*{!photos.isEmpty()}" th:with="photo=*{photos[0]}">
-                                <img class="img-responsive img-rounded" th:alt="${photo.alt}" th:src="@{/articles/photos/__${photo.id}__}"/>
+                                <img class="img-responsive img-rounded" th:alt="${photo.alt}"
+                                     th:src="@{/articles/photos/__${photo.id}__}"/>
                             </th:block>
                             <th:block th:if="*{photos.isEmpty()}">
                                 <img class="img-responsive img-rounded" th:src="@{images/placeholder.svg}"/>
                             </th:block>
                         </div>
-                        <p class="text-center">
-                            Published on <th:block th:text="*{#dates.format(creationDate, 'yyyy MMM dd HH:mm')}"/>
+                        <p class="text-center text-muted">
+                            Published on
+                            <th:block th:text="*{#dates.format(creationDate, 'yyyy MMM dd HH:mm')}"/>
                         </p>
                     </div>
                     <div class="col-md-8">
@@ -46,11 +48,21 @@
 
     <!-- Restaurant panel -->
     <div class="col-md-4">
-        <div class="panel panel-default">
-            <div class="panel-body">
-                <h4>Explore restaurants</h4>
-                <p>Check out these restaurants and their offers.</p>
-            </div>
+        <h4>Explore restaurants</h4>
+        <p>Check out these restaurants and their offers.</p>
+        <div class="list-group" th:if="${!restaurants.isEmpty()}">
+            <a class="list-group-item"
+               th:each="restaurant : ${restaurants}"
+               th:object="${restaurant}"
+               th:href="@{/restaurant/{id}(id=*{id})}">
+                <h4 class="list-group-item-heading" th:text="*{name}"></h4>
+                <p class="list-group-item-text" th:text="*{description}"></p>
+                <small class="text-primary" th:if="*{!articles.isEmpty()}">
+                    This restaurant has
+                    <th:block th:text="*{articles.size()}"/>
+                    articles.
+                </small>
+            </a>
         </div>
     </div>
 </th:block>
