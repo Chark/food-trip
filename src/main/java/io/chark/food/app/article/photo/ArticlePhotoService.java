@@ -1,6 +1,5 @@
 package io.chark.food.app.article.photo;
 
-import io.chark.food.app.account.AccountService;
 import io.chark.food.app.administrate.audit.AuditService;
 import io.chark.food.domain.article.photo.ArticlePhoto;
 import io.chark.food.domain.article.photo.ArticlePhotoRepository;
@@ -8,7 +7,10 @@ import io.chark.food.util.exception.NotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class ArticlePhotoService {
@@ -27,6 +29,34 @@ public class ArticlePhotoService {
     }
 
     /**
+     *  Register a new Article Photo.
+     *
+     * @param photo         photo bytes array of the article photo.
+     * @param description   description of the article photo.
+     * @param alt           alternate text of the article photo.
+     * @return              article photo or empty optional.
+     */
+    public Optional<ArticlePhoto> register(byte[] photo, String description, String alt) {
+        ArticlePhoto articlePhoto = new ArticlePhoto(
+                photo,
+                description,
+                alt);
+
+        try {
+            articlePhoto = photoRepository.save(articlePhoto);
+            LOGGER.debug("Created new user ArticlePhoto{description='{}'}", description);
+
+            auditService.info("Created a new ArticlePhoto using description: %s", description);
+        } catch (DataIntegrityViolationException e) {
+            LOGGER.error("Failed while creating new user ArticlePhoto{description='{}'}", description, e);
+
+            auditService.error("Failed to create a new ArticlePhoto using description: %s", description);
+            return Optional.empty();
+        }
+        return Optional.of(articlePhoto);
+    }
+
+    /**
      * Get an article photo by id.
      *
      * @return article photo.
@@ -41,5 +71,4 @@ public class ArticlePhotoService {
         }
         return photo;
     }
-
 }

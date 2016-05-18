@@ -1,10 +1,17 @@
 package io.chark.food.app.data;
 
 import io.chark.food.app.account.AccountService;
+import io.chark.food.app.article.ArticleService;
+import io.chark.food.app.article.category.ArticleCategoryService;
+import io.chark.food.app.article.photo.ArticlePhotoService;
 import io.chark.food.app.restaurant.RestaurantService;
+import io.chark.food.domain.article.Article;
+import io.chark.food.domain.article.category.ArticleCategory;
+import io.chark.food.domain.article.photo.ArticlePhoto;
 import io.chark.food.domain.authentication.account.Account;
 import io.chark.food.domain.restaurant.Restaurant;
 import io.chark.food.util.authentication.AuthenticationUtils;
+import io.chark.food.util.photo.PhotoUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,9 +41,22 @@ public class TestDataService {
             " Curabitur tincidunt purus urna, non gravida leo porttitor vel. Morbi vel dui quis elit aliquet" +
             " molestie. Morbi ut blandit purus. Donec in tortor mauris. Proin tincidunt aliquam auctor. ";
 
+    /**
+     * Default short description for all the stuff.
+     */
+    private static final String DEFAULT_SHORT_DESCRIPTION = "Lorem ipsum dolor sit amet, consectetur adipiscing elit.";
+
+    /**
+     * Default alternate text for all the stuff.
+     */
+    private static final String DEFAULT_ALTERNATE_TEXT = "This is alt text.";
+
     private static final Logger LOGGER = LoggerFactory.getLogger(TestDataService.class);
     private final RestaurantService restaurantService;
     private final AccountService accountService;
+    private final ArticleCategoryService articleCategoryService;
+    private final ArticlePhotoService articlePhotoService;
+    private final ArticleService articleService;
 
     // Username's to initialize.
     private final List<String> usernameList;
@@ -44,15 +64,30 @@ public class TestDataService {
     // Restaurants to initialize.
     private final List<String> restaurantNameList;
 
+    // Article categories to initialize.
+    private final List<String> articleCategoryTitleList;
+
+    // Articles to initialize.
+    private final List<String> articleTitleList;
+
+    // Article photos to initialize.
+    private final List<String> articlePhotoPathList;
+
     // Add some randomness to test data.
     private final Random random;
 
     @Autowired
     public TestDataService(RestaurantService restaurantService,
-                           AccountService accountService) {
+                           AccountService accountService,
+                           ArticleCategoryService articleCategoryService,
+                           ArticlePhotoService articlePhotoService,
+                           ArticleService articleService) {
 
         this.restaurantService = restaurantService;
         this.accountService = accountService;
+        this.articleCategoryService = articleCategoryService;
+        this.articlePhotoService = articlePhotoService;
+        this.articleService = articleService;
         this.random = new Random();
 
         // Test username's.
@@ -82,6 +117,32 @@ public class TestDataService {
                 "Pizzas",
                 "Just awesome"
         ));
+
+        // Test article categories titles.
+        this.articleCategoryTitleList = new ArrayList<>();
+        this.articleCategoryTitleList.addAll(Arrays.asList(
+                "Pirma kategorija",
+                "Antra kategorija",
+                "Trečia kategorija"
+        ));
+
+        // Test article categories titles.
+        this.articleTitleList = new ArrayList<>();
+        this.articleTitleList.addAll(Arrays.asList(
+                "Pirmas straipsnis",
+                "Antras straipsnis",
+                "Trečias straipsnis",
+                "Ketvirtas straipsnis",
+                "Penktas straipsnis",
+                "Šeštas straipsnis"
+        ));
+
+        // Test restaurant names.
+        this.articlePhotoPathList = new ArrayList<>();
+        this.articlePhotoPathList.addAll(Arrays.asList(
+                "static/images/default_avatar.JPG",
+                "static/images/photo.jpg"
+        ));
     }
 
     /**
@@ -97,6 +158,15 @@ public class TestDataService {
 
         // Initialize main restaurants and their test accounts.
         initTestRestaurants(accounts);
+
+        // Initialize main article categories.
+        List<ArticleCategory> articleCategories = initTestArticleCategories();
+
+        // Initialize main article photos.
+        List<ArticlePhoto> articlePhotos = initTestArticlePhotos();
+
+        // Initialize main articles and their article categories.
+        initTestArticles(articleCategories, articlePhotos);
 
         LOGGER.info("Finished initializing test data");
         return new AsyncResult<>(null);
@@ -162,5 +232,85 @@ public class TestDataService {
             SecurityContextHolder.clearContext();
         }
         return restaurants;
+    }
+
+    /**
+     * Create a list of article categories.
+     *
+     * @return list of test article categories.
+     */
+    private List<ArticleCategory> initTestArticleCategories() {
+        List<ArticleCategory> articleCategories = new ArrayList<>();
+
+        for (String title : this.articleCategoryTitleList) {
+            Optional<ArticleCategory> articleCategory = articleCategoryService
+                    .register(title, DEFAULT_DESCRIPTION);
+
+            // Add article category to article category list if present.
+            articleCategory.ifPresent(articleCategories::add);
+        }
+        return articleCategories;
+    }
+
+    /**
+     * Create a list of articles.
+     *
+     * @param articleCategories list of article categories.
+     * @param articlePhotos     list of article photos.
+     * @return                  list of test articles.
+     */
+    private List<Article> initTestArticles(List<ArticleCategory> articleCategories,
+                                           List<ArticlePhoto> articlePhotos) {
+
+        List<Article> articles = new ArrayList<>();
+
+        for (String title : this.articleTitleList) {
+            Optional<Article> article = articleService
+                    .register(
+                            title,
+                            DEFAULT_DESCRIPTION,
+                            DEFAULT_SHORT_DESCRIPTION,
+                            "meta keywords",
+                            "meta description"
+                    );
+
+            // Add article to article list if present.
+            article.ifPresent(articles::add);
+        }
+
+        // Add article categories to articles
+        for (int i = 0; i < articles.size(); i++) {
+            int num = i % articleCategories.size();
+            articleService.addCategory(articles.get(i), articleCategories.get(num));
+        }
+
+        // Add article photos to articles
+        for (int i = 0; i < articles.size(); i++) {
+            int num = i % articlePhotos.size();
+            articleService.addPhoto(articles.get(i), articlePhotos.get(num));
+        }
+
+        return articles;
+    }
+
+    /**
+     * Create a list of article photos.
+     *
+     * @return list of test article photos.
+     */
+    private List<ArticlePhoto> initTestArticlePhotos() {
+        List<ArticlePhoto> articlePhotos = new ArrayList<>();
+
+        for (String title : this.articleTitleList) {
+            for (String path : this.articlePhotoPathList) {
+                Optional<ArticlePhoto> articlePhoto = articlePhotoService
+                        .register(PhotoUtils.getImageBytes(path), DEFAULT_SHORT_DESCRIPTION, DEFAULT_ALTERNATE_TEXT);
+
+                // Add article photo to article photo list if present.
+                articlePhoto.ifPresent(articlePhotos::add);
+            }
+        }
+
+        return articlePhotos;
     }
 }

@@ -1,6 +1,5 @@
 package io.chark.food.app.article.category;
 
-import io.chark.food.app.account.AccountService;
 import io.chark.food.app.administrate.audit.AuditService;
 import io.chark.food.domain.article.category.ArticleCategory;
 import io.chark.food.domain.article.category.ArticleCategoryRepository;
@@ -10,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,20 +29,11 @@ public class ArticleCategoryService {
     }
 
     /**
-     * Initialize article categories used by the system.
-     */
-    @PostConstruct
-    public void init() {
-        addCategory("Lorem Ipsum", "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.");
-        addCategory("Sed ut perspiciatis", "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.");
-    }
-
-    /**
      * Register a new Article Category.
      *
      * @param title         title of the article category.
      * @param description   description of the article category.
-     * @return created      article category or empty optional.
+     * @return created article category or empty optional.
      */
     public Optional<ArticleCategory> register(String title, String description) {
         ArticleCategory category = new ArticleCategory(
@@ -89,23 +78,11 @@ public class ArticleCategoryService {
         }
     }
 
-
     /**
      * Get a list of article categories.
      * @return list of article categories.
      */
     public List<ArticleCategory> getCategories() {
         return categoryRepository.findAll();
-    }
-
-    /**
-     * Create a new article category in the system.
-     *
-     * @param title       title of the article category.
-     * @param description description of the article category.
-     */
-    private void addCategory(String title, String description) {
-        LOGGER.debug("Creating new ArticleCategory{title='{}'}", title);
-        categoryRepository.save(new ArticleCategory(title, description));
     }
 }

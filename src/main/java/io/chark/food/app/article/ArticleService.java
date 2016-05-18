@@ -8,13 +8,13 @@ import io.chark.food.domain.article.ArticleRepository;
 import io.chark.food.domain.article.photo.ArticlePhoto;
 import io.chark.food.domain.article.photo.ArticlePhotoRepository;
 import io.chark.food.util.exception.NotFoundException;
-import io.chark.food.util.photo.PhotoUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
+import java.util.Optional;
 
 @Service
 public class ArticleService {
@@ -39,33 +39,82 @@ public class ArticleService {
     }
 
     /**
-     * Initialize articles used by the system.
+     * Register a new Article.
+     *
+     * @param title             title of the article.
+     * @param description       description of the article.
+     * @param shortDescription  short description of the article.
+     * @param metaKeywords      meta keywords of the article.
+     * @param metaDescription   meta description of the article.
+     * @return  created article or empty optional.
      */
-//    @PostConstruct todo disabled for now
-    public void init() {
-        addArticle("Pirmas straipsnis", "Pilnas straipsnio aprašymas.", "Trumpas straipsnio aprašymas", null, null);
-        addArticle("Antras straipsnis", "Pilnas straipsnio aprašymas.", "Trumpas straipsnio aprašymas", null, null);
-        addArticle("Trečias straispnis", "Pilnas straipsnio aprašymas.", "Trumpas straipsnio aprašymas", null, null);
+    public Optional<Article> register(String title,
+                                      String description,
+                                      String shortDescription,
+                                      String metaKeywords,
+                                      String metaDescription) {
+
+        Article article = new Article(
+                title,
+                description,
+                shortDescription,
+                metaKeywords,
+                metaDescription);
+
+        try {
+            article = articleRepository.save(article);
+            LOGGER.debug("Created new user Article{title='{}'}", title);
+
+            auditService.info("Created a new Article using title: %s", title);
+        } catch (DataIntegrityViolationException e) {
+            LOGGER.error("Failed while creating new user Article{title='{}'}", title, e);
+
+            auditService.error("Failed to create a new Article using title: %s", title);
+            return Optional.empty();
+        }
+        return Optional.of(article);
     }
 
-    private void addArticle(String title, String description, String shortDescription, String metaKeywords, String metaDescription) {
-        LOGGER.debug("Creating new Article{title='{}'}", title);
-        Article article = new Article(title, description, shortDescription, metaKeywords, metaDescription);
-
-        // Adds article category
-        long num = articleRepository.count() % categoryRepository.count();
-        ArticleCategory category = categoryRepository.findOne(num + 1);
+    /**
+     * Add specified article category to specified article.
+     *
+     * @param article   article.
+     * @param category  article category.
+     * @return          article optional with added category.
+     */
+    public Optional<Article> addCategory(Article article, ArticleCategory category) {
         article.addCategory(category);
 
-        // Adds photo of the article
-        byte[] image = PhotoUtils.getImageBytes("static/images/default_avatar.JPG");
-        ArticlePhoto photo = new ArticlePhoto(image, "Edvinas has the best dog.", "Good looking cool dog");
-        article.addPhoto(photoRepository.save(photo));
-        photo = new ArticlePhoto(image, "Edvinas has the best dog.", "Good looking cool dog");
-        article.addPhoto(photoRepository.save(photo));
+        try {
+            LOGGER.debug("Adding ArticleCategory{id={}} to Article{id={}}", category.getId(), article.getId());
+            return Optional.ofNullable(articleRepository.save(article));
+        } catch (DataIntegrityViolationException e) {
+            LOGGER.error("Could not add article category to article", e);
 
-        //ArticlePhoto photo
-        articleRepository.save(article);
+            auditService.error("Failed to add article category to article");
+            return Optional.empty();
+        }
+    }
+
+    /**
+     * Add specified article photo to specified article.
+     *
+     * @param article   article.
+     * @param photo  article photo.
+     * @return          article optional with added photo.
+     */
+    public Optional<Article> addPhoto(Article article, ArticlePhoto photo) {
+        article.addPhoto(photo);
+
+        try {
+            LOGGER.debug("Adding ArticlePhoto{id={}} to Article{id={}}", photo.getId(), article.getId());
+            return Optional.ofNullable(articleRepository.save(article));
+        } catch (DataIntegrityViolationException e) {
+            LOGGER.error("Could not add article photo to article", e);
+
+            auditService.error("Failed to add article photo to article");
+            return Optional.empty();
+        }
     }
 
     /**
