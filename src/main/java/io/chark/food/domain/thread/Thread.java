@@ -7,6 +7,8 @@ import io.chark.food.domain.comment.Comment;
 import io.chark.food.domain.thread.category.ThreadCategory;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -43,13 +45,34 @@ public class Thread extends BaseEntity {
     public Thread() {
     }
 
+    public Date getEditDate() {
+        return editDate;
+    }
+
+
+
+    public int getCurrentlyViewing() {
+        return currentlyViewing;
+    }
+
+    public int getViewCount() {
+        return viewCount;
+    }
+
     public Thread(Account account, String title, String description, boolean registrationRequired, ThreadCategory threadCategory) {
         this.account = account;
         this.title = title;
         this.description = description;
         this.registrationRequired = registrationRequired;
         this.threadCategory = threadCategory;
+        this.comments = new ArrayList<>();
     }
+
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
+    }
+
 
     public void setDescription(String description) {
         this.description = description;
@@ -59,6 +82,7 @@ public class Thread extends BaseEntity {
 
         this.title = title;
     }
+
 
     public void setThreadLink(String threadLink) {
         this.threadLink = threadLink;
@@ -88,21 +112,20 @@ public class Thread extends BaseEntity {
         return description;
     }
 
-    public int getViewCount() {
-        return viewCount;
+    public String getMonthYear(){
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(this.creationDate.getTime());
+        return cal.get(Calendar.DAY_OF_MONTH) + "/" + cal.get(Calendar.MONTH) + "/" + cal.get(Calendar.YEAR);
     }
 
-    public Date getEditDate() {
-        return editDate;
+    public void addComment(Comment c){
+        comments.add(c);
     }
 
     public boolean isRegistrationRequired() {
         return registrationRequired;
     }
 
-    public int getCurrentlyViewing() {
-        return currentlyViewing;
-    }
 
     public String getThreadLink() {
         return threadLink;

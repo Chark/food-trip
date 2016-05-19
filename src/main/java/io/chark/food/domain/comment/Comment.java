@@ -1,6 +1,7 @@
 package io.chark.food.domain.comment;
 
 import io.chark.food.domain.BaseEntity;
+import io.chark.food.domain.authentication.account.Account;
 import io.chark.food.domain.thread.Thread;
 
 import javax.persistence.Column;
@@ -11,12 +12,15 @@ import java.util.Date;
 @Entity
 public class Comment extends BaseEntity {
 
-    @ManyToOne
-    private Thread thread;
-
 
     private String text;
     private String link;
+
+    @ManyToOne
+    private Account account;
+
+    @ManyToOne
+    private Thread thread;
 
     @Column(nullable = false)
     private Date creationDate = new Date();
@@ -24,18 +28,22 @@ public class Comment extends BaseEntity {
 
     private boolean hidden;
 
-    public Comment(Thread thread, String text, boolean hidden) {
-        this.thread = thread;
-        this.text = text;
-        this.hidden = hidden;
+    public Comment() {
     }
 
-    public Thread getThread() {
-        return thread;
+    public Comment(Account account, String text, boolean hidden) {
+        this.text = text;
+        this.hidden = hidden;
+        this.account = account;
     }
+
 
     public String getText() {
         return text;
+    }
+
+    public void setThread(Thread thread){
+        this.thread = thread;
     }
 
     public Date getCreationDate() {
@@ -52,5 +60,9 @@ public class Comment extends BaseEntity {
 
     public String getLink() {
         return link;
+    }
+
+    public Account getAccount() {
+        return account;
     }
 }

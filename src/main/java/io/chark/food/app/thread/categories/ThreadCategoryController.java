@@ -23,16 +23,13 @@ public class ThreadCategoryController {
 
     @RequestMapping(value = "/list")
     public String categories(Model model) {
-
         model.addAttribute("categories", threadCategoryService.getThreadCategories());
-        return "thread/category_list";
+        return "thread/category/category_list";
     }
 
     @RequestMapping(value = "/list/{id}", method = RequestMethod.GET)
     public String category(@PathVariable long id, Model model) {
-
         model.addAttribute("category", threadCategoryService.getThreadCategory(id));
-        return "thread/category_view";
+        return "thread/category/category_view";
     }
-
 }

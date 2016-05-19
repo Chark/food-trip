@@ -1,0 +1,72 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layouts/default">
+
+<head>
+    <title>Thread list</title>
+</head>
+
+<body>
+
+<th:block layout:fragment="content">
+    <div class="container">
+        <div class="forum">
+            <div class="page-header">
+                <h1>All Categories</h1>
+            </div>
+
+            <div class="forum-categories">
+                <th:block th:each="category : ${categories}">
+                    <div class="category">
+                        <div class="category-name">
+                            <h4 class="thread-name"><a th:href="@{/threads/list/__${category.id}__}"
+                                                       th:text="${category.name}"></a></h4>
+                        </div>
+
+                        <div class="threads">
+                            <th:block th:each="thread : ${category.threads}" th:object="${thread}">
+
+
+                                <!--<th:block th:with="threadD=${category.threads.get(0)}">-->
+                                <!---->
+                                <!--</th:block>-->
+
+                                <div class="thread">
+                                    <div class="photo">
+                                        <img class="img-responsive img-circle" th:src="@{/images/placeholder.svg}"/>
+                                    </div>
+                                    <div class="thread-info">
+                                        <div class="thread-name">
+                                            <a th:href="@{/threads/list/__${category.id}__/thread/__*{id}__}"
+                                               th:text="*{title}"></a>
+                                        </div>
+                                        <div class="thread-bottom">
+                                            <th:block th:switch="*{registrationRequired}">
+                                                <span th:case="${true}" class="registration badge">
+                                                    Registration required
+                                                </span>
+                                            </th:block>
+                                        </div>
+                                    </div>
+                                    <div class="thread-stats">
+                                        <div class="thread-views">
+                                            <span class="glyphicon glyphicon-eye-open"></span>
+                                            <span th:text="*{viewCount}"></span>
+                                        </div>
+                                        <div class="thread-comments">
+                                            <span class="glyphicon glyphicon-comment"></span>
+                                            <span th:text="*{comments.size()}"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </th:block>
+                        </div>
+                    </div>
+                </th:block>
+            </div>
+        </div>
+    </div>
+</th:block>
+
+</body>
+</html>

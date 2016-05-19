@@ -1,7 +1,8 @@
 package io.chark.food.domain.comment;
 
-/**
- * Created by arvyd on 2016-05-16.
- */
-public class CommentRepository {
+import io.chark.food.domain.BaseRepository;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface CommentRepository extends BaseRepository<Comment> {
 }

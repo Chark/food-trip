@@ -25,7 +25,7 @@ public class ThreadCategory extends BaseEntity {
     private Date editDate;
 
     @JsonBackReference
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "threadCategory")
+    @OneToMany(mappedBy = "threadCategory")
     private List<Thread> threads = new ArrayList<>();
 
     public ThreadCategory() {
@@ -51,11 +51,9 @@ public class ThreadCategory extends BaseEntity {
         return threads;
     }
 
-    public ThreadCategory(String name, String description){
+    public ThreadCategory(String name, String description) {
         this.name = name;
         this.creationDate = new Date();
         this.description = description;
     }
-
-
 }

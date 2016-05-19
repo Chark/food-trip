@@ -60,12 +60,12 @@ body {
 .tales {
     width: 50%;
 }
-.carousel-inner{
+
+.carousel-inner {
     max-width: 600px;
     max-height: 300px !important;
     margin: auto;
 }
-
 
 /* Forum */
 
@@ -85,3 +85,90 @@ body {
 .forum.table th.cell-stat-2x {
     width: 14em;
 }
+
+.forum {
+    background-color: #EEE;
+    padding: 5px 20px;
+}
+
+.forum .forum-categories .category {
+    padding-bottom: 20px;
+
+}
+
+.forum .threads {
+
+}
+
+.forum .threads .thread {
+    max-height: 50px;
+    margin: 15px 0;
+}
+
+.forum .threads .thread .photo {
+    width: 10%;
+    max-height: inherit;
+    display: inline-block;
+    vertical-align: middle;
+    text-align: right;
+    padding: 0 8px;
+}
+
+.forum .threads .thread .photo img {
+    max-height: inherit;
+    margin: 0 auto;
+}
+
+.forum .threads .thread .thread-info {
+    width: 50%;
+    display: inline-block;
+    vertical-align: middle;
+    line-height: 20px;
+}
+
+.forum .threads .thread .thread-info .thread-bottom .registration {
+    background-color: #e04462;
+
+}
+
+.forum .threads .thread .thread-info .thread-name {
+    font-size: 16px;
+    color: #333;
+}
+
+.forum .threads .thread .thread-stats {
+    width: 39%;
+    display: inline-block;
+    vertical-align: middle;
+    text-align: right;
+}
+
+.forum .threads .thread .thread-stats > div {
+    display: inline-block;
+    padding: 0px 10px;
+}
+
+.thread .thread-info-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.thread .thread-info-list li {
+    display: inline-block;
+    padding: 0;
+    margin: 0;
+}
+
+.thread .thread-info-list li:first-child:before {
+    content: "";
+    margin:0;
+}
+
+.thread .thread-info-list li:before {
+    content: "·";
+    margin:0 5px 0 2px
+}
+
+
+

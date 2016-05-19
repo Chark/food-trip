@@ -1,0 +1,46 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layouts/default">
+
+<head>
+    <title>Threads</title>
+</head>
+
+<body>
+
+<th:block layout:fragment="content">
+    <div class="container">
+        <div class="thread">
+            <div class="thread-title">
+                <h3 th:text="${thread.title}"></h3>
+            </div>
+            <div class="original-thread-comment">
+                <div class="thread">
+                    <div class="thread-info">
+                        <div class="posted-by">
+                            <span th:text="${thread.account.prettyUsername}"></span>
+                        </div>
+                        <ul class="thread-info-list">
+                            <li th:text="${thread.monthYear}"></li>
+                            <li>in <a th:href="@{/threads/list/__${thread.threadCategory.id}__}"
+                                      th:text="${thread.threadCategory.name}"></a></li>
+                        </ul>
+                    </div>
+                    <div class="thread-post">
+                        <p th:text="${thread.description}"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="thread-list">
+            <th:block th:each="comment : ${thread.comments}">
+                <div th:text="${comment.text}"></div>
+            </th:block>
+
+
+        </div>
+    </div>
+</th:block>
+
+</body>
+</html>

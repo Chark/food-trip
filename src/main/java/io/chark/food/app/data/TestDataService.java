@@ -4,6 +4,7 @@ import io.chark.food.app.account.AccountService;
 import io.chark.food.app.article.ArticleService;
 import io.chark.food.app.article.category.ArticleCategoryService;
 import io.chark.food.app.article.photo.ArticlePhotoService;
+import io.chark.food.app.comment.CommentService;
 import io.chark.food.app.restaurant.RestaurantService;
 import io.chark.food.app.thread.ThreadService;
 import io.chark.food.app.thread.categories.ThreadCategoryService;
@@ -11,6 +12,7 @@ import io.chark.food.domain.article.Article;
 import io.chark.food.domain.article.category.ArticleCategory;
 import io.chark.food.domain.article.photo.ArticlePhoto;
 import io.chark.food.domain.authentication.account.Account;
+import io.chark.food.domain.comment.Comment;
 import io.chark.food.domain.restaurant.Restaurant;
 import io.chark.food.domain.thread.Thread;
 import io.chark.food.domain.thread.category.ThreadCategory;
@@ -63,6 +65,7 @@ public class TestDataService {
     private final ArticleService articleService;
     private final ThreadCategoryService threadCategoryService;
     private final ThreadService threadService;
+    private final CommentService commentService;
 
     // Username's to initialize.
     private final List<String> usernameList;
@@ -89,7 +92,8 @@ public class TestDataService {
                            ArticlePhotoService articlePhotoService,
                            ArticleService articleService,
                            ThreadCategoryService threadCategoryService,
-                           ThreadService threadService
+                           ThreadService threadService,
+                           CommentService commentService
     ) {
 
         this.restaurantService = restaurantService;
@@ -99,6 +103,7 @@ public class TestDataService {
         this.articleService = articleService;
         this.threadCategoryService = threadCategoryService;
         this.threadService = threadService;
+        this.commentService = commentService;
         this.random = new Random();
 
         // Test username's.
@@ -176,6 +181,8 @@ public class TestDataService {
         // Initialize main article photos.
         List<ArticlePhoto> articlePhotos = initTestArticlePhotos(this.articleTitleList.size());
 
+
+
         // Initialize main articles and their article categories.
         initTestArticles(articleCategories, articlePhotos, restaurants);
 
@@ -186,6 +193,10 @@ public class TestDataService {
         //Initializes test threads with categories
         //initTestThreadCategories(); is required
         initTestThreads();
+
+
+
+
 
         LOGGER.info("Finished initializing test data");
         return new AsyncResult<>(null);
@@ -214,24 +225,28 @@ public class TestDataService {
      *
      * @return list of thread categories
      */
-    private List<ThreadCategory> initTestThreadCategories(){
+    private List<ThreadCategory> initTestThreadCategories() {
         List<ThreadCategory> threadCategories = new ArrayList<>();
-        for(int i = 1; i < 8; i++){
+        for (int i = 1; i < 8; i++) {
             Optional<ThreadCategory> threadCategory = threadCategoryService.register("Test name: " + i, "Test description: " + i);
             threadCategory.ifPresent(threadCategories::add);
         }
-        return  threadCategories;
+        return threadCategories;
     }
 
-
-    private List<Thread> initTestThreads(){
+    /***
+     * Creates a list of test threads.
+     *
+     * @return list of threads
+     */
+    private List<Thread> initTestThreads() {
         List<Thread> threads = new ArrayList<>();
         Account account = accountService.getAccount("admin");
 
-        for(int i = 1; i < 30; i++){
+        for (int i = 1; i < 30; i++) {
             int rand = random.nextInt(threadCategoryService.getThreadCategories().size());
             ThreadCategory threadCategory = threadCategoryService.getThreadCategories().get(rand);
-            Optional<Thread> thread = threadService.register(account, "Test title: " + i ,"Test description: " + i, false,threadCategory);
+            Optional<Thread> thread = threadService.register(account, "Test title: " + i, "Test description: " + i, false, threadCategory);
             thread.ifPresent(threads::add);
         }
 
