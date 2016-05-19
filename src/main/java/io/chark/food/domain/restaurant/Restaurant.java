@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.chark.food.domain.BaseEntity;
 import io.chark.food.domain.article.Article;
 import io.chark.food.domain.authentication.account.Account;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
@@ -34,7 +36,8 @@ public class Restaurant extends BaseEntity {
     @Column(nullable = false)
     private Date creationDate = new Date();
 
-    @OneToMany(mappedBy = "restaurant")
+    @Fetch(FetchMode.SELECT)
+    @OneToMany(mappedBy = "restaurant", fetch = FetchType.EAGER)
     private List<Account> accounts;
 
     // Invited accounts to this restaurant.

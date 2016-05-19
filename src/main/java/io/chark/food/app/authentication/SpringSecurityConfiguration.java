@@ -24,6 +24,9 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Autowired
     private AccountService accountService;
 
+    @Autowired
+    private SessionRegistry sessionRegistry;
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         // @formatter:off
@@ -34,7 +37,7 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
                     .migrateSession()
                     .maximumSessions(10)
                     .expiredUrl("/login")
-                    .sessionRegistry(sessionRegistry())
+                    .sessionRegistry(sessionRegistry)
                     .and()
                 .and()
             .authorizeRequests()
@@ -67,15 +70,5 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected AccountService userDetailsService() {
         return accountService;
-    }
-
-    @Bean
-    public SessionRegistry sessionRegistry() {
-        return new SessionRegistryImpl();
-    }
-
-    @Bean
-    public HttpSessionEventPublisher httpSessionEventPublisher() {
-        return new HttpSessionEventPublisher();
     }
 }
