@@ -42,9 +42,20 @@
             <div><h3>Comments</h3></div>
             <th:block th:each="comment : ${thread.comments}">
                 <div class="comment">
-                    <div class="user-info">
-                        <div class="username" th:text="${comment.account.prettyUsername}"></div>
-                        <div class="date" th:text="${comment.monthYear}"></div>
+                    <div class="top">
+                        <div class="user-info">
+                            <div class="username" th:text="${comment.account.prettyUsername}"></div>
+                            <div class="date" th:text="${comment.monthYear}"></div>
+                        </div>
+                        <div class="votes">
+                            <a th:href="@{/threads/list/__${thread.threadCategory.id}__/thread/__${thread.id}__/comment/__${comment.id}__/1}" class="btn btn-success">
+                                <span class=" glyphicon glyphicon-arrow-up"></span>
+                            </a>
+                            <span style="padding: 0px 15px;" th:text="${comment.votes}" class="score"></span>
+                            <a th:href="@{/threads/list/__${thread.threadCategory.id}__/thread/__${thread.id}__/comment/__${comment.id}__/0}" class="btn btn-danger">
+                                <span class=" glyphicon glyphicon-arrow-down"></span>
+                            </a>
+                        </div>
                     </div>
                     <div class="comment-text" th:text="${comment.text}"></div>
                 </div>

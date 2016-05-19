@@ -7,8 +7,11 @@ import io.chark.food.domain.thread.Thread;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 public class Comment extends BaseEntity {
@@ -27,6 +30,9 @@ public class Comment extends BaseEntity {
     private Date creationDate = new Date();
     private Date editDate = new Date();
 
+    @OneToMany
+    private List<Rating> ratings = new ArrayList<>();
+
     private boolean hidden;
 
     public Comment() {
@@ -43,14 +49,33 @@ public class Comment extends BaseEntity {
         return text;
     }
 
-    public void setThread(Thread thread){
+    public void setThread(Thread thread) {
         this.thread = thread;
     }
 
-    public String getMonthYear(){
+    public String getMonthYear() {
         Calendar cal = Calendar.getInstance();
         cal.setTimeInMillis(this.creationDate.getTime());
         return cal.get(Calendar.DAY_OF_MONTH) + "/" + cal.get(Calendar.MONTH) + "/" + cal.get(Calendar.YEAR);
+    }
+
+    public List<Rating> getRatings() {
+        return ratings;
+    }
+
+    public int getVotes() {
+        int score = 0;
+        for (Rating r : ratings) {
+            if (r.isPositive())
+                score++;
+            else
+                score--;
+        }
+        return score;
+    }
+
+    public void addRaiting(Rating rating) {
+        this.ratings.add(rating);
     }
 
     public Date getCreationDate() {

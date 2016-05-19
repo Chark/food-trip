@@ -1,6 +1,7 @@
 package io.chark.food.app.thread;
 
 import io.chark.food.app.account.AccountService;
+import io.chark.food.app.comment.RatingService;
 import io.chark.food.app.thread.categories.ThreadCategoryService;
 import io.chark.food.domain.authentication.account.Account;
 import io.chark.food.domain.authentication.permission.Permission;
@@ -19,16 +20,19 @@ public class ThreadController {
 
     private final ThreadService threadService;
     private final AccountService accountService;
+    private final RatingService ratingService;
 
     @Autowired
-    public ThreadController(ThreadService threadService, AccountService accountService) {
+    public ThreadController(ThreadService threadService, AccountService accountService,RatingService ratingService) {
         this.threadService = threadService;
         this.accountService = accountService;
+        this.ratingService =ratingService;
     }
 
     @RequestMapping(value = "/list/{cid}/thread/{tid}", method = RequestMethod.GET)
     public String thread(@PathVariable long cid, @PathVariable long tid, Model model) {
         Thread t = threadService.getThread(tid);
+        System.out.println(ratingService.getScore(1));
         boolean canEdit = false;
         try {
             Account currAccount = accountService.getAccount();
@@ -38,7 +42,6 @@ public class ThreadController {
                 canEdit = true;
             }
         } catch (Exception e) {
-            System.out.println(e);
             if (t.isRegistrationRequired()) {
                 return "redirect:/threads/list";
             }

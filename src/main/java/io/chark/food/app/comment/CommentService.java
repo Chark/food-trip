@@ -18,11 +18,13 @@ public class CommentService {
     private static final Logger LOGGER = LoggerFactory.getLogger(CommentService.class);
     private final CommentRepository commentRepository;
     private final AuditService auditService;
+    private final RatingService ratingService;
 
     @Autowired
-    public CommentService(CommentRepository commentRepository, AuditService auditService) {
+    public CommentService(CommentRepository commentRepository, AuditService auditService, RatingService ratingService) {
         this.commentRepository = commentRepository;
         this.auditService = auditService;
+        this.ratingService = ratingService;
     }
 
     public Comment register(Account account, String text, boolean hidden) {
@@ -41,6 +43,12 @@ public class CommentService {
             auditService.error("Failed to create a Comment by user: %s", account.getPrettyUsername());
             return null;
         }
+        return comment;
+    }
+
+    public Comment upvoteComment(long id, boolean isPositive) {
+        Comment comment = commentRepository.findOne(id);
+        ratingService.register(isPositive);
         return comment;
     }
 }
