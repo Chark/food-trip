@@ -1,0 +1,64 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layouts/default">
+
+<head>
+    <title>Thread control</title>
+</head>
+
+<body>
+<th:block layout:fragment="content">
+    <div class="container">
+        <form name="threadForm"
+              method="POST"
+              th:attr="data-thread-id=${thread.id}"
+              th:action="@{/threads/list/__${category}__/thread/control/__${thread.id}__}"
+              th:object="${thread}">
+
+            <div class="row">
+                <div class="col-md-6 col-md-push-3">
+                    <h2>Thread</h2>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <th:block th:include="fragments/forms :: input
+                        ('title', *{title}, 'title', 'Title', 'Enter title')"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <label class="col-xs-12 control-label">
+                            Thread description
+                <textarea th:text="*{description}" name="description" rows="3" class="form-control"
+                          placeholder="Enter thread description"></textarea>
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <label class="col-xs-12">
+                                Registration required
+                                <select name="registrationRequired" class="form-control">
+                                    <option th:selected="*{registrationRequired}" value="true">Enabled</option>
+                                    <option th:selected="*{!registrationRequired}" value="false">Disabled</option>
+                                </select>
+                            </label>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-success">Save</button>
+                    <a th:href="@{/threads/list/__${category}__}" class="btn btn-danger">Cancel</a>
+
+                </div>
+            </div>
+        </form>
+    </div>
+</th:block>
+
+
+<!-- Initialize javascript for this page -->
+<script type="application/javascript" layout:fragment="javascript">
+    $(function () {
+//        ArticleManagement.initArticle();
+    });
+</script>
+
+</body>
+</html>

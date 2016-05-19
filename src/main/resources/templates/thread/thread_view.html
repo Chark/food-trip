@@ -13,12 +13,18 @@
         <div class="thread">
             <div class="thread-title">
                 <h3 th:text="${thread.title}"></h3>
+                <th:block th:switch="*{canEdit}">
+                    <a th:case="${true}"
+                       th:href="@{/threads/list/__${thread.threadCategory.id}__/thread/control/__${thread.id}__}"
+                       class="btn btn-success">Edit thread</a>
+                </th:block>
+
             </div>
             <div class="original-thread-comment">
                 <div class="thread">
                     <div class="thread-info">
                         <div class="posted-by">
-                            <span th:text="${thread.account.prettyUsername}"></span>
+                            <span th:text="${thread.account.username}"></span>
                         </div>
                         <ul class="thread-info-list">
                             <li th:text="${thread.monthYear}"></li>
@@ -33,8 +39,15 @@
             </div>
         </div>
         <div class="thread-list">
+            <div><h3>Comments</h3></div>
             <th:block th:each="comment : ${thread.comments}">
-                <div th:text="${comment.text}"></div>
+                <div class="comment">
+                    <div class="user-info">
+                        <div class="username" th:text="${comment.account.prettyUsername}"></div>
+                        <div class="date" th:text="${comment.monthYear}"></div>
+                    </div>
+                    <div class="comment-text" th:text="${comment.text}"></div>
+                </div>
             </th:block>
 
 

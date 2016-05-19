@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -47,7 +48,7 @@ public class ThreadCategoryService {
     }
 
     public List<ThreadCategory> getThreadCategories (){
-        return threadCategoryRepository.findAll();
+        return threadCategoryRepository.findAll(new Sort(Sort.Direction.ASC, "id"));
     }
 
     public ThreadCategory getThreadCategory(long id) {

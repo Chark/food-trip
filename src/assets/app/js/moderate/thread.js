@@ -32,6 +32,9 @@
                     data: 'description'
                 },
                 {
+                    data: 'threadCategory.name'
+                },
+                {
                     data: 'viewCount'
                 },
                 {

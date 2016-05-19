@@ -34,12 +34,10 @@ public class Thread extends BaseEntity {
 
     private boolean registrationRequired;
 
-    @JsonBackReference
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     private ThreadCategory threadCategory;
 
     @OneToMany
-    @Column(nullable = false)
     private List<Comment> comments;
 
     public Thread() {
@@ -57,6 +55,10 @@ public class Thread extends BaseEntity {
 
     public int getViewCount() {
         return viewCount;
+    }
+
+    public void setViewCount(int viewCount) {
+        this.viewCount = viewCount;
     }
 
     public Thread(Account account, String title, String description, boolean registrationRequired, ThreadCategory threadCategory) {
@@ -94,6 +96,10 @@ public class Thread extends BaseEntity {
 
     public void setRegistrationRequired(boolean registrationRequired) {
         this.registrationRequired = registrationRequired;
+    }
+
+    public void setThreadCategory(ThreadCategory threadCategory) {
+        this.threadCategory = threadCategory;
     }
 
     public void setEditDate(Date editDate) {
@@ -139,6 +145,9 @@ public class Thread extends BaseEntity {
         return title;
     }
 
+    public int incremenetViewCount(){
+        return ++this.viewCount;
+    }
     public ThreadCategory getThreadCategory() {
         return threadCategory;
     }

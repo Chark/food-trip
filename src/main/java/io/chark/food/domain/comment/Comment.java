@@ -7,6 +7,7 @@ import io.chark.food.domain.thread.Thread;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
+import java.util.Calendar;
 import java.util.Date;
 
 @Entity
@@ -44,6 +45,12 @@ public class Comment extends BaseEntity {
 
     public void setThread(Thread thread){
         this.thread = thread;
+    }
+
+    public String getMonthYear(){
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(this.creationDate.getTime());
+        return cal.get(Calendar.DAY_OF_MONTH) + "/" + cal.get(Calendar.MONTH) + "/" + cal.get(Calendar.YEAR);
     }
 
     public Date getCreationDate() {

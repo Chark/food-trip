@@ -1,7 +1,9 @@
 package io.chark.food.app.thread.categories;
 
 
+import io.chark.food.app.account.AccountService;
 import io.chark.food.app.thread.ThreadService;
+import io.chark.food.domain.authentication.account.Account;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,11 +16,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 public class ThreadCategoryController {
     private final ThreadService threadService;
     private final ThreadCategoryService threadCategoryService;
+    private final AccountService accountService;
 
     @Autowired
-    public ThreadCategoryController(ThreadService threadService,ThreadCategoryService threadCategoryService) {
+    public ThreadCategoryController(ThreadService threadService,ThreadCategoryService threadCategoryService,AccountService accountService) {
         this.threadService = threadService;
         this.threadCategoryService = threadCategoryService;
+        this.accountService = accountService;
     }
 
     @RequestMapping(value = "/list")
@@ -29,7 +33,19 @@ public class ThreadCategoryController {
 
     @RequestMapping(value = "/list/{id}", method = RequestMethod.GET)
     public String category(@PathVariable long id, Model model) {
+        boolean canEdit = false;
+        try{
+            Account currAccount = accountService.getAccount();
+            if (currAccount != null) {
+                canEdit = true;
+            }
+        }catch (Exception e){
+            System.out.println(e);
+        }
+
+
         model.addAttribute("category", threadCategoryService.getThreadCategory(id));
+        model.addAttribute("canEdit", canEdit);
         return "thread/category/category_view";
     }
 }

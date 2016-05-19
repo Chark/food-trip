@@ -26,6 +26,7 @@ public class ThreadCategory extends BaseEntity {
 
     @JsonBackReference
     @OneToMany(mappedBy = "threadCategory")
+    @OrderBy("title ASC")
     private List<Thread> threads = new ArrayList<>();
 
     public ThreadCategory() {

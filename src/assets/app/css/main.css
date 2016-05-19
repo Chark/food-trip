@@ -171,4 +171,16 @@ body {
 }
 
 
+.thread-list {
+    border-top: 1px solid #eee;
+}
 
+.thread-list .comment .user-info{
+    padding: 0 0 8px;;
+}
+
+.thread-list .comment {
+    border-top: 1px solid #eee;
+    padding: 10px 0;
+
+}
