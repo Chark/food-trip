@@ -8,7 +8,8 @@ import java.util.Date;
 @Entity
 public class ArticlePhoto extends BaseEntity {
 
-    @Basic(fetch = FetchType.EAGER)
+    @Lob
+//    @Basic(fetch = FetchType.EAGER) todo Ugnius maybe use file path instead of blob? Its causing issues on postgres
     @Column(nullable = false)
     private byte[] photo;
 
