@@ -1,5 +1,6 @@
 package io.chark.food.domain.thread.category;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import io.chark.food.domain.BaseEntity;
 import io.chark.food.domain.article.Article;
@@ -23,7 +24,7 @@ public class ThreadCategory extends BaseEntity {
     private Date creationDate;
     private Date editDate;
 
-    @JsonManagedReference
+    @JsonBackReference
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "threadCategory")
     private List<Thread> threads = new ArrayList<>();
 

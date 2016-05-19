@@ -21,7 +21,9 @@
                 <tr>
                     <th class="cell-stat"></th>
                     <th>
-                        <h3 th:text="${category.name}"></h3>
+                        <a th:href="@{/threads/list/__${category.id}__}">
+                            <h3 th:text="${category.name}"></h3>
+                        </a>
                         <h5 th:text="${category.description}"></h5>
                     </th>
                     <th class="cell-stat text-center hidden-xs hidden-sm">Topics</th>

@@ -4,7 +4,9 @@ import io.chark.food.app.thread.categories.ThreadCategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 
 @Controller
@@ -20,10 +22,5 @@ public class ThreadController {
         this.threadCategoryService = threadCategoryService;
     }
 
-    @RequestMapping(value = "/list")
-    public String list(Model model) {
 
-        model.addAttribute("categories", threadCategoryService.getThreadCategories());
-        return "thread/thread_list";
-    }
 }

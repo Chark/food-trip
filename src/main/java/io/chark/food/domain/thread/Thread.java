@@ -1,5 +1,6 @@
 package io.chark.food.domain.thread;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import io.chark.food.domain.BaseEntity;
 import io.chark.food.domain.authentication.account.Account;
 import io.chark.food.domain.comment.Comment;
@@ -31,6 +32,7 @@ public class Thread extends BaseEntity {
 
     private boolean registrationRequired;
 
+    @JsonBackReference
     @ManyToOne
     private ThreadCategory threadCategory;
 

@@ -27,26 +27,6 @@ public class ThreadCategoryService {
         this.auditService = auditService;
     }
 
-    @PostConstruct
-    public void init() {
-    }
-
-
-    private Optional<ThreadCategory> addThreadCategory(String name, String description) {
-        LOGGER.debug("Creating new ThreadCategory{name='{}'}", name);
-
-        try {
-            ThreadCategory threadCategory = new ThreadCategory(name, description);
-            Optional<ThreadCategory> optional = Optional.of(threadCategoryRepository.save(threadCategory));
-            auditService.info("Thread category '%s' successfully created", name);
-            LOGGER.debug("Thread category created successfully{title='{}'}", name);
-            return optional;
-
-        } catch (DataIntegrityViolationException e) {
-            LOGGER.error("Error in creating a thread category", e);
-            return Optional.empty();
-        }
-    }
 
     public Optional<ThreadCategory> register(String name, String description) {
         ThreadCategory threadCategory = new ThreadCategory(name,
@@ -70,5 +50,8 @@ public class ThreadCategoryService {
         return threadCategoryRepository.findAll();
     }
 
+    public ThreadCategory getThreadCategory(long id) {
+        return threadCategoryRepository.findOne(id);
+    }
 
 }
