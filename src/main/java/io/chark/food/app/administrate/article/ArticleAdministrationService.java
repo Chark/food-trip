@@ -37,6 +37,13 @@ public class ArticleAdministrationService {
         this.auditService = auditService;
     }
 
+    /**
+     * Create a new article or update an existing one based on id.
+     *
+     * @param id             article id.
+     * @param articleDetails details used in creation or updating.
+     * @return article optional.
+     */
     public Optional<Article> saveArticle(long id,
                                          Article articleDetails) {
 
