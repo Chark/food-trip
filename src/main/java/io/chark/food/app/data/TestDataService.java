@@ -181,22 +181,15 @@ public class TestDataService {
         // Initialize main article photos.
         List<ArticlePhoto> articlePhotos = initTestArticlePhotos(this.articleTitleList.size());
 
-
-
         // Initialize main articles and their article categories.
         initTestArticles(articleCategories, articlePhotos, restaurants);
 
         // Initializes test thread categories
         initTestThreadCategories();
 
-
         //Initializes test threads with categories
         //initTestThreadCategories(); is required
         initTestThreads();
-
-
-
-
 
         LOGGER.info("Finished initializing test data");
         return new AsyncResult<>(null);
@@ -218,7 +211,6 @@ public class TestDataService {
         }
         return accounts;
     }
-
 
     /***
      * Creates a list of test thread categories.
@@ -360,9 +352,16 @@ public class TestDataService {
 
         // Add article photos to articles
         for (int i = 0; i < articles.size(); i++) {
-            int num = i % articlePhotos.size();
+            int num = (2 * i) % articlePhotos.size();
 
             Optional<Article> optional = articleService.addPhoto(articles.get(i), articlePhotos.get(num));
+            if (optional.isPresent()) {
+                articles.set(i, optional.get());
+            }
+
+            num = (2 * i + 1) % articlePhotos.size();
+
+            optional = articleService.addPhoto(articles.get(i), articlePhotos.get(num));
             if (optional.isPresent()) {
                 articles.set(i, optional.get());
             }
