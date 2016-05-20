@@ -54,7 +54,7 @@ public class ArticleAdministrationController {
     }
 
     /**
-     * Create a new user article or update an existing one based on provided id.
+     * Update existing article.
      *
      * @return article administration page or the same page if an error occurred.
      */
