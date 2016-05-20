@@ -39,27 +39,8 @@ public class ArticleAdministrationService {
 
     public Optional<Article> saveArticle(long id,
                                          Article articleDetails) {
-                                         //List<ArticleCategory> categories) {
 
-        // Below or equals means this is a new account.
-        Optional<Article> optional;
-        if (id <= 0) {
-
-            // Reuse the register method to save a new account.
-            optional = articleService.register(
-                    restaurantService.getRestaurant(), // Get restaurant from currently authenticated user, NOTE
-                    articleDetails.getTitle(),         // that the user must have a restaurant! Read method javadoc.
-                    articleDetails.getDescription(),
-                    articleDetails.getShortDescription(),
-                    articleDetails.getMetaKeywords(),
-                    articleDetails.getMetaDescription()
-            );
-
-        } else {
-
-            // Existing account.
-            optional = Optional.of(articleRepository.findOne(id));
-        }
+        Optional<Article> optional = Optional.of(articleRepository.findOne(id));
 
         // No account found, error.
         if (!optional.isPresent()) {
@@ -76,14 +57,13 @@ public class ArticleAdministrationService {
         article.setShortDescription(articleDetails.getShortDescription());
         article.setMetaKeywords(articleDetails.getMetaKeywords());
         article.setMetaDescription(articleDetails.getMetaDescription());
-        //article.setCategories(categories);
+        article.setCategories(articleDetails.getCategories());
 
         try {
             article = articleRepository.save(article);
             LOGGER.debug("Saved Article{id={}}", article.getId());
 
-            auditService.debug("%s Article+ with id: %d via admin panel",
-                    id <= 0 ? "Created new" : "Updated", article.getId());
+            auditService.debug("Updated Article+ with id: %d via admin panel", article.getId());
 
             return Optional.of(article);
         } catch (DataIntegrityViolationException e) {

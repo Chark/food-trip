@@ -120,6 +120,30 @@ public class ArticleService {
     }
 
     /**
+     * Set specified article categories to specified article.
+     *
+     * @param article    article.
+     * @param categories list of article categories
+     * @return article optional with added categories.
+     */
+    public Optional<Article> setCategories(Article article, List<ArticleCategory> categories) {
+        article.setCategories(categories);
+
+        try {
+            LOGGER.debug("Setting ArticleCategories{size={}} to Article{id={}}",
+                    categories.size(),
+                    article.getId());
+
+            return Optional.ofNullable(articleRepository.save(article));
+        } catch (DataIntegrityViolationException e) {
+            LOGGER.error("Could not add article categories to article", e);
+
+            auditService.error("Failed to add article categories to article");
+            return Optional.empty();
+        }
+    }
+
+    /**
      * Add specified article photo to specified article.
      *
      * @param article article.

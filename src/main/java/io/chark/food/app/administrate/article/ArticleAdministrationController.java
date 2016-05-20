@@ -31,7 +31,7 @@ public class ArticleAdministrationController {
      * @return template for administrating articles.
      */
     @RequestMapping(value = "/articles", method = RequestMethod.GET)
-    public String articleCategoryAdministration() {
+    public String articleAdministration() {
         return "administrate/articles";
     }
 
@@ -42,15 +42,9 @@ public class ArticleAdministrationController {
      */
     @RequestMapping(value = "/articles/{id}", method = RequestMethod.GET)
     public String getArticle(@PathVariable long id, Model model) {
-        Article article;
 
-        if (id <= 0) {
-            // Id below or equals to zero means this is a new article cagegory.
-            article = new Article();
-        } else {
-            // Id is above zero, existing account.
-            article = administrationService.getArticle(id);
-        }
+        Article article = administrationService.getArticle(id);
+
         model.addAttribute("article", article);
 
         List<ArticleCategory> categories = categoryAdministrationController.getCategories();
@@ -65,24 +59,21 @@ public class ArticleAdministrationController {
      * @return article administration page or the same page if an error occurred.
      */
     @RequestMapping(value = "/articles/{id}", method = RequestMethod.POST)
-    public String saveCategory(@PathVariable long id,
-                               Article article,
-                               ArticleCategory category,
-                               Model model) {
+    public String saveArticle(@PathVariable long id,
+                              Article article,
+                              Model model) {
 
-        System.out.println("ugnius");
-        //System.out.println(article.getCategories().size());
-        /*if (!administrationService.saveArticle(id, article).isPresent()) {
+        if (!administrationService.saveArticle(id, article).isPresent()) {
             model.addAttribute("error", "Failed to create article," +
                     " please double check the details you've entered.");
 
             model.addAttribute("article", article);
 
-            categories = categoryAdministrationController.getCategories();
+            List<ArticleCategory> categories = categoryAdministrationController.getCategories();
             model.addAttribute("categories", categories);
 
             return "administrate/article";
-        }*/
+        }
         return "redirect:/administrate/articles";
     }
 
