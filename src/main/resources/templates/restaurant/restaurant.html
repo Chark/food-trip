@@ -26,7 +26,8 @@
                     employees.
                 </p>
                 <p>
-                    The hygiene index of this restaurant is: <span class="text-primary" th:text="*{hygieneLevel}"></span>.
+                    The hygiene index of this restaurant is: <span class="text-primary"
+                                                                   th:text="*{hygieneLevel}"></span>.
                     This restaurant has a rating of <span class="text-primary" th:text="*{rating}"></span> restaurant
                     points.
                 </p>
@@ -34,6 +35,61 @@
                 <p>
                     You can contact this restaurant via e-mail: <span class="text-primary" th:text="*{email}"></span>
                 </p>
+
+
+                <h4>Restaurant details</h4>
+                <div>
+                    <th:block th:if="*{restaurantDetails.registrationCode != ''}">
+                        <div>
+                            <span>Registration Code:</span>
+                            <span th:text="*{restaurantDetails.registrationCode}"></span>
+                        </div>
+                    </th:block>
+
+                    <th:block th:if="*{restaurantDetails.vat != ''}">
+                        <div>
+                            <span>VAT:</span>
+                            <span th:text="*{restaurantDetails.vat}"></span>
+                        </div>
+                    </th:block>
+
+                    <th:block th:if="*{restaurantDetails.manager != ''}">
+                        <div>
+                            <span>Manager:</span>
+                            <span th:text="*{restaurantDetails.manager}"></span>
+                        </div>
+                    </th:block>
+
+                    <th:block th:if="*{restaurantDetails.phoneNumber != ''}">
+                        <div>
+                            <span>Phone number:</span>
+                            <span th:text="*{restaurantDetails.phoneNumber}"></span>
+                        </div>
+                    </th:block>
+
+                    <th:block th:if="*{restaurantDetails.fax != ''}">
+                        <div>
+                            <span>Fax:</span>
+                            <span th:text="*{restaurantDetails.fax}"></span>
+                        </div>
+                    </th:block>
+
+                    <th:block th:if="*{restaurantDetails.website != ''}">
+                        <div>
+                            <span>Website:</span>
+                            <span th:text="*{restaurantDetails.website}"></span>
+                        </div>
+                    </th:block>
+                    <th:block th:if="*{restaurantDetails.mobileNumber != ''}">
+                        <div>
+                            <span>Mobile Number:</span>
+                            <span th:text="*{restaurantDetails.mobileNumber}"></span>
+                        </div>
+                    </th:block>
+
+
+
+                </div>
 
                 <small class="text-muted">
                     Founded on
@@ -56,7 +112,8 @@
                     <div th:if="*{articles.isEmpty()}" class="col-md-12">
                         Looks like this restaurant has not posted anything just yet.
                     </div>
-                    <div th:if="*{!articles.isEmpty()}" class="col-md-12" th:each="article : *{articles}" th:object="${article}">
+                    <div th:if="*{!articles.isEmpty()}" class="col-md-12" th:each="article : *{articles}"
+                         th:object="${article}">
                         <h4>
                             <a th:href="@{/articles/{id}(id=*{id})}" th:text="*{title}"></a>
                         </h4>
