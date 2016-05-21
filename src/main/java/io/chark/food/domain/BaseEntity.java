@@ -26,7 +26,7 @@ public class BaseEntity {
 
     @Id
     @GeneratedValue
-    private long id;
+    protected long id;
 
     @JsonView(MinimalView.class)
     public long getId() {
