@@ -12,17 +12,17 @@ public class Bank extends BaseEntity {
 
     @Size(max = DEFAULT_LENGTH)
     @Column(unique = true, nullable = false, length = DEFAULT_LENGTH)
-    private String pavadinimas;
+    private String name;
 
-    public Bank(String pavadinimas) {
-        this.pavadinimas = pavadinimas;
+    public Bank(String name) {
+        this.name = name;
     }
 
-    public String getPavadinimas() {
-        return pavadinimas;
+    public String getName() {
+        return name;
     }
 
-    public void setPavadinimas(String pavadinimas) {
-        this.pavadinimas = pavadinimas;
+    public void setName(String name) {
+        this.name = name;
     }
 }

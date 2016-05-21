@@ -2,12 +2,10 @@ package io.chark.food.app.restaurant;
 
 import io.chark.food.app.account.AccountService;
 import io.chark.food.app.administrate.audit.AuditService;
+import io.chark.food.app.restaurant.details.RestaurantDetailsService;
 import io.chark.food.domain.authentication.account.Account;
 import io.chark.food.domain.authentication.permission.Permission;
-import io.chark.food.domain.restaurant.Invitation;
-import io.chark.food.domain.restaurant.InvitationRepository;
-import io.chark.food.domain.restaurant.Restaurant;
-import io.chark.food.domain.restaurant.RestaurantRepository;
+import io.chark.food.domain.restaurant.*;
 import io.chark.food.util.authentication.AuthenticationUtils;
 import io.chark.food.util.exception.NotFoundException;
 import org.slf4j.Logger;
@@ -18,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 @Service
 public class RestaurantService {
@@ -26,6 +25,7 @@ public class RestaurantService {
     private final RestaurantAuditService restaurantAuditService;
     private final InvitationRepository invitationRepository;
     private final RestaurantRepository restaurantRepository;
+    private final RestaurantDetailsService restaurantDetailsService;
     private final AccountService accountService;
     private final AuditService auditService;
 
@@ -34,13 +34,15 @@ public class RestaurantService {
                              InvitationRepository invitationRepository,
                              RestaurantRepository restaurantRepository,
                              AccountService accountService,
-                             AuditService auditService) {
+                             AuditService auditService,
+                             RestaurantDetailsService restaurantDetailsService) {
 
         this.restaurantAuditService = restaurantAuditService;
         this.invitationRepository = invitationRepository;
         this.restaurantRepository = restaurantRepository;
         this.accountService = accountService;
         this.auditService = auditService;
+        this.restaurantDetailsService = restaurantDetailsService;
     }
 
     /**
@@ -56,6 +58,15 @@ public class RestaurantService {
         restaurant.setEmail(updateDetails.getEmail());
         restaurant.setName(updateDetails.getName());
         restaurant.setDescription(updateDetails.getDescription());
+
+        restaurant.getRestaurantDetails().setRegistrationCode(updateDetails.getRestaurantDetails().getRegistrationCode());
+//        restaurant.getRestaurantDetails().setBankAccountNumber(updateDetails.getRestaurantDetails().getBankAccountNumber());
+        restaurant.getRestaurantDetails().setFax(updateDetails.getRestaurantDetails().getFax());
+        restaurant.getRestaurantDetails().setManager(updateDetails.getRestaurantDetails().getManager());
+        restaurant.getRestaurantDetails().setMobileNumber(updateDetails.getRestaurantDetails().getMobileNumber());
+        restaurant.getRestaurantDetails().setVat(updateDetails.getRestaurantDetails().getVat());
+        restaurant.getRestaurantDetails().setWebsite(updateDetails.getRestaurantDetails().getWebsite());
+        restaurant.getRestaurantDetails().setPhoneNumber(updateDetails.getRestaurantDetails().getPhoneNumber());
 
         try {
             restaurant = restaurantRepository.save(restaurant);
@@ -90,7 +101,18 @@ public class RestaurantService {
             return Optional.empty();
         }
 
+        Random random = new Random();
+
         try {
+
+            Optional<RestaurantDetails> restaurantDetails = restaurantDetailsService.register(
+                    "+37067715464",
+                    "LT95569514646" + random.nextInt(9999999),
+                    "LT8989898" + random.nextInt(9999999),
+                    "989895526" + random.nextInt(9999999),
+                    "Jonas Ketvirtis");
+
+            restaurant.setRestaurantDetails(restaurantDetails.get());
 
             // Default restaurant rating and hygiene level.
             restaurant.setRating(1);

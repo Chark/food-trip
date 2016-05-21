@@ -6,6 +6,7 @@ import io.chark.food.app.article.category.ArticleCategoryService;
 import io.chark.food.app.article.photo.ArticlePhotoService;
 import io.chark.food.app.comment.CommentService;
 import io.chark.food.app.restaurant.RestaurantService;
+import io.chark.food.app.restaurant.details.RestaurantDetailsService;
 import io.chark.food.app.thread.ThreadService;
 import io.chark.food.app.thread.categories.ThreadCategoryService;
 import io.chark.food.domain.article.Article;
@@ -14,6 +15,7 @@ import io.chark.food.domain.article.photo.ArticlePhoto;
 import io.chark.food.domain.authentication.account.Account;
 import io.chark.food.domain.comment.Comment;
 import io.chark.food.domain.restaurant.Restaurant;
+import io.chark.food.domain.restaurant.RestaurantDetails;
 import io.chark.food.domain.thread.Thread;
 import io.chark.food.domain.thread.category.ThreadCategory;
 import io.chark.food.util.authentication.AuthenticationUtils;
@@ -66,6 +68,7 @@ public class TestDataService {
     private final ThreadCategoryService threadCategoryService;
     private final ThreadService threadService;
     private final CommentService commentService;
+    private final RestaurantDetailsService restaurantDetailsService;
 
     // Username's to initialize.
     private final List<String> usernameList;
@@ -93,7 +96,8 @@ public class TestDataService {
                            ArticleService articleService,
                            ThreadCategoryService threadCategoryService,
                            ThreadService threadService,
-                           CommentService commentService
+                           CommentService commentService,
+                           RestaurantDetailsService restaurantDetailsService
     ) {
 
         this.restaurantService = restaurantService;
@@ -104,6 +108,7 @@ public class TestDataService {
         this.threadCategoryService = threadCategoryService;
         this.threadService = threadService;
         this.commentService = commentService;
+        this.restaurantDetailsService = restaurantDetailsService;
         this.random = new Random();
 
         // Test username's.
@@ -267,8 +272,20 @@ public class TestDataService {
                 // Need an account in authentication for new restaurant registering.
                 AuthenticationUtils.setAccount(account.get());
 
+//                Optional<RestaurantDetails> restaurantDetails = restaurantDetailsService.register(
+//                        "+37067715464" + random.nextInt(9999999),
+//                        "LT95569514646" + random.nextInt(9999999),
+//                        "LT8989898" + random.nextInt(9999999),
+//                        "989895526" + random.nextInt(9999999),
+//                        "Jonas Ketvirtis" + random.nextInt(9999999));
+
+                Restaurant tempRest = new Restaurant(email, name, DEFAULT_DESCRIPTION);
+//                tempRest.setRestaurantDetails(restaurantDetails.get());
+
                 Optional<Restaurant> restaurant = restaurantService
-                        .register(new Restaurant(email, name, DEFAULT_DESCRIPTION));
+                        .register(tempRest);
+
+
 
                 // Add restaurant to restaurant list if present.
                 if (restaurant.isPresent()) {
