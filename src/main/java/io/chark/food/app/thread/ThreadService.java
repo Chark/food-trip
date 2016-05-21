@@ -66,6 +66,10 @@ public class ThreadService {
         threadRepository.save(t);
     }
 
+    public List<Comment> getComments(long id){
+        return threadRepository.findOne(id).getComments();
+    }
+
     public Optional<Thread> register(Account account, String title, String description, boolean registrationRequired, ThreadCategory threadCategory) {
         Thread thread = new Thread(account,
                 title,

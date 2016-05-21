@@ -1,6 +1,7 @@
 package io.chark.food.app.comment;
 
 import io.chark.food.app.administrate.audit.AuditService;
+import io.chark.food.domain.authentication.account.Account;
 import io.chark.food.domain.comment.Comment;
 import io.chark.food.domain.comment.Rating;
 import io.chark.food.domain.comment.RatingRepository;
@@ -24,8 +25,8 @@ public class RatingService {
         this.auditService = auditService;
     }
 
-    public Rating register(boolean isPositive) {
-        Rating rating = new Rating(isPositive);
+    public Rating register(boolean isPositive, Account account) {
+        Rating rating = new Rating(isPositive, account);
 
         try {
             rating = ratingRepository.save(rating);

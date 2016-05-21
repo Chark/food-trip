@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @Controller
 @RequestMapping(value = "/threads")
@@ -37,12 +38,18 @@ public class CommentController {
     @RequestMapping(value = "/list/{cid}/thread/{tid}/comment/{comid}/{voteResult}", method = RequestMethod.GET)
     public String vote(@PathVariable long cid, @PathVariable long tid, @PathVariable long voteResult, @PathVariable long comid, Model model, HttpServletRequest request) {
         Comment comment = commentService.getComment(comid);
-
+        Account account = accountService.getAccount();
+        List<Rating> ratings = comment.getRatings();
+        for (Rating r : ratings) {
+            if (r.getAccount().getId() == account.getId()) {
+                return "redirect:/threads/list/" + cid + "/thread/" + tid;
+            }
+        }
         boolean vote = false;
         if (voteResult != 0) {
             vote = true;
         }
-        Rating rating = new Rating(vote);
+        Rating rating = new Rating(vote, account);
         comment.addRaiting(rating);
         ratingService.register(rating);
 
