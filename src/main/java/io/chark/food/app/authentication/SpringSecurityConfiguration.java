@@ -53,7 +53,6 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
                     "/threads/**",
                     "/compiled/**")
                 .permitAll()
-                .antMatchers("/articles/new").hasRole(ROLE_USER.getName())
                 .antMatchers("/administrate/**").hasRole(ROLE_ADMIN.getName())
                 .antMatchers("/moderate/**").hasRole(ROLE_MODERATOR.getName())
             .anyRequest()

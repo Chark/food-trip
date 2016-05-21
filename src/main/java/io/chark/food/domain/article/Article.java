@@ -42,8 +42,7 @@ public class Article extends BaseEntity {
     public Article() {
     }
 
-    public Article(Restaurant restaurant,
-                   String title,
+    public Article(String title,
                    String description,
                    String shortDescription,
                    String metaKeywords,
@@ -55,6 +54,10 @@ public class Article extends BaseEntity {
         this.shortDescription = shortDescription;
         this.metaKeywords = metaKeywords;
         this.metaDescription = metaDescription;
+    }
+
+    public void setRestaurant(Restaurant restaurant) {
+        this.restaurant = restaurant;
     }
 
     public String getTitle() {

@@ -1,8 +1,6 @@
 package io.chark.food.app.administrate.article;
 
 import io.chark.food.app.administrate.audit.AuditService;
-import io.chark.food.app.article.ArticleService;
-import io.chark.food.app.restaurant.RestaurantService;
 import io.chark.food.domain.article.Article;
 import io.chark.food.domain.article.ArticleRepository;
 import io.chark.food.util.exception.NotFoundException;
@@ -21,19 +19,13 @@ public class ArticleAdministrationService {
     private static final Logger LOGGER = LoggerFactory.getLogger(ArticleAdministrationService.class);
 
     private final ArticleRepository articleRepository;
-    private final RestaurantService restaurantService;
-    private final ArticleService articleService;
     private final AuditService auditService;
 
     @Autowired
     public ArticleAdministrationService(ArticleRepository articleRepository,
-                                        RestaurantService restaurantService,
-                                        ArticleService articleService,
                                         AuditService auditService) {
 
         this.articleRepository = articleRepository;
-        this.restaurantService = restaurantService;
-        this.articleService = articleService;
         this.auditService = auditService;
     }
 
@@ -49,15 +41,12 @@ public class ArticleAdministrationService {
 
         Optional<Article> optional = Optional.of(articleRepository.findOne(id));
 
-        // No account found, error.
+        // No article found, error.
         if (!optional.isPresent()) {
             return Optional.empty();
         }
 
-        // Update account details.
-        optional = articleService.update(optional.get(), articleDetails);
-
-        // Update other details editable only by admins.
+        // Update article details.
         Article article = optional.get();
         article.setTitle(articleDetails.getTitle());
         article.setDescription(articleDetails.getDescription());

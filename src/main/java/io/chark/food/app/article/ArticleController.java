@@ -66,13 +66,7 @@ public class ArticleController {
                                 Model model) {
 
         // Perform the actual register.
-        Optional<Article> optional = articleService.register(
-                article.getRestaurant(),
-                article.getTitle(),
-                article.getDescription(),
-                article.getShortDescription(),
-                article.getMetaKeywords(),
-                article.getMetaDescription());
+        Optional<Article> optional = articleService.register(article);
 
         Article createdArticle = optional.get();
         articleService.setCategories(article, article.getCategories());
@@ -121,7 +115,7 @@ public class ArticleController {
                               Model model) {
 
         // Perform the actual register.
-        Optional<Article> optional = articleService.update(articleService.getArticle(id), article);
+        Optional<Article> optional = articleService.update(id, article);
 
         if (!optional.isPresent()) {
             model.addAttribute("error", "Failed to update article," +
