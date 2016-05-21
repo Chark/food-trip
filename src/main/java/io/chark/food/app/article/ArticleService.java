@@ -86,6 +86,7 @@ public class ArticleService {
         article.setShortDescription(articleDetails.getShortDescription());
         article.setMetaKeywords(articleDetails.getMetaKeywords());
         article.setMetaDescription(articleDetails.getMetaDescription());
+        article.setCategories(articleDetails.getCategories());
 
         try {
             LOGGER.debug("Updating Article{id={}} details", article.getId());

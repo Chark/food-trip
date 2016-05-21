@@ -38,7 +38,7 @@ public class ArticleAdministrationService {
     }
 
     /**
-     * Create a new article or update an existing one based on id.
+     * Update an existing one based on id.
      *
      * @param id             article id.
      * @param articleDetails details used in creation or updating.
