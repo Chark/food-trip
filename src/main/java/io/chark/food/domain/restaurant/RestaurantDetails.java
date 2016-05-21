@@ -135,6 +135,10 @@ public class RestaurantDetails extends BaseEntity {
         this.bankAccountNumber = bankAccountNumber;
     }
 
+    public void setBank(Bank bank) {
+        this.bank = bank;
+    }
+
     public Bank getBank() {
         return bank;
     }

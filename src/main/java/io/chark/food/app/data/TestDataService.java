@@ -6,6 +6,7 @@ import io.chark.food.app.article.category.ArticleCategoryService;
 import io.chark.food.app.article.photo.ArticlePhotoService;
 import io.chark.food.app.comment.CommentService;
 import io.chark.food.app.restaurant.RestaurantService;
+import io.chark.food.app.restaurant.details.BankService;
 import io.chark.food.app.restaurant.details.RestaurantDetailsService;
 import io.chark.food.app.thread.ThreadService;
 import io.chark.food.app.thread.categories.ThreadCategoryService;
@@ -14,6 +15,7 @@ import io.chark.food.domain.article.category.ArticleCategory;
 import io.chark.food.domain.article.photo.ArticlePhoto;
 import io.chark.food.domain.authentication.account.Account;
 import io.chark.food.domain.comment.Comment;
+import io.chark.food.domain.restaurant.Bank;
 import io.chark.food.domain.restaurant.Restaurant;
 import io.chark.food.domain.restaurant.RestaurantDetails;
 import io.chark.food.domain.thread.Thread;
@@ -69,7 +71,11 @@ public class TestDataService {
     private final ThreadService threadService;
     private final CommentService commentService;
     private final RestaurantDetailsService restaurantDetailsService;
+    private final BankService bankService;
 
+
+    // Username's to initialize.
+    private final List<String> bankList;
     // Username's to initialize.
     private final List<String> usernameList;
 
@@ -97,7 +103,8 @@ public class TestDataService {
                            ThreadCategoryService threadCategoryService,
                            ThreadService threadService,
                            CommentService commentService,
-                           RestaurantDetailsService restaurantDetailsService
+                           RestaurantDetailsService restaurantDetailsService,
+                           BankService bankService
     ) {
 
         this.restaurantService = restaurantService;
@@ -109,7 +116,20 @@ public class TestDataService {
         this.threadService = threadService;
         this.commentService = commentService;
         this.restaurantDetailsService = restaurantDetailsService;
+        this.bankService = bankService;
         this.random = new Random();
+
+        this.bankList = new ArrayList<>();
+        this.bankList.addAll(Arrays.asList(
+                "SWEDBANK",
+                "SEB Vilniaus Bankas",
+                "NORDEA",
+                "Dankse bankas",
+                "Snoras",
+                "Ketvircio bankas",
+                "Medicinos bankas"
+        ));
+
 
         // Test username's.
         this.usernameList = new ArrayList<>();
@@ -196,6 +216,8 @@ public class TestDataService {
         //initTestThreadCategories(); is required
         initTestThreads();
 
+        initTestBanks();
+
         LOGGER.info("Finished initializing test data");
         return new AsyncResult<>(null);
     }
@@ -215,6 +237,23 @@ public class TestDataService {
             account.ifPresent(accounts::add);
         }
         return accounts;
+    }
+
+    /***
+     * Creates a list of test banks.
+     *
+     * @return list of banks
+     * */
+    private List<Bank> initTestBanks() {
+        List<Bank> banks = new ArrayList<>();
+        for (String name : this.bankList) {
+            Optional<Bank> bank = bankService
+                    .register(name);
+
+            // Add account to account list if present.
+            bank.ifPresent(banks::add);
+        }
+        return banks;
     }
 
     /***

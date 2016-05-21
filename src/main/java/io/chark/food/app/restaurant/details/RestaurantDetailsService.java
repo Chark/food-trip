@@ -59,7 +59,7 @@ public class RestaurantDetailsService {
 
 
 
-//        restaurantDetails.setBankAccountNumber(updateDetails.getBankAccountNumber());
+        restaurantDetails.setBankAccountNumber(updateDetails.getBankAccountNumber());
         restaurantDetails.setFax(updateDetails.getFax());
         restaurantDetails.setManager(updateDetails.getManager());
         restaurantDetails.setMobileNumber(updateDetails.getMobileNumber());

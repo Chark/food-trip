@@ -86,7 +86,18 @@
                             <span th:text="*{restaurantDetails.mobileNumber}"></span>
                         </div>
                     </th:block>
-
+                    <th:block th:if="*{restaurantDetails.bankAccountNumber != ''}">
+                        <div>
+                            <span>Bank account number:</span>
+                            <span th:text="*{restaurantDetails.bankAccountNumber}"></span>
+                        </div>
+                    </th:block>
+                    <th:block th:if="*{restaurantDetails.bank != null}">
+                        <div>
+                            <span>Bank:</span>
+                            <span th:text="*{restaurantDetails.bank.name}"></span>
+                        </div>
+                    </th:block>
 
 
                 </div>

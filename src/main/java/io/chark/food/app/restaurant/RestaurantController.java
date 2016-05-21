@@ -1,6 +1,8 @@
 package io.chark.food.app.restaurant;
 
+import io.chark.food.app.restaurant.details.BankService;
 import io.chark.food.domain.audit.RestaurantAuditMessage;
+import io.chark.food.domain.restaurant.Bank;
 import io.chark.food.domain.restaurant.Invitation;
 import io.chark.food.domain.restaurant.Restaurant;
 import io.chark.food.domain.restaurant.RestaurantDetails;
@@ -22,13 +24,16 @@ public class RestaurantController {
 
     private final RestaurantService restaurantService;
     private final RestaurantAuditService auditService;
+    private final BankService bankService;
 
     @Autowired
     public RestaurantController(RestaurantService restaurantService,
-                                RestaurantAuditService auditService) {
+                                RestaurantAuditService auditService,
+                                BankService bankService) {
 
         this.restaurantService = restaurantService;
         this.auditService = auditService;
+        this.bankService = bankService;
     }
 
     /**
@@ -51,7 +56,10 @@ public class RestaurantController {
     @RequestMapping(method = RequestMethod.GET)
     public String restaurant(Model model) {
         Restaurant rest = restaurantService.getRestaurant();
+        List<Bank> banks = bankService.getBanks();
         model.addAttribute("restaurant", rest);
+        model.addAttribute("banks", banks);
+
         return "restaurant/profile";
     }
 

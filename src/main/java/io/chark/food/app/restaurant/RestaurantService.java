@@ -60,14 +60,14 @@ public class RestaurantService {
         restaurant.setDescription(updateDetails.getDescription());
 
         restaurant.getRestaurantDetails().setRegistrationCode(updateDetails.getRestaurantDetails().getRegistrationCode());
-//        restaurant.getRestaurantDetails().setBankAccountNumber(updateDetails.getRestaurantDetails().getBankAccountNumber());
         restaurant.getRestaurantDetails().setFax(updateDetails.getRestaurantDetails().getFax());
         restaurant.getRestaurantDetails().setManager(updateDetails.getRestaurantDetails().getManager());
         restaurant.getRestaurantDetails().setMobileNumber(updateDetails.getRestaurantDetails().getMobileNumber());
         restaurant.getRestaurantDetails().setVat(updateDetails.getRestaurantDetails().getVat());
         restaurant.getRestaurantDetails().setWebsite(updateDetails.getRestaurantDetails().getWebsite());
         restaurant.getRestaurantDetails().setPhoneNumber(updateDetails.getRestaurantDetails().getPhoneNumber());
-
+        restaurant.getRestaurantDetails().setBank(updateDetails.getRestaurantDetails().getBank());
+        restaurant.getRestaurantDetails().setBankAccountNumber(updateDetails.getRestaurantDetails().getBankAccountNumber());
         try {
             restaurant = restaurantRepository.save(restaurant);
             restaurantAuditService.info("Updated restaurant details", "Update");

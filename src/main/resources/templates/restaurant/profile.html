@@ -68,6 +68,10 @@
                 <th:block th:include="this :: restaurantInfo('Fax', *{restaurantDetails.fax})"/>
                 <th:block th:include="this :: restaurantInfo('Website', *{restaurantDetails.website})"/>
                 <th:block th:include="this :: restaurantInfo('Mobile', *{restaurantDetails.mobileNumber})"/>
+                <th:block th:include="this :: restaurantInfo('Bank account number', *{restaurantDetails.bankAccountNumber})"/>
+                <th:block th:if="*{restaurantDetails.bank != null}">
+                    <th:block th:include="this :: restaurantInfo('Bank', *{restaurantDetails.bank.name})"/>
+                </th:block>
 
             </div>
         </div>
@@ -162,6 +166,26 @@
                             <div class="col-md-6">
                                 <th:block th:include="fragments/forms :: input
                             ('text', *{restaurantDetails.mobileNumber}, 'restaurantDetails.mobileNumber', 'Mobile number', 'Enter Mobile number')"/>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <th:block th:include="fragments/forms :: input
+                            ('text', *{restaurantDetails.bankAccountNumber}, 'restaurantDetails.bankAccountNumber', 'Bank account Number', 'Enter Bank account number')"/>
+                                </div>
+                        </div>
+
+                        </div>
+
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                Banks
+                                <select name="restaurantDetails.bank" class="form-control">
+                                    <option value="">Not selected</option>
+                                    <th:block th:each="bank : ${banks}">
+                                        <option th:selected="( *{restaurantDetails.bank} != null and ${bank.id} == *{restaurantDetails.bank.id})"   th:value="${bank.id}" th:text="${bank.name}"></option>
+                                    </th:block>
+                                </select>
                             </div>
                         </div>
 

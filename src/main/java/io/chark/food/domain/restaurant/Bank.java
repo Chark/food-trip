@@ -14,6 +14,9 @@ public class Bank extends BaseEntity {
     @Column(unique = true, nullable = false, length = DEFAULT_LENGTH)
     private String name;
 
+    public Bank() {
+    }
+
     public Bank(String name) {
         this.name = name;
     }
