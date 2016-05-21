@@ -3,6 +3,7 @@ package io.chark.food.app.restaurant;
 import io.chark.food.domain.audit.RestaurantAuditMessage;
 import io.chark.food.domain.restaurant.Invitation;
 import io.chark.food.domain.restaurant.Restaurant;
+import io.chark.food.domain.restaurant.RestaurantDetails;
 import io.chark.food.util.exception.BadInputException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -49,7 +50,8 @@ public class RestaurantController {
      */
     @RequestMapping(method = RequestMethod.GET)
     public String restaurant(Model model) {
-        model.addAttribute("restaurant", restaurantService.getRestaurant());
+        Restaurant rest = restaurantService.getRestaurant();
+        model.addAttribute("restaurant", rest);
         return "restaurant/profile";
     }
 
@@ -60,7 +62,6 @@ public class RestaurantController {
      */
     @RequestMapping(method = RequestMethod.POST)
     public String restaurant(Restaurant details, Model model) {
-
         if (restaurantService.update(details).isPresent()) {
             // Success, redirect to profile page.
             return "redirect:/restaurant";

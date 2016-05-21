@@ -14,6 +14,7 @@
           th:action="@{/administrate/accounts/__${account.id}__}"
           th:object="${account}">
 
+        <input type="hidden" name="id" th:value="*{id}"/>
         <div class="alert alert-dismissible alert-danger" th:if="${error}">
             <button data-dismiss="alert" class="close" type="button">×</button>
             <strong>Error!</strong>
@@ -25,6 +26,7 @@
                 <h2>Account details</h2>
                 <div class="row">
                     <div class="col-md-6">
+
                         <th:block th:include="fragments/forms :: input
                         ('username', *{username}, 'username', 'Username', 'Enter username')"/>
 

@@ -3,6 +3,7 @@ package io.chark.food.app.restaurant;
 import io.chark.food.FoodTripIntegrationTest;
 import io.chark.food.app.account.AccountService;
 import io.chark.food.app.administrate.audit.AuditService;
+import io.chark.food.app.restaurant.details.RestaurantDetailsService;
 import io.chark.food.domain.authentication.account.Account;
 import io.chark.food.domain.authentication.account.AccountRepository;
 import io.chark.food.domain.restaurant.InvitationRepository;
@@ -46,6 +47,9 @@ public class RestaurantServiceTest {
     private AccountService accountService;
 
     @Resource
+    private RestaurantDetailsService restaurantDetailsService;
+
+    @Resource
     private PasswordEncoder passwordEncoder;
 
     private RestaurantService service;
@@ -66,7 +70,8 @@ public class RestaurantServiceTest {
                 invitationRepository,
                 restaurantRepository,
                 accountService,
-                Mockito.mock(AuditService.class));
+                Mockito.mock(AuditService.class),
+                restaurantDetailsService);
     }
 
     @After

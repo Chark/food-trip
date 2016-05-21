@@ -50,7 +50,30 @@
                 <p class="break-text" th:if="*{description != null and description != ''}" th:text="*{description}"></p>
             </div>
         </div>
+
+        <!-- Restaurant Details-->
+        <div class="panel panel-default">
+            <div class="panel-heading clearfix">
+                <div class="pull-left">Restaurant details</div>
+            </div>
+            <div class="panel-body">
+
+                <h5>Details</h5>
+                <th:block
+                        th:include="this :: restaurantInfo('Registration code', *{restaurantDetails.registrationCode})"/>
+                <th:block th:include="this :: restaurantInfo('VAT', *{restaurantDetails.vat})"/>
+                <th:block
+                        th:include="this :: restaurantInfo('Manager', *{restaurantDetails.manager})"/>
+                <th:block th:include="this :: restaurantInfo('Phone number', *{restaurantDetails.phoneNumber})"/>
+                <th:block th:include="this :: restaurantInfo('Fax', *{restaurantDetails.fax})"/>
+                <th:block th:include="this :: restaurantInfo('Website', *{restaurantDetails.website})"/>
+                <th:block th:include="this :: restaurantInfo('Mobile', *{restaurantDetails.mobileNumber})"/>
+
+            </div>
+        </div>
+
     </div>
+
 
     <!-- Main restaurant profile management -->
     <div class="col-md-9">
@@ -99,11 +122,58 @@
                             </div>
                         </div>
                     </div>
+
+
+                    <div class="registrationDetails">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <th:block th:include="fragments/forms :: input
+                            ('text', *{restaurantDetails.registrationCode}, 'restaurantDetails.registrationCode', 'Registration code', 'Enter unique registration code')"/>
+                            </div>
+                            <div class="col-md-6">
+                                <th:block th:include="fragments/forms :: input
+                            ('text', *{restaurantDetails.vat}, 'restaurantDetails.vat', 'VAT', 'Enter unique VAT code')"/>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <th:block th:include="fragments/forms :: input
+                            ('text', *{restaurantDetails.manager}, 'restaurantDetails.manager', 'Manager', 'Enter manager name')"/>
+                            </div>
+                            <div class="col-md-6">
+                                <th:block th:include="fragments/forms :: input
+                            ('text', *{restaurantDetails.phoneNumber}, 'restaurantDetails.phoneNumber', 'Phone number', 'Enter phone number')"/>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <th:block th:include="fragments/forms :: input
+                            ('text', *{restaurantDetails.fax}, 'restaurantDetails.fax', 'FAX', 'Enter FAX number')"/>
+                            </div>
+                            <div class="col-md-6">
+                                <th:block th:include="fragments/forms :: input
+                            ('text', *{restaurantDetails.website}, 'restaurantDetails.website', 'Web site', 'Enter website')"/>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <th:block th:include="fragments/forms :: input
+                            ('text', *{restaurantDetails.mobileNumber}, 'restaurantDetails.mobileNumber', 'Mobile number', 'Enter Mobile number')"/>
+                            </div>
+                        </div>
+
+                    </div>
                     <button type="submit" class="btn btn-sm btn-success">Save</button>
                 </form>
             </div>
         </div>
+
+
     </div>
+
 
     <!-- Accounts under this restaurant -->
     <div class="col-md-4">
@@ -132,6 +202,7 @@
         </div>
     </div>
 
+
     <!-- Restaurant invitations -->
     <div class="col-md-5">
         <div class="panel panel-default">
@@ -153,6 +224,7 @@
                 </table>
             </div>
         </div>
+
 
         <!-- Invite new user modal -->
         <div class="modal fade invite-modal" role="dialog">
@@ -185,8 +257,9 @@
         </div>
     </div>
 
+
     <!-- Restaurant audit logs -->
-    <div class="col-md-offset-3 col-md-9">
+    <div class=" col-md-9">
         <div class="panel panel-default">
             <div class="panel-heading">
                 Audit

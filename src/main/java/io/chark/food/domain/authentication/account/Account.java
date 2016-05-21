@@ -203,6 +203,10 @@ public class Account extends BaseEntity implements UserDetails {
         return restaurant != null;
     }
 
+    public void setId(long id) {
+        this.id = id;
+    }
+
     @Override
     public Set<Permission> getAuthorities() {
         return permissions;

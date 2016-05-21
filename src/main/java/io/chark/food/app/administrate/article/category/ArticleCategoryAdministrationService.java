@@ -34,6 +34,13 @@ public class ArticleCategoryAdministrationService {
         this.auditService = auditService;
     }
 
+    /**
+     * Create a new article category or update an existing one based on id.
+     *
+     * @param id              article category id.
+     * @param categoryDetails details used in creation or updating.
+     * @return article category optional.
+     */
     public Optional<ArticleCategory> saveCategory(long id, ArticleCategory categoryDetails) {
 
         // Below or equals means this is a new account.

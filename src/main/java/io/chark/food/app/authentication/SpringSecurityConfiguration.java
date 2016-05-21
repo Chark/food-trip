@@ -15,6 +15,7 @@ import org.springframework.security.web.session.HttpSessionEventPublisher;
 
 import static io.chark.food.domain.authentication.permission.Permission.Authority.ROLE_ADMIN;
 import static io.chark.food.domain.authentication.permission.Permission.Authority.ROLE_MODERATOR;
+import static io.chark.food.domain.authentication.permission.Permission.Authority.ROLE_USER;
 
 @Configuration
 @EnableWebSecurity

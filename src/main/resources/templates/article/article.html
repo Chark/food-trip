@@ -14,29 +14,31 @@
             <h1 th:text="${article.title}"></h1>
         </div>
 
-        <div id="carousel-article-photos" class="carousel slide responsive" data-ride="carousel">
-            <!-- Wrapper for slides -->
-            <div class="carousel-inner" role="listbox">
-                <th:block th:each="photo : ${article.photos}">
-                    <div th:class="${photo == article.photos[0]} ? 'item active' : 'item'">
-                        <img class="img-responsive" th:src="@{/articles/photos/__${photo.id}__}"/>
-                        <div class="carousel-caption">
-                            <th:block th:text="${photo.description}"/>
+        <th:block th:if="${article.photos.size() > 0}">
+            <div id="carousel-article-photos" class="carousel slide responsive" data-ride="carousel">
+                <!-- Wrapper for slides -->
+                <div class="carousel-inner" role="listbox">
+                    <th:block th:each="photo : ${article.photos}">
+                        <div th:class="${photo == article.photos[0]} ? 'item active' : 'item'">
+                            <img class="img-responsive" th:src="@{/articles/photos/__${photo.id}__}"/>
+                            <div class="carousel-caption">
+                                <th:block th:text="${photo.description}"/>
+                            </div>
                         </div>
-                    </div>
-                </th:block>
-            </div>
+                    </th:block>
+                </div>
 
-            <!-- Controls -->
-            <a class="left carousel-control" href="#carousel-article-photos" role="button" data-slide="prev">
-                <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-                <span class="sr-only">Previous</span>
-            </a>
-            <a class="right carousel-control" href="#carousel-article-photos" role="button" data-slide="next">
-                <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-                <span class="sr-only">Next</span>
-            </a>
-        </div>
+                <!-- Controls -->
+                <a class="left carousel-control" href="#carousel-article-photos" role="button" data-slide="prev">
+                    <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                    <span class="sr-only">Previous</span>
+                </a>
+                <a class="right carousel-control" href="#carousel-article-photos" role="button" data-slide="next">
+                    <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                    <span class="sr-only">Next</span>
+                </a>
+            </div>
+        </th:block>
 
         <strong th:text="${article.shortDescription}"></strong>
         <p th:text="${article.description}"></p>

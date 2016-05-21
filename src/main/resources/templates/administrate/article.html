@@ -35,14 +35,6 @@
                             th:value="${category.id}"
                             th:selected="${article.hasCategory(category)}"></option>
                 </select>
-                <!--<select name="categories" class="form-control" multiple="multiple">
-                    <option th:each="category : *{categories}"
-                            th:text="${category.title}"
-                            th:value="${category.id}"
-                            th:selected="${article.hasCategory(category)}"></option>
-                </select>
-                <textarea th:text="*{getCategory(0).getTitle()}" name="category" rows="3" class="form-control"
-                          placeholder="Enter article description"></textarea>-->
             </label>
         </div>
         <div class="row">

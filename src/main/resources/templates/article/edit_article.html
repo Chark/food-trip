@@ -1,0 +1,71 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layouts/default">
+
+<head>
+    <title>Edi Article</title>
+</head>
+
+<body>
+<th:block layout:fragment="content">
+    <div class="container">
+        <form name="articleCategoryForm"
+              method="POST"
+              th:attr="data-article-category-id=${article.id}"
+              th:action="@{/articles/__${article.id}__/edit}"
+              th:object="${article}">
+
+            <div class="row">
+                <div class="col-md-12">
+                    <h2>Edit Article</h2>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <th:block th:include="fragments/forms :: input
+                        ('title', *{title}, 'title', 'Title', 'Enter title')"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <label class="col-xs-12">
+                    Article Categories
+                    <select name="categories" class="form-control" multiple="multiple">
+                        <option th:each="category : ${categories}"
+                                th:text="${category.title}"
+                                th:value="${category.id}"
+                                th:selected="${article.hasCategory(category)}"></option>
+                    </select>
+                </label>
+            </div>
+            <div class="row">
+                <label class="col-xs-12 control-label">
+                    Short Description
+                <textarea th:text="*{shortDescription}" name="shortDescription" rows="3" class="form-control"
+                          placeholder="Enter article  short description"></textarea>
+                </label>
+            </div>
+            <div class="row">
+                <label class="col-xs-12 control-label">
+                    Description
+                <textarea th:text="*{description}" name="description" rows="3" class="form-control"
+                          placeholder="Enter article description"></textarea>
+                </label>
+            </div>
+
+            <!-- Submit and back -->
+            <button type="submit" class="btn btn-success">Save</button>
+            <a th:href="@{/}" class="btn btn-danger">Cancel</a>
+        </form>
+    </div>
+</th:block>
+
+<!-- Initialize javascript for this page -->
+<script type="application/javascript" layout:fragment="javascript">
+    $(function () {
+        ArticleManagement.initArticle();
+    });
+</script>
+
+</body>
+</html>

@@ -47,6 +47,10 @@ public class Restaurant extends BaseEntity {
     @OneToMany(mappedBy = "restaurant", orphanRemoval = true)
     private List<Article> articles;
 
+
+    @OneToOne()
+    private RestaurantDetails restaurantDetails;
+
     public Restaurant() {
     }
 
@@ -54,6 +58,12 @@ public class Restaurant extends BaseEntity {
         this.email = email;
         this.name = name;
         this.description = description;
+    }
+
+
+
+    public void setRestaurantDetails(RestaurantDetails restaurantDetails) {
+        this.restaurantDetails = restaurantDetails;
     }
 
     public String getEmail() {
@@ -127,5 +137,9 @@ public class Restaurant extends BaseEntity {
     @JsonIgnore
     public List<Article> getArticles() {
         return articles;
+    }
+
+    public RestaurantDetails getRestaurantDetails() {
+        return restaurantDetails;
     }
 }

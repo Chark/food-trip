@@ -1,8 +1,6 @@
 package io.chark.food.app.administrate.article;
 
 import io.chark.food.app.administrate.audit.AuditService;
-import io.chark.food.app.article.ArticleService;
-import io.chark.food.app.restaurant.RestaurantService;
 import io.chark.food.domain.article.Article;
 import io.chark.food.domain.article.ArticleRepository;
 import io.chark.food.util.exception.NotFoundException;
@@ -21,69 +19,47 @@ public class ArticleAdministrationService {
     private static final Logger LOGGER = LoggerFactory.getLogger(ArticleAdministrationService.class);
 
     private final ArticleRepository articleRepository;
-    private final RestaurantService restaurantService;
-    private final ArticleService articleService;
     private final AuditService auditService;
 
     @Autowired
     public ArticleAdministrationService(ArticleRepository articleRepository,
-                                        RestaurantService restaurantService,
-                                        ArticleService articleService,
                                         AuditService auditService) {
 
         this.articleRepository = articleRepository;
-        this.restaurantService = restaurantService;
-        this.articleService = articleService;
         this.auditService = auditService;
     }
 
+    /**
+     * Update an existing one based on id.
+     *
+     * @param id             article id.
+     * @param articleDetails details used in creation or updating.
+     * @return article optional.
+     */
     public Optional<Article> saveArticle(long id,
                                          Article articleDetails) {
-                                         //List<ArticleCategory> categories) {
 
-        // Below or equals means this is a new account.
-        Optional<Article> optional;
-        if (id <= 0) {
+        Optional<Article> optional = Optional.of(articleRepository.findOne(id));
 
-            // Reuse the register method to save a new account.
-            optional = articleService.register(
-                    restaurantService.getRestaurant(), // Get restaurant from currently authenticated user, NOTE
-                    articleDetails.getTitle(),         // that the user must have a restaurant! Read method javadoc.
-                    articleDetails.getDescription(),
-                    articleDetails.getShortDescription(),
-                    articleDetails.getMetaKeywords(),
-                    articleDetails.getMetaDescription()
-            );
-
-        } else {
-
-            // Existing account.
-            optional = Optional.of(articleRepository.findOne(id));
-        }
-
-        // No account found, error.
+        // No article found, error.
         if (!optional.isPresent()) {
             return Optional.empty();
         }
 
-        // Update account details.
-        optional = articleService.update(optional.get(), articleDetails);
-
-        // Update other details editable only by admins.
+        // Update article details.
         Article article = optional.get();
         article.setTitle(articleDetails.getTitle());
         article.setDescription(articleDetails.getDescription());
         article.setShortDescription(articleDetails.getShortDescription());
         article.setMetaKeywords(articleDetails.getMetaKeywords());
         article.setMetaDescription(articleDetails.getMetaDescription());
-        //article.setCategories(categories);
+        article.setCategories(articleDetails.getCategories());
 
         try {
             article = articleRepository.save(article);
             LOGGER.debug("Saved Article{id={}}", article.getId());
 
-            auditService.debug("%s Article+ with id: %d via admin panel",
-                    id <= 0 ? "Created new" : "Updated", article.getId());
+            auditService.debug("Updated Article+ with id: %d via admin panel", article.getId());
 
             return Optional.of(article);
         } catch (DataIntegrityViolationException e) {
