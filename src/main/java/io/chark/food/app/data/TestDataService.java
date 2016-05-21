@@ -181,8 +181,8 @@ public class TestDataService {
         // Test restaurant names.
         this.articlePhotoPathList = new ArrayList<>();
         this.articlePhotoPathList.addAll(Arrays.asList(
-                "static/images/default_avatar.JPG",
-                "static/images/photo.jpg"
+                "static/images/article_photo_1.jpg",
+                "static/images/article_photo_2.jpg"
         ));
     }
 
