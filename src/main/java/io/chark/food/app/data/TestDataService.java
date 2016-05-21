@@ -345,13 +345,11 @@ public class TestDataService {
         List<Article> articles = new ArrayList<>();
         for (String title : this.articleTitleList) {
             Optional<Article> article = articleService
-                    .register(
-                            restaurants.get(0), // take the first one
-                            title,
+                    .register(new Article(title,
                             DEFAULT_DESCRIPTION,
                             DEFAULT_SHORT_DESCRIPTION,
                             "meta keywords",
-                            "meta description");
+                            "meta description"), restaurants.get(0));
 
             // Add article to article list if present.
             article.ifPresent(articles::add);

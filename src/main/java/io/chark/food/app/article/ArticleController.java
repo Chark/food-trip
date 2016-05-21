@@ -66,13 +66,7 @@ public class ArticleController {
                                 Model model) {
 
         // Perform the actual register.
-        Optional<Article> optional = articleService.register(
-                article.getRestaurant(),
-                article.getTitle(),
-                article.getDescription(),
-                article.getShortDescription(),
-                article.getMetaKeywords(),
-                article.getMetaDescription());
+        Optional<Article> optional = articleService.register(article);
 
         Article createdArticle = optional.get();
         articleService.setCategories(article, article.getCategories());
@@ -91,4 +85,51 @@ public class ArticleController {
 
         return "redirect:/articles/" + createdArticle.getId();
     }
+
+    /**
+     * Edit article view.
+     *
+     * @return edit article template.
+     */
+    @RequestMapping(value = "/{id}/edit", method = RequestMethod.GET)
+    public String getEditArticle(@PathVariable long id,
+                                 Model model) {
+
+        Article article = articleService.getArticle(id);
+        model.addAttribute("article", article);
+
+        List<ArticleCategory> categories = categoryService.getCategories();
+        model.addAttribute("categories", categories);
+
+        return "article/edit_article";
+    }
+
+    /**
+     * Edit article.
+     *
+     * @return article page or the same page if an error occurred.
+     */
+    @RequestMapping(value = "/{id}/edit", method = RequestMethod.POST)
+    public String editArticle(@PathVariable long id,
+                              Article article,
+                              Model model) {
+
+        // Perform the actual register.
+        Optional<Article> optional = articleService.update(id, article);
+
+        if (!optional.isPresent()) {
+            model.addAttribute("error", "Failed to update article," +
+                    " please double check the details you've entered.");
+
+            model.addAttribute("article", article);
+
+            List<ArticleCategory> categories = categoryService.getCategories();
+            model.addAttribute("categories", categories);
+
+            return "article/edit_article";
+        }
+
+        return "redirect:/articles/" + id;
+    }
+
 }
