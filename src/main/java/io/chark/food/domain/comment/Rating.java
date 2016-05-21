@@ -1,6 +1,7 @@
 package io.chark.food.domain.comment;
 
 import io.chark.food.domain.BaseEntity;
+import io.chark.food.domain.authentication.account.Account;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,15 +15,23 @@ public class Rating extends BaseEntity {
     @Column(nullable = false)
     private boolean isPositive;
 
+    @ManyToOne
+    private Account account;
+
     private Date ratingDate;
 
 
     public Rating() {
     }
 
-    public Rating(boolean isPositive) {
+    public Account getAccount() {
+        return account;
+    }
+
+    public Rating(boolean isPositive, Account account) {
         this.ratingDate = new Date();
         this.isPositive = isPositive;
+        this.account = account;
     }
 
 

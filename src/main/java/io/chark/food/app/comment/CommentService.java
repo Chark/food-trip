@@ -36,7 +36,7 @@ public class CommentService {
     }
 
     public Optional<Comment> register(Account account, String text, boolean isHidden) {
-        Comment comment = new Comment(account, text,isHidden);
+        Comment comment = new Comment(account, text, isHidden);
 
         try {
 
@@ -74,7 +74,7 @@ public class CommentService {
 
         Optional<Comment> optional;
         Account currentAccount = accountService.getAccount();
-        if(currentAccount == null){
+        if (currentAccount == null) {
             LOGGER.error("Could not save thread. User not found");
 
             auditService.error("Failed to save Thread. User not found.");
@@ -121,7 +121,9 @@ public class CommentService {
 
     public Comment upvoteComment(long id, boolean isPositive) {
         Comment comment = commentRepository.findOne(id);
-        ratingService.register(isPositive);
+        Account account = accountService.getAccount();
+        System.out.println("YEP");
+        ratingService.register(isPositive, account);
         return comment;
     }
 
