@@ -9,6 +9,7 @@ import io.chark.food.domain.comment.CommentRepository;
 import io.chark.food.domain.comment.Rating;
 import io.chark.food.domain.thread.Thread;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -38,7 +39,13 @@ public class CommentController {
     @RequestMapping(value = "/list/{cid}/thread/{tid}/comment/{comid}/{voteResult}", method = RequestMethod.GET)
     public String vote(@PathVariable long cid, @PathVariable long tid, @PathVariable long voteResult, @PathVariable long comid, Model model, HttpServletRequest request) {
         Comment comment = commentService.getComment(comid);
-        Account account = accountService.getAccount();
+        Account account;
+        try {
+            account = accountService.getAccount();
+
+        }catch (DataIntegrityViolationException e){
+            return "redirect:/threads/list/" + cid + "/thread/" + tid;
+        }
         List<Rating> ratings = comment.getRatings();
         for (Rating r : ratings) {
             if (r.getAccount().getId() == account.getId()) {
@@ -61,7 +68,12 @@ public class CommentController {
     public String controlComment(@PathVariable long cid, @PathVariable long tid, @PathVariable long comid, Model model) {
         Comment comment;
         boolean canEdit = false;
-
+        Account currAccount;
+        try{
+            currAccount = accountService.getAccount();
+        }catch (DataIntegrityViolationException e) {
+            return "redirect:/threads/list/" + cid + "thread/" + tid;
+        }
 
         if (comid <= 0) {
             comment = new Comment();
@@ -70,7 +82,7 @@ public class CommentController {
 
         } else {
             comment = commentService.getComment(comid);
-            Account currAccount = accountService.getAccount();
+
             if (comment.getAccount().getId() == currAccount.getId() ||
                     currAccount.hasPermission(Permission.Authority.ROLE_MODERATOR) ||
                     currAccount.hasPermission(Permission.Authority.ROLE_ADMIN)) {

@@ -50,7 +50,7 @@ public class ThreadController {
 
         threadService.incrementView(t);
         model.addAttribute("canEdit", canEdit);
-        model.addAttribute("canComment", true);
+        model.addAttribute("canComment", canComment);
         model.addAttribute("thread", threadService.getThread(tid));
         return "thread/thread_view";
     }

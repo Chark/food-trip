@@ -71,15 +71,23 @@
                             <!--</th:block>-->
                         </div>
                         <div class="votes">
-                            <a th:href="@{/threads/list/__${thread.threadCategory.id}__/thread/__${thread.id}__/comment/__${comment.id}__/1}"
-                               class="btn btn-success">
-                                <span class=" glyphicon glyphicon-arrow-up"></span>
-                            </a>
-                            <span style="padding: 0px 15px;" th:text="${comment.votes}" class="score"></span>
-                            <a th:href="@{/threads/list/__${thread.threadCategory.id}__/thread/__${thread.id}__/comment/__${comment.id}__/0}"
-                               class="btn btn-danger">
-                                <span class=" glyphicon glyphicon-arrow-down"></span>
-                            </a>
+                            <th:block th:switch="*{canComment}">
+                                <a th:case="${true}"
+                                   th:href="@{/threads/list/__${thread.threadCategory.id}__/thread/__${thread.id}__/comment/__${comment.id}__/1}"
+                                   class="btn btn-success">
+                                    <span class=" glyphicon glyphicon-arrow-up"></span>
+                                </a>
+                            </th:block>
+                            <span style="padding: 0px 15px;" class="score">Rating: <span
+                                    th:text="${comment.votes}"></span></span>
+                            <th:block th:switch="*{canComment}">
+                                <a th:case="${true}"
+                                   th:href="@{/threads/list/__${thread.threadCategory.id}__/thread/__${thread.id}__/comment/__${comment.id}__/0}"
+                                   class="btn btn-danger">
+                                    <span class=" glyphicon glyphicon-arrow-down"></span>
+                                </a>
+                            </th:block>
+
                         </div>
                     </div>
                     <div class="comment-text" th:text="${comment.text}"></div>
