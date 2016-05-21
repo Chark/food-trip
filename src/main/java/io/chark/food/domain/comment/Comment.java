@@ -44,6 +44,9 @@ public class Comment extends BaseEntity {
         this.account = account;
     }
 
+    public Thread getThread() {
+        return thread;
+    }
 
     public String getText() {
         return text;
@@ -51,6 +54,18 @@ public class Comment extends BaseEntity {
 
     public void setThread(Thread thread) {
         this.thread = thread;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    public void setHidden(boolean hidden) {
+        this.hidden = hidden;
+    }
+
+    public void setEditDate(Date editDate) {
+        this.editDate = editDate;
     }
 
     public String getMonthYear() {
@@ -88,6 +103,10 @@ public class Comment extends BaseEntity {
 
     public Date getEditDate() {
         return editDate;
+    }
+
+    public void setAccount(Account account) {
+        this.account = account;
     }
 
     public String getLink() {

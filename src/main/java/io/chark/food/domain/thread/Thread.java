@@ -37,7 +37,9 @@ public class Thread extends BaseEntity {
     @ManyToOne(fetch = FetchType.EAGER)
     private ThreadCategory threadCategory;
 
+
     @OneToMany
+    @OrderBy("creationDate DESC")
     private List<Comment> comments;
 
     public Thread() {

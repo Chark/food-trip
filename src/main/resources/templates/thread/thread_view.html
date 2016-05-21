@@ -14,9 +14,27 @@
             <div class="thread-title">
                 <h3 th:text="${thread.title}"></h3>
                 <th:block th:switch="*{canEdit}">
-                    <a th:case="${true}"
-                       th:href="@{/threads/list/__${thread.threadCategory.id}__/thread/control/__${thread.id}__}"
-                       class="btn btn-success">Edit thread</a>
+                    <th:block th:case="${true}">
+                        <a
+                                th:href="@{/threads/list/__${thread.threadCategory.id}__/thread/control/__${thread.id}__}"
+                                class="btn btn-success">Edit thread</a>
+                        <a
+                                th:href="@{/threads/list/__${thread.threadCategory.id}__/thread/__${thread.id}__/delete}"
+                                class="btn btn-danger">Delete thread</a>
+
+                    </th:block>
+
+                </th:block>
+
+                <th:block th:switch="*{canComment}">
+                    <th:block th:case="${true}">
+                        <div style='padding: 10px 0;'>
+                            <a
+                                    th:href="@{/threads/list/__${thread.threadCategory.id}__/thread/control/__${thread.id}__/comment/0}"
+                                    class="btn btn-success">Comment</a>
+                        </div>
+                    </th:block>
+
                 </th:block>
 
             </div>
@@ -46,13 +64,20 @@
                         <div class="user-info">
                             <div class="username" th:text="${comment.account.prettyUsername}"></div>
                             <div class="date" th:text="${comment.monthYear}"></div>
+                            <!--<th:block th:switch="*{}">-->
+                            <!--<a-->
+                            <!--th:href="@{/threads/list/__${thread.threadCategory.id}__/thread/control/__${thread.id}__/comment/__${comment.id}__}"-->
+                            <!--class="btn btn-warning">Edit comment</a>-->
+                            <!--</th:block>-->
                         </div>
                         <div class="votes">
-                            <a th:href="@{/threads/list/__${thread.threadCategory.id}__/thread/__${thread.id}__/comment/__${comment.id}__/1}" class="btn btn-success">
+                            <a th:href="@{/threads/list/__${thread.threadCategory.id}__/thread/__${thread.id}__/comment/__${comment.id}__/1}"
+                               class="btn btn-success">
                                 <span class=" glyphicon glyphicon-arrow-up"></span>
                             </a>
                             <span style="padding: 0px 15px;" th:text="${comment.votes}" class="score"></span>
-                            <a th:href="@{/threads/list/__${thread.threadCategory.id}__/thread/__${thread.id}__/comment/__${comment.id}__/0}" class="btn btn-danger">
+                            <a th:href="@{/threads/list/__${thread.threadCategory.id}__/thread/__${thread.id}__/comment/__${comment.id}__/0}"
+                               class="btn btn-danger">
                                 <span class=" glyphicon glyphicon-arrow-down"></span>
                             </a>
                         </div>

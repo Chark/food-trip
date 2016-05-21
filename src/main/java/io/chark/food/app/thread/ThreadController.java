@@ -20,20 +20,19 @@ public class ThreadController {
 
     private final ThreadService threadService;
     private final AccountService accountService;
-    private final RatingService ratingService;
 
     @Autowired
-    public ThreadController(ThreadService threadService, AccountService accountService,RatingService ratingService) {
+    public ThreadController(ThreadService threadService, AccountService accountService) {
         this.threadService = threadService;
         this.accountService = accountService;
-        this.ratingService =ratingService;
     }
 
     @RequestMapping(value = "/list/{cid}/thread/{tid}", method = RequestMethod.GET)
     public String thread(@PathVariable long cid, @PathVariable long tid, Model model) {
         Thread t = threadService.getThread(tid);
-        System.out.println(ratingService.getScore(1));
         boolean canEdit = false;
+        boolean canComment = false;
+        boolean canEditComment = false;
         try {
             Account currAccount = accountService.getAccount();
             if (t.getAccount().getId() == currAccount.getId() ||
@@ -41,6 +40,8 @@ public class ThreadController {
                     currAccount.hasPermission(Permission.Authority.ROLE_ADMIN)) {
                 canEdit = true;
             }
+
+            canComment = true;
         } catch (Exception e) {
             if (t.isRegistrationRequired()) {
                 return "redirect:/threads/list";
@@ -49,8 +50,15 @@ public class ThreadController {
 
         threadService.incrementView(t);
         model.addAttribute("canEdit", canEdit);
+        model.addAttribute("canComment", true);
         model.addAttribute("thread", threadService.getThread(tid));
         return "thread/thread_view";
+    }
+
+    @RequestMapping(value = "/list/{cid}/thread/{tid}/delete", method = RequestMethod.GET)
+    public String deleteThread(@PathVariable long cid, @PathVariable long tid, Model model) {
+        threadService.delete(tid);
+        return "redirect:/threads/list/" + cid;
     }
 
     @RequestMapping(value = "/list/{cid}/thread/control/{tid}", method = RequestMethod.GET)
