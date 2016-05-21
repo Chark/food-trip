@@ -27,17 +27,17 @@ public class ThreadService {
     private static final Logger LOGGER = LoggerFactory.getLogger(ThreadService.class);
 
     private final ThreadRepository threadRepository;
-    private final ThreadCategoryRepository threadCategoryRepository;
+    private final ThreadCategoryService threadCategoryService;
     private final AccountService accountService;
     private final CommentService commentService;
     private final AuditService auditService;
 
     @Autowired
-    public ThreadService(ThreadRepository threadRepository, AuditService auditService, CommentService commentService, ThreadCategoryRepository threadCategoryRepository, AccountService accountService) {
+    public ThreadService(ThreadRepository threadRepository, AuditService auditService, CommentService commentService, ThreadCategoryService threadCategoryService, AccountService accountService) {
         this.threadRepository = threadRepository;
         this.auditService = auditService;
         this.commentService = commentService;
-        this.threadCategoryRepository = threadCategoryRepository;
+        this.threadCategoryService = threadCategoryService;
         this.accountService = accountService;
     }
 
@@ -76,7 +76,7 @@ public class ThreadService {
 
         //TODO remove from live
         for (int i = 0; i < 10; i++) {
-            thread.addComment(commentService.register(account, "Long text is really long not much lol " + i, false));
+            thread.addComment(commentService.register(account, "Long text is really long not much lol " + i, false).get());
         }
         try {
 
@@ -104,15 +104,26 @@ public class ThreadService {
             auditService.error("Failed to create a new Comment");
             return Optional.empty();
         }
-
-
         return t;
     }
 
+
+
+    public void addComment(long id, Comment comment){
+
+        Thread t = threadRepository.findOne(id);
+        t.addComment(comment);
+    }
     public Thread getThread(long id) {
         return threadRepository.findOne(id);
     }
 
+    public void delete(long id){
+        Thread thread = threadRepository.findOne(id);
+        threadRepository.delete(thread);
+        auditService.info("Deleted Thread with id: %d", id);
+
+    }
 
     public Optional<Thread> saveThread(long id, long cid, Thread threadDetails) {
 
@@ -126,7 +137,7 @@ public class ThreadService {
         }
         if (id <= 0) {
 
-            ThreadCategory threadCategory = threadCategoryRepository.findOne(cid);
+            ThreadCategory threadCategory = threadCategoryService.getThreadCategory(id);
 
             optional = register(currentAccount,
                     threadDetails.getTitle(),
