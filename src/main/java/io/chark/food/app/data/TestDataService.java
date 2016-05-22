@@ -8,6 +8,7 @@ import io.chark.food.app.comment.CommentService;
 import io.chark.food.app.restaurant.RestaurantService;
 import io.chark.food.app.restaurant.details.BankService;
 import io.chark.food.app.restaurant.details.RestaurantDetailsService;
+import io.chark.food.app.restaurant.location.CityService;
 import io.chark.food.app.thread.ThreadService;
 import io.chark.food.app.thread.categories.ThreadCategoryService;
 import io.chark.food.domain.article.Article;
@@ -18,6 +19,7 @@ import io.chark.food.domain.comment.Comment;
 import io.chark.food.domain.restaurant.Bank;
 import io.chark.food.domain.restaurant.Restaurant;
 import io.chark.food.domain.restaurant.RestaurantDetails;
+import io.chark.food.domain.restaurant.location.City;
 import io.chark.food.domain.thread.Thread;
 import io.chark.food.domain.thread.category.ThreadCategory;
 import io.chark.food.util.authentication.AuthenticationUtils;
@@ -72,6 +74,7 @@ public class TestDataService {
     private final CommentService commentService;
     private final RestaurantDetailsService restaurantDetailsService;
     private final BankService bankService;
+    private final CityService cityService;
 
 
     // Username's to initialize.
@@ -91,6 +94,9 @@ public class TestDataService {
     // Article photos to initialize.
     private final List<String> articlePhotoPathList;
 
+
+    private final List<String> cityList;
+
     // Add some randomness to test data.
     private final Random random;
 
@@ -104,7 +110,8 @@ public class TestDataService {
                            ThreadService threadService,
                            CommentService commentService,
                            RestaurantDetailsService restaurantDetailsService,
-                           BankService bankService
+                           BankService bankService,
+                           CityService cityService
     ) {
 
         this.restaurantService = restaurantService;
@@ -117,6 +124,7 @@ public class TestDataService {
         this.commentService = commentService;
         this.restaurantDetailsService = restaurantDetailsService;
         this.bankService = bankService;
+        this.cityService = cityService;
         this.random = new Random();
 
         this.bankList = new ArrayList<>();
@@ -148,6 +156,15 @@ public class TestDataService {
                 "Erlandas",
                 "Edvinas"
         ));
+
+        this.cityList = new ArrayList<>();
+        this.cityList.addAll(Arrays.asList(
+                "Vilnius",
+                "Kaunas",
+                "Akmene",
+                "Palanga"
+        ));
+
 
         // Test restaurant names.
         this.restaurantNameList = new ArrayList<>();
@@ -218,6 +235,8 @@ public class TestDataService {
 
         initTestBanks();
 
+        initTestCities();
+
         LOGGER.info("Finished initializing test data");
         return new AsyncResult<>(null);
     }
@@ -254,6 +273,21 @@ public class TestDataService {
             bank.ifPresent(banks::add);
         }
         return banks;
+    }
+
+
+
+
+    private List<City> initTestCities() {
+        List<City> cities = new ArrayList<>();
+        for (String name : this.cityList) {
+            Optional<City> city = cityService
+                    .register(name, "Lietuva");
+
+            // Add account to account list if present.
+            city.ifPresent(cities::add);
+        }
+        return cities;
     }
 
     /***

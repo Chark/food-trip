@@ -99,6 +99,36 @@
                         </div>
                     </th:block>
 
+                    <th:block th:if="*{location != null and  location.city != null}">
+                        <div>
+                            <span>City:</span>
+                            <span th:text="*{location.city.name}"></span>
+                        </div>
+                    </th:block>
+
+
+                    <th:block th:if="*{location != null and location.city != null}">
+                        <div>
+                            <span>City:</span>
+                            <span th:text="*{location.city.country}"></span>
+                        </div>
+                    </th:block>
+
+                    <th:block th:if="*{location != null and location.street != null}">
+                        <div>
+                            <span>Street:</span>
+                            <span th:text="*{location.street}"></span>
+                        </div>
+                    </th:block>
+
+
+                    <th:block th:if="*{location != null and location.dangerIndex != null}">
+                        <div>
+                            <span>Danger index:</span>
+                            <span th:text="*{location.dangerIndex}"></span>
+                        </div>
+                    </th:block>
+
 
                 </div>
 

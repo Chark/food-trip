@@ -6,6 +6,8 @@ import io.chark.food.app.restaurant.details.RestaurantDetailsService;
 import io.chark.food.domain.authentication.account.Account;
 import io.chark.food.domain.authentication.permission.Permission;
 import io.chark.food.domain.restaurant.*;
+import io.chark.food.domain.restaurant.location.Location;
+import io.chark.food.domain.restaurant.location.LocationRepository;
 import io.chark.food.util.authentication.AuthenticationUtils;
 import io.chark.food.util.exception.NotFoundException;
 import org.slf4j.Logger;
@@ -28,6 +30,7 @@ public class RestaurantService {
     private final RestaurantDetailsService restaurantDetailsService;
     private final AccountService accountService;
     private final AuditService auditService;
+    private final LocationRepository locationRepository;
 
     @Autowired
     public RestaurantService(RestaurantAuditService restaurantAuditService,
@@ -35,7 +38,8 @@ public class RestaurantService {
                              RestaurantRepository restaurantRepository,
                              AccountService accountService,
                              AuditService auditService,
-                             RestaurantDetailsService restaurantDetailsService) {
+                             RestaurantDetailsService restaurantDetailsService,
+                             LocationRepository locationRepository) {
 
         this.restaurantAuditService = restaurantAuditService;
         this.invitationRepository = invitationRepository;
@@ -43,6 +47,7 @@ public class RestaurantService {
         this.accountService = accountService;
         this.auditService = auditService;
         this.restaurantDetailsService = restaurantDetailsService;
+        this.locationRepository = locationRepository;
     }
 
     /**
@@ -68,6 +73,8 @@ public class RestaurantService {
         restaurant.getRestaurantDetails().setPhoneNumber(updateDetails.getRestaurantDetails().getPhoneNumber());
         restaurant.getRestaurantDetails().setBank(updateDetails.getRestaurantDetails().getBank());
         restaurant.getRestaurantDetails().setBankAccountNumber(updateDetails.getRestaurantDetails().getBankAccountNumber());
+        Location location = locationRepository.save(updateDetails.getLocation());
+        restaurant.setLocation(location);
         try {
             restaurant = restaurantRepository.save(restaurant);
             restaurantAuditService.info("Updated restaurant details", "Update");
