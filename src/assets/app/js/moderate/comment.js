@@ -1,23 +1,22 @@
+(function (CommentModerate, $, undefined) {
 
-(function (ThreadModerate, $, undefined) {
-
-    var threadUrl = '/moderate/api/threads';
-    var threadTable;
+    var commentUrl = '/moderate/api/comments';
+    var commentTable;
     var infoModal;
 
     /**
      * Initialize audit page.
      */
-    ThreadModerate.initThreadModerate = function () {
+    CommentModerate.initCommentModerate = function () {
 
 
         /**
          * Initialize thread table.
          */
 
-        threadTable = $('table.thread-table').DataTable({
+        commentTable = $('table.comment-table').DataTable({
             ajax: {
-                url: threadUrl,
+                url: commentUrl,
                 dataSrc: ''
             },
             order: [
@@ -26,16 +25,10 @@
             columns: [
                 {data: 'id'},
                 {
-                    data: 'title'
-                },
-                {
-                    data: 'description'
-                },
-                {
-                    data: 'threadCategory.name'
-                },
-                {
-                    data: 'viewCount'
+                    data: 'account.prettyUsername',
+                    render: function (username) {
+                        return Utils.emptyLabel(username);
+                    }
                 },
                 {
                     data: 'creationDate',
@@ -44,42 +37,42 @@
                     }
                 },
                 {
-                    data: 'account.prettyUsername',
-                    render: function (username) {
-                        return Utils.emptyLabel(username);
-                    }
+                    data: 'rating'
                 },
                 {
-                    data: 'editDate',
+                    data: 'text'
+                },
+                {
+                    data: 'hidden',
                     render: function (e) {
-                        return Utils.date(e);
+                        return Utils.yesNoLabel(e);
                     }
                 },
                 {
                     data: 'id',
                     render: function(id){
-                        return Utils.urlButton('Edit', 'btn-success edit', '/moderate/threads/edit/' + id, id) + ' ' +
+                        return Utils.urlButton('Edit', 'btn-success edit', '/moderate/comments/edit/' + id, id) + ' ' +
                             Utils.smallButton('Delete', 'btn-danger delete', id);
                     }
                 }
             ]
         });
 
-        threadTable.on('click', 'a.delete', function () {
+        commentTable.on('click', 'a.delete', function () {
             var id = $(this).data('id');
             bootbox.dialog({
-                title: 'Delete thread',
-                message: 'Are you sure you want to delete this thread?',
+                title: 'Delete comment',
+                message: 'Are you sure you want to delete this comment?',
                 buttons: {
                     yes: {
                         label: 'Delete',
                         className: 'btn-danger',
                         callback: function () {
-                            $.delete(threadUrl + '/' + id, function () {
-                                toastr.success('Deleted thread');
-                                threadTable.ajax.reload();
+                            $.delete(commentUrl + '/' + id, function () {
+                                toastr.success('Comment delete');
+                                commentTable.ajax.reload();
                             }).fail(function () {
-                                toastr.error('Failed to delete thread');
+                                toastr.error('Failed to delete comment');
                             });
                         }
                     },
@@ -93,8 +86,4 @@
     };
 
 
-
-}(window.ThreadModerate = window.ThreadModerate || {}, jQuery));
-
-
-
+}(window.CommentModerate = window.CommentModerate || {}, jQuery));

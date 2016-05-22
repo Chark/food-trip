@@ -40,22 +40,31 @@ public class CommentController {
     public String vote(@PathVariable long voteResult, @PathVariable long comid, Model model, HttpServletRequest request) {
         Comment comment = commentService.getComment(comid);
         Account account;
-        try {
-            account = accountService.getAccount();
-
-        } catch (DataIntegrityViolationException e) {
-            return "redirect:" + request.getHeader("Referer");
-        }
-        List<Rating> ratings = comment.getRatings();
-        for (Rating r : ratings) {
-            if (r.getAccount().getId() == account.getId()) {
-                return "redirect:" + request.getHeader("Referer");
-            }
-        }
         boolean vote = false;
         if (voteResult != 0) {
             vote = true;
         }
+        try {
+            account = accountService.getAccount();
+
+            List<Rating> ratings = comment.getRatings();
+            for (Rating r : ratings) {
+                if (r.getAccount().getId() == account.getId()) {
+                    return "redirect:" + request.getHeader("Referer");
+                }
+            }
+
+
+            if(account.getId() != comment.getAccount().getId()){
+                comment.getAccount().increaseKarmaPoints(vote);
+//                accountService.save(comment.getAccount());
+            }
+
+        } catch (DataIntegrityViolationException e) {
+            return "redirect:" + request.getHeader("Referer");
+        }
+
+
         Rating rating = new Rating(vote, account);
         comment.addRaiting(rating);
         ratingService.register(rating);
@@ -82,7 +91,6 @@ public class CommentController {
         if (comid <= 0) {
             comment = new Comment();
 
-            comment.setThread(threadService.getThread(tid));
 
         } else {
             comment = commentService.getComment(comid);

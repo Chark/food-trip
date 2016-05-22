@@ -65,6 +65,27 @@
             </a>
         </div>
     </div>
+
+
+    <!-- Popular users panel -->
+    <div class="col-md-4 popular-users">
+        <h4>Popular users</h4>
+        <div class="list-group" th:if="${!accounts.isEmpty()}">
+            <div class="header">
+                <div class="col-md-6">Username</div>
+                <div class="col-md-6" style="text-align: center;">Points</div>
+            </div>
+            <div class="list">
+                <th:block th:each="account : ${accounts}">
+                    <div class="item">
+                        <div class="col-md-6"  th:style="'color: ' + ${account.color}" th:text="*{account.username}"></div>
+                        <div class="col-md-6" style="text-align: center;" th:text="*{account.points}"></div>
+                    </div>
+                </th:block>
+            </div>
+        </div>
+
+    </div>
 </th:block>
 
 </body>

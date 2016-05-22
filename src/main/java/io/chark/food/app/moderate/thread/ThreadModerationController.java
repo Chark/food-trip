@@ -11,13 +11,13 @@ import java.util.List;
 
 @Controller
 @RequestMapping(value = "/moderate")
-public class ThreadAdministrationController {
+public class ThreadModerationController {
 
-    private final ThreadAdministrationService threadAdministrationService;
+    private final ThreadModerationService threadModerationService;
 
     @Autowired
-    public ThreadAdministrationController(ThreadAdministrationService threadAdministrationService) {
-        this.threadAdministrationService = threadAdministrationService;
+    public ThreadModerationController(ThreadModerationService threadModerationService) {
+        this.threadModerationService = threadModerationService;
     }
 
     @RequestMapping(value = "/threads", method = RequestMethod.GET)
@@ -35,7 +35,7 @@ public class ThreadAdministrationController {
             thread = new Thread();
         } else {
             // Id is above zero, existing account.
-            thread = threadAdministrationService.getThread(id);
+            thread = threadModerationService.getThread(id);
         }
         model.addAttribute("thread", thread);
         return "moderate/thread";
@@ -46,7 +46,7 @@ public class ThreadAdministrationController {
                                Thread thread,
                                Model model) {
 
-        if (!threadAdministrationService.saveThread(id, thread).isPresent()) {
+        if (!threadModerationService.saveThread(id, thread).isPresent()) {
             model.addAttribute("error", "Failed to create account," +
                     " please double check the details you've entered. The email or username might already be taken");
 
@@ -60,13 +60,13 @@ public class ThreadAdministrationController {
     @ResponseBody
     @RequestMapping(value = "/api/threads", method = RequestMethod.GET)
     public List<Thread> getThreads() {
-        return threadAdministrationService.getThreads();
+        return threadModerationService.getThreads();
     }
 
     @ResponseStatus(HttpStatus.OK)
     @RequestMapping(value = "/api/threads/{id}", method = RequestMethod.DELETE)
     public void delete(@PathVariable long id) {
-        threadAdministrationService.delete(id);
+        threadModerationService.delete(id);
     }
 
 

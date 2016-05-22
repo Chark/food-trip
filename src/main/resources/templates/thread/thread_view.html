@@ -42,7 +42,7 @@
                 <div class="thread">
                     <div class="thread-info">
                         <div class="posted-by">
-                            <span th:text="${thread.account.username}"></span>
+                            <span th:style="'color: ' + ${thread.account.color}" th:text="${thread.account.username}"></span>
                         </div>
                         <ul class="thread-info-list">
                             <li th:text="${thread.monthYear}"></li>
@@ -59,18 +59,13 @@
         <div class="thread-list">
             <div><h3>Comments</h3></div>
             <th:block th:each="comment : ${thread.comments}">
-                <div class="comment">
+                <div th:if="${!comment.hidden}" class="comment">
                     <div class="top">
                         <div class="user-info">
-                            <div class="username" th:text="${comment.account.prettyUsername}"></div>
+                            <div th:style="'color: ' + ${comment.account.color}"  class="username" th:text="${comment.account.prettyUsername}"></div>
                             <div class="date" th:text="${comment.monthYear}"></div>
-                            <!--<th:block th:switch="*{}">-->
-                            <!--<a-->
-                            <!--th:href="@{/threads/list/__${thread.threadCategory.id}__/thread/control/__${thread.id}__/comment/__${comment.id}__}"-->
-                            <!--class="btn btn-warning">Edit comment</a>-->
-                            <!--</th:block>-->
                         </div>
-                        <div class="votes">
+                        <div style="display: inline-block;" class="votes">
                             <th:block th:switch="*{canComment}">
                                 <a th:case="${true}"
                                    th:href="@{/threads/comment/__${comment.id}__/1}"
@@ -87,7 +82,17 @@
                                     <span class=" glyphicon glyphicon-arrow-down"></span>
                                 </a>
                             </th:block>
+                            <!--/{cid}/{tid}/comments/delete/{id}-->
+                            <th:block th:if="${account != null and comment.account.id == account.id}">
+                                <div class="delete">
+                                    <a class="btn btn-danger" style="margin-top: 10px; width: 100%;"
+                                       th:href="@{/threads/__${thread.threadCategory.id}__/__${thread.id}__/comments/delete/__${comment.id}__}">
+                                        Delete comment
+                                    </a>
 
+                                </div>
+
+                            </th:block>
                         </div>
                     </div>
                     <div class="comment-text" th:text="${comment.text}"></div>

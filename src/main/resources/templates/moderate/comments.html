@@ -1,0 +1,36 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layouts/moderation">
+
+<head>
+    <title>Comments</title>
+</head>
+
+<body>
+<th:block layout:fragment="content">
+    <h2>Manage comments</h2>
+    <p>Moderate comments</p>
+    <table class="comment-table table table-striped table-bordered" cellspacing="0" width="100%">
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>Created by</th>
+            <th>Creation date</th>
+            <th>Rating</th>
+            <th>Text</th>
+            <th>Is hidden</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+    </table>
+</th:block>
+
+<!-- Initialize javascript for this page -->
+<script type="application/javascript" layout:fragment="javascript">
+    $(function () {
+        CommentModerate.initCommentModerate();
+    });
+</script>
+
+</body>
+</html>

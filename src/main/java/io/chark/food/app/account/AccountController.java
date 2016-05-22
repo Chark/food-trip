@@ -1,6 +1,7 @@
 package io.chark.food.app.account;
 
 import io.chark.food.domain.authentication.account.Account;
+import io.chark.food.domain.extras.Color;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -15,6 +16,7 @@ import javax.validation.Valid;
 public class AccountController {
 
     private final AccountService accountService;
+
 
     @Autowired
     public AccountController(AccountService accountService) {
