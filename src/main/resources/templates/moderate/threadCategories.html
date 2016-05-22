@@ -1,0 +1,35 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layouts/moderation">
+
+<head>
+    <title>Thread categories</title>
+</head>
+
+<body>
+<th:block layout:fragment="content">
+    <h2>Manage threads categories</h2>
+    <p>Moderate threads categories. You can create a new you by clicking <a th:href="@{/moderate/threads/categories/edit/0}">here</a> </p>
+    <table class="thread-categories-table table table-striped table-bordered" cellspacing="0" width="100%">
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Creation date</th>
+            <th>Edit date</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+    </table>
+</th:block>
+
+<!-- Initialize javascript for this page -->
+<script type="application/javascript" layout:fragment="javascript">
+    $(function () {
+        ThreadCategoryModerate.initThreadCategoryModerate();
+    });
+</script>
+
+</body>
+</html>

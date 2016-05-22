@@ -13,6 +13,7 @@
         <div class="forum">
             <div class="page-header">
                 <h1 th:text="${category.name}"></h1>
+                <div style="padding: 10px;" th:text="${category.description}"></div>
                 <th:block th:switch="${canEdit}">
                     <a th:case="${true}"
                        th:href="@{/threads/list/__${category.id}__/thread/control/0}"

@@ -49,7 +49,6 @@ public class ThreadService {
         thread.setAccount(threadDetails.getAccount());
         thread.setRegistrationRequired(threadDetails.isRegistrationRequired());
         thread.setThreadLink(threadDetails.getThreadLink());
-        thread.setEditDate(new Date());
         try {
             LOGGER.debug("Updating Thread{id={}} details", thread.getId());
             return Optional.ofNullable(threadRepository.save(thread));
@@ -140,7 +139,7 @@ public class ThreadService {
         }
         if (id <= 0) {
 
-            ThreadCategory threadCategory = threadCategoryService.getThreadCategory(id);
+            ThreadCategory threadCategory = threadCategoryService.getThreadCategory(cid);
 
             optional = register(currentAccount,
                     threadDetails.getTitle(),
@@ -166,7 +165,6 @@ public class ThreadService {
         thread.setDescription(threadDetails.getDescription());
         thread.setAccount(currentAccount);
         thread.setThreadLink(threadDetails.getThreadLink());
-
 
         try {
             thread = threadRepository.save(thread);

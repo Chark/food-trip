@@ -12,6 +12,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -49,6 +50,24 @@ public class ThreadCategoryService {
 
     public List<ThreadCategory> getThreadCategories (){
         return threadCategoryRepository.findAll(new Sort(Sort.Direction.ASC, "id"));
+    }
+
+
+    public Optional<ThreadCategory> update(ThreadCategory threadCategory, ThreadCategory threadCategoryDetails) {
+
+        // Update other stuff.
+        threadCategory.setDescription(threadCategory.getDescription());
+        threadCategory.setName(threadCategoryDetails.getName());
+        threadCategory.setEditDate(new Date());
+        try {
+            LOGGER.debug("Updating Thread Category{id={}} details", threadCategory.getId());
+            return Optional.ofNullable(threadCategoryRepository.save(threadCategory));
+        } catch (DataIntegrityViolationException e) {
+            LOGGER.error("Could not update thread category", e);
+
+            auditService.error("Failed to update thread category details");
+            return Optional.empty();
+        }
     }
 
     public ThreadCategory getThreadCategory(long id) {
