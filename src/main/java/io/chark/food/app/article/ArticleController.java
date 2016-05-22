@@ -3,6 +3,7 @@ package io.chark.food.app.article;
 import io.chark.food.app.account.AccountService;
 import io.chark.food.app.article.category.ArticleCategoryService;
 import io.chark.food.app.comment.CommentService;
+import io.chark.food.app.moderate.comment.CommentModerationService;
 import io.chark.food.domain.article.Article;
 import io.chark.food.domain.article.category.ArticleCategory;
 import io.chark.food.domain.authentication.account.Account;
@@ -11,11 +12,13 @@ import io.chark.food.domain.comment.Comment;
 import io.chark.food.domain.thread.Thread;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -29,17 +32,20 @@ public class ArticleController {
     private final AccountService accountService;
     private final ArticleCategoryService categoryService;
     private final CommentService commentService;
+    private final CommentModerationService commentModerationService;
 
     @Autowired
     public ArticleController(ArticleService articleService,
                              ArticleCategoryService categoryService,
                              AccountService accountService,
-                             CommentService commentService) {
+                             CommentService commentService,
+                             CommentModerationService commentModerationService) {
 
         this.articleService = articleService;
         this.categoryService = categoryService;
         this.accountService = accountService;
         this.commentService = commentService;
+        this.commentModerationService = commentModerationService;
     }
 
     /**
@@ -52,6 +58,7 @@ public class ArticleController {
         Account currAccount;
         try {
             currAccount = accountService.getAccount();
+            model.addAttribute("account",currAccount);
             canVote = true;
         } catch (Exception e) {
 
@@ -188,6 +195,12 @@ public class ArticleController {
         }
 
         return "redirect:/articles/" + id;
+    }
+
+    @RequestMapping(value = "/{aid}/comments/delete/{id}", method = RequestMethod.GET)
+    public String delete(@PathVariable long id,@PathVariable long aid,HttpServletRequest request) {
+        commentModerationService.delete(id);
+        return "redirect:/articles/" + aid;
     }
 
 }

@@ -1,0 +1,53 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layouts/moderation">
+
+<head>
+    <title>Thread</title>
+</head>
+
+<body>
+<th:block layout:fragment="content">
+    <form name="commentForm"
+          method="POST"
+          th:attr="data-thread-id=${comment.id}"
+          th:action="@{/moderate/comments/edit/__${comment.id}__}"
+          th:object="${comment}">
+        <h2>Comment Details</h2>
+        <div class="row">
+
+            <div class="col-md-6">
+
+                <div class="row">
+                    <label class="col-xs-12 control-label">
+                        Description
+                <textarea th:text="*{text}" name="text" rows="3" class="form-control"
+                          placeholder="Enter comment description"></textarea>
+                    </label>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <div class="row">
+                        <label class="col-xs-12">
+                            Is comment hidden
+                            <select name="hidden" class="form-control">
+                                <option th:selected="*{hidden}" value="true">Yes</option>
+                                <option th:selected="*{!hidden}" value="false">No</option>
+                            </select>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-success">Save</button>
+        <a th:href="@{/moderate/comments}" class="btn btn-danger">Cancel</a>
+    </form>
+</th:block>
+
+<!-- Initialize javascript for this page -->
+<script type="application/javascript" layout:fragment="javascript">
+</script>
+</body>
+</html>

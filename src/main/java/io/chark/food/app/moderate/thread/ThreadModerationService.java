@@ -17,17 +17,17 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class ThreadAdministrationService {
+public class ThreadModerationService {
 
     private final ThreadRepository threadRepository;
     private final ThreadService threadService;
     private final AuditService auditService;
     private final AccountService accountService;
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ThreadAdministrationService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ThreadModerationService.class);
 
     @Autowired
-    public ThreadAdministrationService(ThreadRepository threadRepository, AuditService auditService, ThreadService threadService, AccountService accountService) {
+    public ThreadModerationService(ThreadRepository threadRepository, AuditService auditService, ThreadService threadService, AccountService accountService) {
         this.threadRepository = threadRepository;
         this.auditService = auditService;
         this.threadService = threadService;

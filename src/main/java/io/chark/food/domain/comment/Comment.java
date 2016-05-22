@@ -1,5 +1,6 @@
 package io.chark.food.domain.comment;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.chark.food.domain.BaseEntity;
 import io.chark.food.domain.authentication.account.Account;
 import io.chark.food.domain.thread.Thread;
@@ -16,20 +17,21 @@ import java.util.List;
 @Entity
 public class Comment extends BaseEntity {
 
-
     private String text;
     private String link;
 
     @ManyToOne
     private Account account;
 
-    @ManyToOne
-    private Thread thread;
 
     @Column(nullable = false)
     private Date creationDate = new Date();
     private Date editDate = new Date();
 
+    private int rating;
+
+
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @OneToMany
     private List<Rating> ratings = new ArrayList<>();
 
@@ -42,19 +44,14 @@ public class Comment extends BaseEntity {
         this.text = text;
         this.hidden = hidden;
         this.account = account;
+        this.rating = 0;
     }
 
-    public Thread getThread() {
-        return thread;
-    }
 
     public String getText() {
         return text;
     }
 
-    public void setThread(Thread thread) {
-        this.thread = thread;
-    }
 
     public void setText(String text) {
         this.text = text;
@@ -78,6 +75,10 @@ public class Comment extends BaseEntity {
         return ratings;
     }
 
+    public int getRating() {
+        return rating;
+    }
+
     public int getVotes() {
         int score = 0;
         for (Rating r : ratings) {
@@ -90,6 +91,12 @@ public class Comment extends BaseEntity {
     }
 
     public void addRaiting(Rating rating) {
+        if(rating.isPositive()){
+            this.rating++;
+        }else{
+            this.rating--;
+        }
+
         this.ratings.add(rating);
     }
 
@@ -115,5 +122,21 @@ public class Comment extends BaseEntity {
 
     public Account getAccount() {
         return account;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Comment comment = (Comment) o;
+
+        return getId() == comment.getId();
+
+    }
+
+    @Override
+    public int hashCode() {
+        return (int) (getId() ^ (getId() >>> 32));
     }
 }

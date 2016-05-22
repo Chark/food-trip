@@ -60,7 +60,7 @@
                 <div class="comment">
                     <div class="top">
                         <div class="user-info">
-                            <div class="username" th:text="${comment.account.prettyUsername}"></div>
+                            <div class="username" th:style="'color: ' + ${comment.account.color}"  th:text="${comment.account.prettyUsername}"></div>
                             <div class="date" th:text="${comment.monthYear}"></div>
                             <!--<th:block th:switch="*{}">-->
                             <!--<a-->
@@ -68,7 +68,7 @@
                             <!--class="btn btn-warning">Edit comment</a>-->
                             <!--</th:block>-->
                         </div>
-                        <div class="votes">
+                        <div class="votes" style="display: inline-block;">
                             <th:block th:switch="*{canVote}">
                                 <a th:case="${true}"
                                    th:href="@{/threads/comment/__${comment.id}__/1}"
@@ -84,6 +84,15 @@
                                    class="btn btn-danger">
                                     <span class=" glyphicon glyphicon-arrow-down"></span>
                                 </a>
+                            </th:block>
+                            <th:block th:if="${account != null and comment.account.id == account.id}">
+                                <div class="delete">
+                                    <a class="btn btn-danger" style="margin-top: 10px; width: 100%;"  th:href="@{/articles/__${article.id}__/comments/delete/__${comment.id}__}">
+                                        Delete comment
+                                    </a>
+
+                                </div>
+
                             </th:block>
 
                         </div>

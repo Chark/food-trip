@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonView;
 import io.chark.food.domain.BaseEntity;
 import io.chark.food.domain.authentication.permission.Permission;
+import io.chark.food.domain.extras.Color;
 import io.chark.food.domain.thread.Thread;
 import io.chark.food.domain.restaurant.Invitation;
 import io.chark.food.domain.restaurant.Restaurant;
@@ -50,6 +51,7 @@ public class Account extends BaseEntity implements UserDetails {
     private Date registrationDate;
 
     // Karma points?
+    @Column(name = "points", nullable = false)
     private int points;
 
     private boolean enabled;
@@ -72,11 +74,37 @@ public class Account extends BaseEntity implements UserDetails {
     public Account() {
     }
 
+
     public Account(String username, String email, String password) {
         this.registrationDate = new Date();
         this.setUsername(username);
         this.setPassword(password);
         this.setEmail(email);
+        this.points = 0;
+    }
+
+
+    public Color getColor() {
+        if (points > 50 && points < 100) {
+            return Color.BLUE;
+        } else if (points >= 100 && points < 200) {
+            return Color.RED;
+        } else if (points >= 200) {
+            return Color.GREEN;
+        }
+        return Color.BLACK;
+    }
+
+    public void setPoints(int points) {
+        this.points = points;
+    }
+
+    public void increaseKarmaPoints(boolean isUpvote) {
+        if (isUpvote) {
+            this.points++;
+        } else {
+            this.points--;
+        }
     }
 
     public void setPassword(String password) {

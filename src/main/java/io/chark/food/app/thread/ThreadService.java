@@ -114,7 +114,6 @@ public class ThreadService {
 
 
     public void addComment(long id, Comment comment){
-
         Thread t = threadRepository.findOne(id);
         t.addComment(comment);
     }
@@ -186,6 +185,6 @@ public class ThreadService {
     }
 
     public List<Thread> getThreads() {
-        return threadRepository.findAll(new Sort(Sort.Direction.ASC, "name"));
+        return threadRepository.findAll(new Sort(Sort.Direction.ASC, "title"));
     }
 }

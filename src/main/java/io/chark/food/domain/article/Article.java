@@ -40,12 +40,12 @@ public class Article extends BaseEntity {
     @ManyToOne
     private Restaurant restaurant;
 
-    @OneToMany
-    @OrderBy("creationDate DESC")
-    private List<Comment> comments = new ArrayList<>();
-
     public Article() {
     }
+
+    @OneToMany(orphanRemoval = true)
+    @OrderBy("rating DESC")
+    private List<Comment> comments = new ArrayList<>();
 
     public Article(String title,
                    String description,
@@ -59,6 +59,10 @@ public class Article extends BaseEntity {
         this.shortDescription = shortDescription;
         this.metaKeywords = metaKeywords;
         this.metaDescription = metaDescription;
+    }
+
+    public void removeComment(Comment comment) {
+        this.comments.remove(comment);
     }
 
     public List<Comment> getComments() {

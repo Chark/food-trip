@@ -39,7 +39,7 @@ public class Thread extends BaseEntity {
 
 
     @OneToMany
-    @OrderBy("creationDate DESC")
+    @OrderBy("rating DESC")
     private List<Comment> comments;
 
     public Thread() {
@@ -49,7 +49,9 @@ public class Thread extends BaseEntity {
         return editDate;
     }
 
-
+    public void removeComment(Comment comment) {
+        this.comments.remove(comment);
+    }
 
     public int getCurrentlyViewing() {
         return currentlyViewing;

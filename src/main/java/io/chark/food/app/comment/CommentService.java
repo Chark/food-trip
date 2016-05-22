@@ -62,7 +62,6 @@ public class CommentService {
 
     public Optional<Comment> update(Comment comment, Comment commentDetails) {
         comment.setAccount(commentDetails.getAccount());
-        comment.setThread(commentDetails.getThread());
         try {
             LOGGER.debug("Updating Comment{id={}} ", comment.getId());
             return Optional.ofNullable(commentRepository.save(comment));

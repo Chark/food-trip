@@ -184,3 +184,11 @@ body {
     padding: 10px 0;
 
 }
+
+.popular-users .header > div{
+    border: 1px solid #dddddd;
+}
+
+.popular-users .list .item > div{
+    border: 1px solid #dddddd;
+}

@@ -20,7 +20,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -30,6 +33,8 @@ import static io.chark.food.domain.extras.Color.*;
 @Service
 public class AccountService implements UserDetailsService {
 
+    public static final int MAX_TOP_ACCOUNT_COUNT = 10;
+
     private static final Logger LOGGER = LoggerFactory.getLogger(AccountService.class);
 
     private final PermissionRepository permissionRepository;
@@ -37,6 +42,9 @@ public class AccountService implements UserDetailsService {
     private final AccountRepository accountRepository;
     private final PasswordEncoder passwordEncoder;
     private final AuditService auditService;
+
+    @PersistenceContext
+    private EntityManager entityManager;
 
     @Autowired
     public AccountService(PermissionRepository permissionRepository,
@@ -314,5 +322,15 @@ public class AccountService implements UserDetailsService {
         } else {
             LOGGER.warn("Default account: {} already exists", username);
         }
+    }
+
+    public List<Account> getTop10Accounts() {
+        return getTopAccounts(MAX_TOP_ACCOUNT_COUNT);
+    }
+
+    public List<Account> getTopAccounts(int max){
+        return entityManager.createQuery("SELECT a FROM Account a ORDER BY a.points DESC", Account.class)
+                .setMaxResults(max)
+                .getResultList();
     }
 }

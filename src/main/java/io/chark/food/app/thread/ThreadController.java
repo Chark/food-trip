@@ -2,6 +2,7 @@ package io.chark.food.app.thread;
 
 import io.chark.food.app.account.AccountService;
 import io.chark.food.app.comment.RatingService;
+import io.chark.food.app.moderate.comment.CommentModerationService;
 import io.chark.food.app.thread.categories.ThreadCategoryService;
 import io.chark.food.domain.authentication.account.Account;
 import io.chark.food.domain.authentication.permission.Permission;
@@ -13,6 +14,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import javax.servlet.http.HttpServletRequest;
+
 
 @Controller
 @RequestMapping(value = "/threads")
@@ -20,11 +23,13 @@ public class ThreadController {
 
     private final ThreadService threadService;
     private final AccountService accountService;
+    private final CommentModerationService commentModerationService;
 
     @Autowired
-    public ThreadController(ThreadService threadService, AccountService accountService) {
+    public ThreadController(ThreadService threadService, AccountService accountService, CommentModerationService commentModerationService) {
         this.threadService = threadService;
         this.accountService = accountService;
+        this.commentModerationService = commentModerationService;
     }
 
     @RequestMapping(value = "/list/{cid}/thread/{tid}", method = RequestMethod.GET)
@@ -39,6 +44,7 @@ public class ThreadController {
                     currAccount.hasPermission(Permission.Authority.ROLE_MODERATOR) ||
                     currAccount.hasPermission(Permission.Authority.ROLE_ADMIN)) {
                 canEdit = true;
+                model.addAttribute("account", currAccount);
             }
 
             canComment = true;
@@ -98,6 +104,13 @@ public class ThreadController {
             return "thread/thread_create";
         }
         return "redirect:/threads/list/" + cid;
+    }
+
+
+    @RequestMapping(value = "/{cid}/{tid}/comments/delete/{id}", method = RequestMethod.GET)
+    public String delete(@PathVariable long id, @PathVariable long cid, @PathVariable long tid) {
+        commentModerationService.delete(id);
+        return "redirect:/threads/list/" + cid + "/thread/" + tid;
     }
 
 
