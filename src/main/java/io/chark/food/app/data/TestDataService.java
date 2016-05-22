@@ -383,6 +383,9 @@ public class TestDataService {
 
         List<Article> articles = new ArrayList<>();
         for (String title : this.articleTitleList) {
+
+
+
             Optional<Article> article = articleService
                     .register(new Article(title,
                             DEFAULT_DESCRIPTION,
@@ -399,6 +402,7 @@ public class TestDataService {
             int num = i % articleCategories.size();
 
             Optional<Article> optional = articleService.addCategory(articles.get(i), articleCategories.get(num));
+
             if (optional.isPresent()) {
                 articles.set(i, optional.get());
             }

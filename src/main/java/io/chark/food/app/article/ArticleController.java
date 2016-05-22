@@ -1,15 +1,23 @@
 package io.chark.food.app.article;
 
+import io.chark.food.app.account.AccountService;
 import io.chark.food.app.article.category.ArticleCategoryService;
+import io.chark.food.app.comment.CommentService;
 import io.chark.food.domain.article.Article;
 import io.chark.food.domain.article.category.ArticleCategory;
+import io.chark.food.domain.authentication.account.Account;
+import io.chark.food.domain.authentication.permission.Permission;
+import io.chark.food.domain.comment.Comment;
+import io.chark.food.domain.thread.Thread;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,25 +26,75 @@ import java.util.Optional;
 public class ArticleController {
 
     private final ArticleService articleService;
+    private final AccountService accountService;
     private final ArticleCategoryService categoryService;
+    private final CommentService commentService;
 
     @Autowired
     public ArticleController(ArticleService articleService,
-                             ArticleCategoryService categoryService) {
+                             ArticleCategoryService categoryService,
+                             AccountService accountService,
+                             CommentService commentService) {
 
         this.articleService = articleService;
         this.categoryService = categoryService;
+        this.accountService = accountService;
+        this.commentService = commentService;
     }
 
     /**
      * View article.
      */
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public String list(@PathVariable long id, Model model) {
+    public String list(@PathVariable long id, Model model, HttpServletRequest request) {
+
+        boolean canVote = false;
+        Account currAccount;
+        try {
+            currAccount = accountService.getAccount();
+            canVote = true;
+        } catch (Exception e) {
+
+        }
+
+        model.addAttribute("canVote", canVote);
+
 
         Article article = articleService.getArticle(id);
         model.addAttribute("article", article);
         return "article/article";
+    }
+
+    @RequestMapping(value = "/{aid}/comment", method = RequestMethod.GET)
+    public String controlComment(@PathVariable long aid, Model model, HttpServletRequest request) {
+        Comment comment;
+
+        Account currAccount;
+        try {
+            currAccount = accountService.getAccount();
+        } catch (DataIntegrityViolationException e) {
+            return "redirect:" + request.getHeader("Referer");
+        }
+
+        comment = new Comment();
+        model.addAttribute("article", aid);
+        model.addAttribute("comment", comment);
+        return "comment/article_create";
+    }
+
+
+    @RequestMapping(value = "/{aid}/comment", method = RequestMethod.POST)
+    public String saveComment(@PathVariable long aid, Comment c, Model model, HttpServletRequest request) {
+
+        if (!commentService.saveCommentArticle(aid, c).isPresent()) {
+            model.addAttribute("error", "Failed to create thread," +
+                    " please double check the details you've entered.");
+
+            model.addAttribute("comment", c);
+
+            return "thread/thread_create";
+        }
+        return "redirect:/articles/" + aid;
     }
 
     /**
