@@ -13,6 +13,7 @@ import org.hibernate.annotations.FetchMode;
 import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -52,6 +53,7 @@ public class Restaurant extends BaseEntity {
 
     @JsonManagedReference
     @OneToMany(orphanRemoval = true)
+    @OrderBy("validThrough asc")
     private List<Offer> offers;
 
 
@@ -172,7 +174,7 @@ public class Restaurant extends BaseEntity {
 
     public void addOffer(Offer offer)
     {
-        offers.add(offer);
+            offers.add(offer);
     }
 
 

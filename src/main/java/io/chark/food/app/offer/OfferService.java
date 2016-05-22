@@ -15,16 +15,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
-import java.util.Random;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import java.util.*;
 
 @Service
 public class OfferService {
     private static final Logger LOGGER = LoggerFactory.getLogger(OfferService.class);
     private final OfferRepository offerRepository;
     private final RestaurantService restaurantService;
+
+    @PersistenceContext
+    private EntityManager entityManager;
 
     @Autowired
     public OfferService(OfferRepository offerRepository, AuditService auditService, RestaurantService restaurantService) {
@@ -71,6 +73,11 @@ public class OfferService {
         return offerRepository.findByRestaurantId(restaurant.getId());
     }
 
+    public List<Offer> getAllOffers()
+    {
+        return offerRepository.findAll();
+    }
+
 
     public Optional<Offer> update(long id, Offer updateDetails) {
         Offer offer = offerRepository.findOne(id);
@@ -95,6 +102,10 @@ public class OfferService {
         offerRepository.delete(id);
     }
 
-
+    public List<Offer> getnOffers(int max){
+        return entityManager.createQuery("SELECT a FROM Offer a ORDER BY a.validThrough asc", Offer.class)
+                .setMaxResults(max)
+                .getResultList();
+    }
 
 }

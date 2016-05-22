@@ -45,6 +45,7 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
             .antMatchers(
                     "/",
                     "/home",
+                    "/offers",
                     "/register",
                     "/fonts/**",
                     "/images/**",
