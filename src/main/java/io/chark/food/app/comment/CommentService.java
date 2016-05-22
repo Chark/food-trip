@@ -2,7 +2,10 @@ package io.chark.food.app.comment;
 
 import io.chark.food.app.account.AccountService;
 import io.chark.food.app.administrate.audit.AuditService;
+import io.chark.food.app.article.ArticleService;
 import io.chark.food.app.thread.ThreadService;
+import io.chark.food.domain.article.Article;
+import io.chark.food.domain.article.ArticleRepository;
 import io.chark.food.domain.authentication.account.Account;
 import io.chark.food.domain.comment.Comment;
 import io.chark.food.domain.comment.CommentRepository;
@@ -24,15 +27,17 @@ public class CommentService {
     private final ThreadRepository threadRepository;
     private final AuditService auditService;
     private final RatingService ratingService;
+    private final ArticleRepository articleRepository;
     private final AccountService accountService;
 
     @Autowired
-    public CommentService(CommentRepository commentRepository, AuditService auditService, RatingService ratingService, AccountService accountService, ThreadRepository threadRepository) {
+    public CommentService(CommentRepository commentRepository, AuditService auditService, RatingService ratingService, AccountService accountService, ThreadRepository threadRepository, ArticleRepository articleRepository) {
         this.commentRepository = commentRepository;
         this.auditService = auditService;
         this.ratingService = ratingService;
         this.accountService = accountService;
         this.threadRepository = threadRepository;
+        this.articleRepository = articleRepository;
     }
 
     public Optional<Comment> register(Account account, String text, boolean isHidden) {
@@ -118,6 +123,54 @@ public class CommentService {
             return Optional.empty();
         }
     }
+
+
+    public Optional<Comment> saveCommentArticle(long aid, Comment commentDetails) {
+
+        Optional<Comment> optional;
+        Account currentAccount = accountService.getAccount();
+        if (currentAccount == null) {
+            LOGGER.error("Could not save thread. User not found");
+
+            auditService.error("Failed to save Thread. User not found.");
+            return Optional.empty();
+        }
+
+            Article article = articleRepository.findOne(aid);
+
+            optional = register(currentAccount,
+                    commentDetails.getText(),
+                    commentDetails.isHidden()
+            );
+            article.addComment(optional.get());
+
+
+
+        if (!optional.isPresent()) {
+            return Optional.empty();
+        }
+
+        optional = update(optional.get(), commentDetails);
+        Article article1 = articleRepository.findOne(aid);
+
+        Comment comment = optional.get();
+        comment.setAccount(currentAccount);
+        comment.setEditDate(new Date());
+        comment.setText(commentDetails.getText());
+        try {
+            comment = commentRepository.save(comment);
+            LOGGER.debug("Article Saved comment{id={}}", comment.getId());
+
+            return Optional.of(comment);
+        } catch (DataIntegrityViolationException e) {
+            LOGGER.error("Could not save article", e);
+
+            auditService.error("Failed to save article comment");
+            return Optional.empty();
+        }
+    }
+
+
 
     public Comment upvoteComment(long id, boolean isPositive) {
         Comment comment = commentRepository.findOne(id);

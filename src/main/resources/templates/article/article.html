@@ -42,7 +42,59 @@
 
         <strong th:text="${article.shortDescription}"></strong>
         <p th:text="${article.description}"></p>
+
+
+        <div class="thread-list">
+            <div><h3>Comments</h3></div>
+            <th:block th:switch="*{canVote}">
+                <th:block th:case="${true}">
+                    <div style='padding: 10px 0;'>
+                        <a
+                                th:href="@{/articles/__${article.id}__/comment}"
+                                class="btn btn-success">Comment</a>
+                    </div>
+                </th:block>
+
+            </th:block>
+            <th:block th:each="comment : ${article.comments}">
+                <div class="comment">
+                    <div class="top">
+                        <div class="user-info">
+                            <div class="username" th:text="${comment.account.prettyUsername}"></div>
+                            <div class="date" th:text="${comment.monthYear}"></div>
+                            <!--<th:block th:switch="*{}">-->
+                            <!--<a-->
+                            <!--th:href="@{/threads/list/__${thread.threadCategory.id}__/thread/control/__${thread.id}__/comment/__${comment.id}__}"-->
+                            <!--class="btn btn-warning">Edit comment</a>-->
+                            <!--</th:block>-->
+                        </div>
+                        <div class="votes">
+                            <th:block th:switch="*{canVote}">
+                                <a th:case="${true}"
+                                   th:href="@{/threads/comment/__${comment.id}__/1}"
+                                   class="btn btn-success">
+                                    <span class=" glyphicon glyphicon-arrow-up"></span>
+                                </a>
+                            </th:block>
+                            <span style="padding: 0px 15px;" class="score">Rating: <span
+                                    th:text="${comment.votes}"></span></span>
+                            <th:block th:switch="*{canVote}">
+                                <a th:case="${true}"
+                                   th:href="@{/threads/comment/__${comment.id}__/0}"
+                                   class="btn btn-danger">
+                                    <span class=" glyphicon glyphicon-arrow-down"></span>
+                                </a>
+                            </th:block>
+
+                        </div>
+                    </div>
+                    <div class="comment-text" th:text="${comment.text}"></div>
+                </div>
+            </th:block>
+
+        </div>
     </div>
+
 </th:block>
 
 </body>

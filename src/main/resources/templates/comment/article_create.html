@@ -1,0 +1,46 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layouts/default">
+
+<head>
+    <title>Thread control</title>
+</head>
+
+<body>
+<th:block layout:fragment="content">
+    <div class="container">
+        <div class="col-md-6 col-md-push-3">
+            <form name="commentForm"
+                  method="POST"
+                  th:attr="data-comment-id=${comment.id}"
+                  th:action="@{/articles/__${article}__/comment}"
+                  th:object="${comment}">
+
+                <div class="row">
+
+                    <h2>Comments</h2>
+
+                    <div class="row">
+                        <label class="col-xs-12 control-label">
+                            Comment text
+                        <textarea th:text="*{text}" name="text" rows="3" class="form-control"
+                                  placeholder="Enter comment"></textarea>
+                        </label>
+                    </div>
+                </div>
+                <div style="padding: 15px 0px;">
+                    <button type="submit" class="btn btn-success">Save</button>
+                    <a th:href="@{/articles/__${article}__/comment}" class="btn btn-danger">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</th:block>
+
+
+<!-- Initialize javascript for this page -->
+<script type="application/javascript" layout:fragment="javascript">
+</script>
+
+</body>
+</html>

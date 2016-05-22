@@ -2,12 +2,17 @@ package io.chark.food.app.restaurant;
 
 import io.chark.food.app.offer.OfferService;
 import io.chark.food.app.restaurant.details.BankService;
+import io.chark.food.app.restaurant.location.CityService;
+import io.chark.food.app.restaurant.location.LocationService;
 import io.chark.food.domain.audit.RestaurantAuditMessage;
 import io.chark.food.domain.offer.Offer;
 import io.chark.food.domain.restaurant.Bank;
 import io.chark.food.domain.restaurant.Invitation;
 import io.chark.food.domain.restaurant.Restaurant;
 import io.chark.food.domain.restaurant.RestaurantDetails;
+import io.chark.food.domain.restaurant.location.City;
+import io.chark.food.domain.restaurant.location.Location;
+import io.chark.food.domain.restaurant.location.LocationRepository;
 import io.chark.food.util.exception.BadInputException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -29,17 +34,24 @@ public class RestaurantController {
     private final RestaurantAuditService auditService;
     private final BankService bankService;
     private final OfferService offerService;
+    private final CityService cityService;
+    private final LocationRepository locationRepository;
 
     @Autowired
     public RestaurantController(RestaurantService restaurantService,
                                 RestaurantAuditService auditService,
                                 BankService bankService,
                                 OfferService offerService) {
+                                BankService bankService,
+                                CityService cityService,
+                                LocationRepository locationRepository) {
 
         this.restaurantService = restaurantService;
         this.auditService = auditService;
         this.bankService = bankService;
         this.offerService = offerService;
+        this.cityService = cityService;
+        this.locationRepository = locationRepository;
     }
 
     /**
@@ -63,8 +75,12 @@ public class RestaurantController {
     public String restaurant(Model model) {
         Restaurant rest = restaurantService.getRestaurant();
         List<Bank> banks = bankService.getBanks();
+        if(rest.getLocation() == null){
+            rest.setLocation(new Location());
+        }
         model.addAttribute("restaurant", rest);
         model.addAttribute("banks", banks);
+        model.addAttribute("cities", cityService.getCities());
         model.addAttribute("offer", new Offer());
 
         return "restaurant/profile";
@@ -76,7 +92,10 @@ public class RestaurantController {
      * @return restaurant profile template.
      */
     @RequestMapping(method = RequestMethod.POST)
-    public String restaurant(Restaurant details, Model model) {
+    public String restaurant(Restaurant details,  Model model) {
+
+
+
         if (restaurantService.update(details).isPresent()) {
             // Success, redirect to profile page.
             return "redirect:/restaurant";

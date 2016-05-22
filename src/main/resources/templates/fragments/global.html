@@ -138,8 +138,8 @@
             <li><a th:href="@{/administrate/audit}" sec:authorize="hasAuthority('ROLE_ADMIN')">Audit</a></li>
             <li><a th:href="@{/administrate/accounts}" sec:authorize="hasAuthority('ROLE_ADMIN')">Accounts</a></li>
             <li><a th:href="@{/administrate/articles/categories}" sec:authorize="hasAuthority('ROLE_ADMIN')">Article Categories</a></li>
-            <li><a th:href="@{/moderate/threads}" sec:authorize="hasAuthority('ROLE_MODERATOR')">Threads</a></li>
             <li><a th:href="@{/administrate/articles}" sec:authorize="hasAuthority('ROLE_ADMIN')">Articles</a></li>
+            <li><a th:href="@{/moderate/threads}" sec:authorize="hasAuthority('ROLE_MODERATOR')">Threads</a></li>
         </ul>
     </div>
 </th:block>

@@ -1,11 +1,15 @@
 package io.chark.food.app.article;
 
+import io.chark.food.app.account.AccountService;
 import io.chark.food.app.administrate.audit.AuditService;
+import io.chark.food.app.comment.CommentService;
 import io.chark.food.app.restaurant.RestaurantService;
 import io.chark.food.domain.article.Article;
 import io.chark.food.domain.article.category.ArticleCategory;
 import io.chark.food.domain.article.ArticleRepository;
 import io.chark.food.domain.article.photo.ArticlePhoto;
+import io.chark.food.domain.authentication.account.Account;
+import io.chark.food.domain.comment.Comment;
 import io.chark.food.domain.restaurant.Restaurant;
 import io.chark.food.util.exception.NotFoundException;
 import io.chark.food.util.exception.UnauthorizedException;
@@ -16,6 +20,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,16 +31,22 @@ public class ArticleService {
 
     private final ArticleRepository articleRepository;
     private final RestaurantService restaurantService;
+    private final CommentService commentService;
+    private final AccountService accountService;
     private final AuditService auditService;
 
     @Autowired
     public ArticleService(ArticleRepository articleRepository,
                           RestaurantService restaurantService,
-                          AuditService auditService) {
+                          AuditService auditService,
+                          CommentService commentService,
+                          AccountService accountService) {
 
         this.articleRepository = articleRepository;
         this.restaurantService = restaurantService;
         this.auditService = auditService;
+        this.commentService = commentService;
+        this.accountService = accountService;
     }
 
     /**
@@ -60,6 +71,14 @@ public class ArticleService {
 
         String title = article.getTitle();
         try {
+            Account account = accountService.loadUserByUsername("admin");
+            for (int j = 0; j < 5; j++) {
+
+                article.addComment(commentService.register(account, "Text text text" + j, false).get());
+
+            }
+
+
             article = articleRepository.save(article);
             LOGGER.debug("Created new user Article{title='{}'}", title);
 
@@ -71,6 +90,13 @@ public class ArticleService {
             return Optional.empty();
         }
         return Optional.of(article);
+    }
+
+    public void addComment(Article a, Comment c) {
+        Article article = articleRepository.findOne(a.getId());
+        article.addComment(c);
+        articleRepository.save(a);
+
     }
 
     /**

@@ -36,20 +36,20 @@ public class CommentController {
         this.threadService = threadService;
     }
 
-    @RequestMapping(value = "/list/{cid}/thread/{tid}/comment/{comid}/{voteResult}", method = RequestMethod.GET)
-    public String vote(@PathVariable long cid, @PathVariable long tid, @PathVariable long voteResult, @PathVariable long comid, Model model, HttpServletRequest request) {
+    @RequestMapping(value = "/comment/{comid}/{voteResult}", method = RequestMethod.GET)
+    public String vote(@PathVariable long voteResult, @PathVariable long comid, Model model, HttpServletRequest request) {
         Comment comment = commentService.getComment(comid);
         Account account;
         try {
             account = accountService.getAccount();
 
-        }catch (DataIntegrityViolationException e){
-            return "redirect:/threads/list/" + cid + "/thread/" + tid;
+        } catch (DataIntegrityViolationException e) {
+            return "redirect:" + request.getHeader("Referer");
         }
         List<Rating> ratings = comment.getRatings();
         for (Rating r : ratings) {
             if (r.getAccount().getId() == account.getId()) {
-                return "redirect:/threads/list/" + cid + "/thread/" + tid;
+                return "redirect:" + request.getHeader("Referer");
             }
         }
         boolean vote = false;
@@ -60,8 +60,12 @@ public class CommentController {
         comment.addRaiting(rating);
         ratingService.register(rating);
 
-        return "redirect:/threads/list/" + cid + "/thread/" + tid;
+        return "redirect:" + request.getHeader("Referer");
     }
+
+
+
+
 
 
     @RequestMapping(value = "/list/{cid}/thread/control/{tid}/comment/{comid}", method = RequestMethod.GET)
@@ -69,9 +73,9 @@ public class CommentController {
         Comment comment;
         boolean canEdit = false;
         Account currAccount;
-        try{
+        try {
             currAccount = accountService.getAccount();
-        }catch (DataIntegrityViolationException e) {
+        } catch (DataIntegrityViolationException e) {
             return "redirect:/threads/list/" + cid + "thread/" + tid;
         }
 
@@ -99,6 +103,9 @@ public class CommentController {
         model.addAttribute("canEdit", canEdit);
         return "comment/thread_create";
     }
+
+
+
 
     @RequestMapping(value = "/list/{cid}/thread/control/{tid}/comment/{comid}", method = RequestMethod.POST)
     public String saveComment(@PathVariable long cid, @PathVariable long tid, @PathVariable long comid, Comment comment, Model model) {

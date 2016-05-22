@@ -42,6 +42,10 @@
                 <th:block th:include="this :: restaurantInfo('Hygiene index', *{hygieneLevel})"/>
                 <th:block th:include="this :: restaurantInfo('Views', *{viewCount})"/>
                 <th:block th:include="this :: restaurantInfo('Employees', *{accounts.size()})"/>
+                <th:block th:include="this :: restaurantInfo('City', *{location.city.name})"/>
+                <th:block th:include="this :: restaurantInfo('Country', *{location.city.country})"/>
+                <th:block th:include="this :: restaurantInfo('Street', *{location.street})"/>
+                <th:block th:include="this :: restaurantInfo('Danger index', *{location.dangerIndex})"/>
 
                 <h5>Description</h5>
                 <th:block th:if="*{description == null or description == ''}">
@@ -237,6 +241,35 @@
                             </div>
                         </div>
 
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                City
+                                <select name="location.city" class="form-control">
+                                    <!--TODO concat string with counry-->
+                                    <option value="">Not selected</option>
+                                    <th:block th:each="city : ${cities}">
+
+
+                                        <option th:selected="( *{location.city} != null and ${city.id} == *{location.city.id})"
+                                                th:value="${city.id}" th:text="${city.name}"></option>
+                                    </th:block>
+                                </select>
+                            </div>
+
+
+                            <div class="col-md-6">
+                                <th:block th:include="fragments/forms :: input
+                            ('text', *{location.street}, 'location.street', 'Street', 'Enter street')"/>
+                            </div>
+
+
+                            <div class="col-md-6">
+                                <th:block th:include="fragments/forms :: input
+                            ('text', *{location.dangerIndex}, 'location.dangerIndex', 'Danger index', 'Enter danger index')"/>
+                            </div>
+                        </div>
+
                     </div>
                     <button type="submit" class="btn btn-sm btn-success">Save</button>
                 </form>
@@ -246,89 +279,93 @@
 
     </div>
 
-
-    <!-- Accounts under this restaurant -->
-    <div class="col-md-4">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                Employees
-            </div>
-            <div class="panel-body">
-                <table class="accounts-table table table-striped table-bordered" cellspacing="0" width="100%">
-                    <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Username</th>
-                        <th>Email</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr th:each="account : *{accounts}" th:object="${account}">
-                        <td th:text="*{id}"></td>
-                        <td th:text="*{prettyUsername}"></td>
-                        <td th:text="*{email}"></td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-
-
-    <!-- Restaurant invitations -->
-    <div class="col-md-5">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                Invitations
-                <div class="pull-right">
-                    <button class="invite-account btn btn-xs btn-default">Invite</button>
-                </div>
-            </div>
-            <div class="panel-body">
-                <table class="invitations-table table table-striped table-bordered" cellspacing="0" width="100%">
-                    <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Username</th>
-                        <th>Actions</th>
-                    </tr>
-                    </thead>
-                </table>
-            </div>
-        </div>
-
-
-        <!-- Invite new user modal -->
-        <div class="modal fade invite-modal" role="dialog">
-            <div class="modal-dialog">
-
-                <!-- Modal content-->
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title">Invite new user</h4>
+    <div class="col-md-9 col-md-push-3">
+        <div class="row">
+            <!-- Accounts under this restaurant -->
+            <div class="col-md-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        Employees
                     </div>
-                    <form name="inviteForm" method="POST">
-                        <div class="modal-body">
-                            <div class="form-group">
-                                <div class="row">
-                                    <label class="col-xs-12">
-                                        Username
-                                        <input class="form-control" required="required" type="text" name="username"/>
-                                    </label>
-                                </div>
+                    <div class="panel-body">
+                        <table class="accounts-table table table-striped table-bordered" cellspacing="0" width="100%">
+                            <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Username</th>
+                                <th>Email</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="account : *{accounts}" th:object="${account}">
+                                <td th:text="*{id}"></td>
+                                <td th:text="*{prettyUsername}"></td>
+                                <td th:text="*{email}"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- Restaurant invitations -->
+            <div class="col-md-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        Invitations
+                        <div class="pull-right">
+                            <button class="invite-account btn btn-xs btn-default">Invite</button>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <table class="invitations-table table table-striped table-bordered" cellspacing="0"
+                               width="100%">
+                            <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Username</th>
+                                <th>Actions</th>
+                            </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+
+
+                <!-- Invite new user modal -->
+                <div class="modal fade invite-modal" role="dialog">
+                    <div class="modal-dialog">
+
+                        <!-- Modal content-->
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                <h4 class="modal-title">Invite new user</h4>
                             </div>
+                            <form name="inviteForm" method="POST">
+                                <div class="modal-body">
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <label class="col-xs-12">
+                                                Username
+                                                <input class="form-control" required="required" type="text"
+                                                       name="username"/>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="submit" class="btn btn-success">Invite</button>
+                                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                                </div>
+                            </form>
                         </div>
-                        <div class="modal-footer">
-                            <button type="submit" class="btn btn-success">Invite</button>
-                            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                        </div>
-                    </form>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-
 
     <!-- Restaurant audit logs -->
     <div class=" col-md-9">

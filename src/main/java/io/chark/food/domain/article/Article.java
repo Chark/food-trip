@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.chark.food.domain.BaseEntity;
 import io.chark.food.domain.article.category.ArticleCategory;
 import io.chark.food.domain.article.photo.ArticlePhoto;
+import io.chark.food.domain.comment.Comment;
 import io.chark.food.domain.restaurant.Restaurant;
 
 import javax.persistence.*;
@@ -39,6 +40,10 @@ public class Article extends BaseEntity {
     @ManyToOne
     private Restaurant restaurant;
 
+    @OneToMany
+    @OrderBy("creationDate DESC")
+    private List<Comment> comments = new ArrayList<>();
+
     public Article() {
     }
 
@@ -54,6 +59,18 @@ public class Article extends BaseEntity {
         this.shortDescription = shortDescription;
         this.metaKeywords = metaKeywords;
         this.metaDescription = metaDescription;
+    }
+
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
+    }
+
+    public void addComment(Comment c){
+        comments.add(c);
     }
 
     public void setRestaurant(Restaurant restaurant) {

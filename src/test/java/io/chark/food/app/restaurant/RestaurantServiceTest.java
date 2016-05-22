@@ -10,6 +10,7 @@ import io.chark.food.domain.authentication.account.AccountRepository;
 import io.chark.food.domain.restaurant.InvitationRepository;
 import io.chark.food.domain.restaurant.Restaurant;
 import io.chark.food.domain.restaurant.RestaurantRepository;
+import io.chark.food.domain.restaurant.location.LocationRepository;
 import io.chark.food.util.authentication.AuthenticationUtils;
 import io.chark.food.util.exception.NotFoundException;
 import io.chark.food.util.exception.UnauthorizedException;
@@ -52,6 +53,9 @@ public class RestaurantServiceTest {
     private RestaurantDetailsService restaurantDetailsService;
 
     @Resource
+    private LocationRepository locationRepository;
+
+    @Resource
     private PasswordEncoder passwordEncoder;
 
     private RestaurantService service;
@@ -73,7 +77,8 @@ public class RestaurantServiceTest {
                 restaurantRepository,
                 accountService,
                 Mockito.mock(AuditService.class),
-                restaurantDetailsService);
+                restaurantDetailsService,
+                locationRepository);
     }
 
     @After

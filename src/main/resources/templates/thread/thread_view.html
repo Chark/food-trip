@@ -73,7 +73,7 @@
                         <div class="votes">
                             <th:block th:switch="*{canComment}">
                                 <a th:case="${true}"
-                                   th:href="@{/threads/list/__${thread.threadCategory.id}__/thread/__${thread.id}__/comment/__${comment.id}__/1}"
+                                   th:href="@{/threads/comment/__${comment.id}__/1}"
                                    class="btn btn-success">
                                     <span class=" glyphicon glyphicon-arrow-up"></span>
                                 </a>
@@ -82,7 +82,7 @@
                                     th:text="${comment.votes}"></span></span>
                             <th:block th:switch="*{canComment}">
                                 <a th:case="${true}"
-                                   th:href="@{/threads/list/__${thread.threadCategory.id}__/thread/__${thread.id}__/comment/__${comment.id}__/0}"
+                                   th:href="@{/threads/comment/__${comment.id}__/0}"
                                    class="btn btn-danger">
                                     <span class=" glyphicon glyphicon-arrow-down"></span>
                                 </a>

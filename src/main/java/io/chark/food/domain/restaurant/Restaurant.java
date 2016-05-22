@@ -5,6 +5,7 @@ import io.chark.food.domain.BaseEntity;
 import io.chark.food.domain.article.Article;
 import io.chark.food.domain.authentication.account.Account;
 import io.chark.food.domain.offer.Offer;
+import io.chark.food.domain.restaurant.location.Location;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
@@ -51,6 +52,18 @@ public class Restaurant extends BaseEntity {
     @OneToMany
     private List<Offer> offers;
 
+
+    @OneToOne
+    private Location location;
+
+
+    public Location getLocation() {
+        return location;
+    }
+
+    public void setLocation(Location location) {
+        this.location = location;
+    }
 
     @OneToOne()
     private RestaurantDetails restaurantDetails;
