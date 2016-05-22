@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.chark.food.domain.BaseEntity;
 import io.chark.food.domain.article.Article;
 import io.chark.food.domain.authentication.account.Account;
+import io.chark.food.domain.offer.Offer;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
@@ -46,6 +47,9 @@ public class Restaurant extends BaseEntity {
 
     @OneToMany(mappedBy = "restaurant", orphanRemoval = true)
     private List<Article> articles;
+
+    @OneToMany
+    private List<Offer> offers;
 
 
     @OneToOne()
@@ -142,4 +146,18 @@ public class Restaurant extends BaseEntity {
     public RestaurantDetails getRestaurantDetails() {
         return restaurantDetails;
     }
+
+    public List<Offer> getOffers() {
+        return offers;
+    }
+
+    public void setOffers(List<Offer> offers) {
+        this.offers = offers;
+    }
+
+    public void addOffer(Offer offer)
+    {
+        offers.add(offer);
+    }
+
 }

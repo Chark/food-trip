@@ -3,6 +3,7 @@ package io.chark.food.app.restaurant;
 import io.chark.food.FoodTripIntegrationTest;
 import io.chark.food.app.account.AccountService;
 import io.chark.food.app.administrate.audit.AuditService;
+import io.chark.food.app.offer.OfferService;
 import io.chark.food.app.restaurant.details.RestaurantDetailsService;
 import io.chark.food.domain.authentication.account.Account;
 import io.chark.food.domain.authentication.account.AccountRepository;
@@ -33,6 +34,7 @@ public class RestaurantServiceTest {
     private static final String TEST_USERNAME = "Username";
     private static final String TEST_PASSWORD = "password";
     private static final String TEST_EMAIL = "Test@test.com";
+
 
     @Resource
     private RestaurantRepository restaurantRepository;

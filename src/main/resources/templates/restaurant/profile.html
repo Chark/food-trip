@@ -68,10 +68,57 @@
                 <th:block th:include="this :: restaurantInfo('Fax', *{restaurantDetails.fax})"/>
                 <th:block th:include="this :: restaurantInfo('Website', *{restaurantDetails.website})"/>
                 <th:block th:include="this :: restaurantInfo('Mobile', *{restaurantDetails.mobileNumber})"/>
-                <th:block th:include="this :: restaurantInfo('Bank account number', *{restaurantDetails.bankAccountNumber})"/>
+                <th:block
+                        th:include="this :: restaurantInfo('Bank account number', *{restaurantDetails.bankAccountNumber})"/>
                 <th:block th:if="*{restaurantDetails.bank != null}">
                     <th:block th:include="this :: restaurantInfo('Bank', *{restaurantDetails.bank.name})"/>
                 </th:block>
+
+            </div>
+        </div>
+
+        <!-- New offer -->
+        <div class="panel panel-default">
+            <div class="panel-heading clearfix">
+                <div class="pull-left">New offer</div>
+            </div>
+            <div class="panel-body">
+                <form name="offerForm" th:action="@{/restaurant/offer}" th:object="${offer}" method="POST">
+
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <th:block th:include="fragments/forms :: input
+                            ('text', *{headline}, 'headline', 'Offer headline', 'Enter new offer headline')"/>
+                        </div>
+                        <div class="col-md-12">
+
+                            <div class="form-group">
+                                <div class="row">
+                                    <label class="col-xs-12 control-label">
+                                        Description
+                                        <textarea th:text="*{description}"
+                                                  name="description"
+                                                  rows="3"
+                                                  class="form-control"
+                                                  placeholder="Offer description"></textarea>
+                                    </label>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-12">
+                            <th:block th:include="fragments/forms :: input
+                            ('text', *{validThrough}, 'validThrough', 'Valid through', 'Enter expiration date')"/>
+                        </div>
+
+
+                    </div>
+
+
+                    <button type="submit" class="btn btn-sm btn-success">Save</button>
+                </form>
 
             </div>
         </div>
@@ -172,7 +219,7 @@
                                     <th:block th:include="fragments/forms :: input
                             ('text', *{restaurantDetails.bankAccountNumber}, 'restaurantDetails.bankAccountNumber', 'Bank account Number', 'Enter Bank account number')"/>
                                 </div>
-                        </div>
+                            </div>
 
                         </div>
 
@@ -183,7 +230,8 @@
                                 <select name="restaurantDetails.bank" class="form-control">
                                     <option value="">Not selected</option>
                                     <th:block th:each="bank : ${banks}">
-                                        <option th:selected="( *{restaurantDetails.bank} != null and ${bank.id} == *{restaurantDetails.bank.id})"   th:value="${bank.id}" th:text="${bank.name}"></option>
+                                        <option th:selected="( *{restaurantDetails.bank} != null and ${bank.id} == *{restaurantDetails.bank.id})"
+                                                th:value="${bank.id}" th:text="${bank.name}"></option>
                                     </th:block>
                                 </select>
                             </div>
@@ -283,7 +331,7 @@
 
 
     <!-- Restaurant audit logs -->
-    <div class=" col-md-9 col-md-push-3">
+    <div class=" col-md-9">
         <div class="panel panel-default">
             <div class="panel-heading">
                 Audit

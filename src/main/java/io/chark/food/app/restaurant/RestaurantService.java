@@ -2,6 +2,7 @@ package io.chark.food.app.restaurant;
 
 import io.chark.food.app.account.AccountService;
 import io.chark.food.app.administrate.audit.AuditService;
+import io.chark.food.app.offer.OfferService;
 import io.chark.food.app.restaurant.details.RestaurantDetailsService;
 import io.chark.food.domain.authentication.account.Account;
 import io.chark.food.domain.authentication.permission.Permission;
@@ -68,6 +69,7 @@ public class RestaurantService {
         restaurant.getRestaurantDetails().setPhoneNumber(updateDetails.getRestaurantDetails().getPhoneNumber());
         restaurant.getRestaurantDetails().setBank(updateDetails.getRestaurantDetails().getBank());
         restaurant.getRestaurantDetails().setBankAccountNumber(updateDetails.getRestaurantDetails().getBankAccountNumber());
+
         try {
             restaurant = restaurantRepository.save(restaurant);
             restaurantAuditService.info("Updated restaurant details", "Update");
@@ -182,6 +184,9 @@ public class RestaurantService {
                 .save(new Invitation(username, account, getRestaurant())));
     }
 
+    public void saveOffer(Restaurant restaurant){
+        restaurantRepository.save(restaurant);
+    }
     /**
      * Get all available restaurants.
      *

@@ -1,7 +1,9 @@
 package io.chark.food.app.restaurant;
 
+import io.chark.food.app.offer.OfferService;
 import io.chark.food.app.restaurant.details.BankService;
 import io.chark.food.domain.audit.RestaurantAuditMessage;
+import io.chark.food.domain.offer.Offer;
 import io.chark.food.domain.restaurant.Bank;
 import io.chark.food.domain.restaurant.Invitation;
 import io.chark.food.domain.restaurant.Restaurant;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,15 +28,18 @@ public class RestaurantController {
     private final RestaurantService restaurantService;
     private final RestaurantAuditService auditService;
     private final BankService bankService;
+    private final OfferService offerService;
 
     @Autowired
     public RestaurantController(RestaurantService restaurantService,
                                 RestaurantAuditService auditService,
-                                BankService bankService) {
+                                BankService bankService,
+                                OfferService offerService) {
 
         this.restaurantService = restaurantService;
         this.auditService = auditService;
         this.bankService = bankService;
+        this.offerService = offerService;
     }
 
     /**
@@ -59,6 +65,7 @@ public class RestaurantController {
         List<Bank> banks = bankService.getBanks();
         model.addAttribute("restaurant", rest);
         model.addAttribute("banks", banks);
+        model.addAttribute("offer", new Offer());
 
         return "restaurant/profile";
     }
@@ -81,6 +88,17 @@ public class RestaurantController {
 
         model.addAttribute("restaurant", details);
         return "restaurant/profile";
+    }
+
+
+    @RequestMapping(value = "/offer", method = RequestMethod.POST)
+    public String addOffer(Offer offer, Model model) {
+        offerService.register(offer).isPresent();
+//        if (offerService.register(offer).isPresent()) {
+            // Success, redirect to profile page.
+//            return "redirect:/restaurant";
+//        }
+        return "redirect:/restaurant";
     }
 
     /**
@@ -164,4 +182,7 @@ public class RestaurantController {
     public List<RestaurantAuditMessage> getAuditMessages() {
         return auditService.getRestaurantAuditMessages();
     }
+
+
+
 }
