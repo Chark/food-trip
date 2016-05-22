@@ -10,7 +10,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Entity
-public class Offer extends BaseEntity {
+public class Offer  extends BaseEntity implements Comparable<Offer> {
+
 
     private String validThrough;
 
@@ -82,5 +83,12 @@ public class Offer extends BaseEntity {
             e.printStackTrace();
         }
         return new Date();
+    }
+
+    @Override
+    public int compareTo(Offer o) {
+        if (getValidThroughDate() == null || o.getValidThroughDate() == null)
+            return 0;
+        return getValidThroughDate().compareTo(o.getValidThroughDate());
     }
 }

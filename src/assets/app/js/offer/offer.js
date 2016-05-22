@@ -54,8 +54,8 @@
         offerTable.on('click', 'a.delete', function () {
             var id = $(this).data('id');
             bootbox.dialog({
-                title: 'Delete thread',
-                message: 'Are you sure you want to delete this thread?',
+                title: 'Delete offer',
+                message: 'Are you sure you want to delete this offer?',
                 buttons: {
                     yes: {
                         label: 'Delete',
