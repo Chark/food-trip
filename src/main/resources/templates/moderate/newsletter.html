@@ -1,0 +1,101 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layouts/moderation">
+
+<head>
+    <title>Thread</title>
+</head>
+
+<body>
+
+<!--<div class="form-group">-->
+    <!--<div class="row">-->
+        <!--<label class="col-xs-12">-->
+            <!--Account permissions-->
+            <!--<select name="authorities" class="form-control" multiple="multiple">-->
+                <!--<option th:each="authority : ${T(io.chark.food.domain.authentication.permission.Permission.Authority).values()}"-->
+                        <!--th:text="${authority.prettyName}"-->
+                        <!--th:value="${authority}"-->
+                        <!--th:selected="*{hasPermission('__${authority}__')}"></option>-->
+            <!--</select>-->
+        <!--</label>-->
+    <!--</div>-->
+<!--</div>-->
+<th:block layout:fragment="content">
+    <form name="newsletterForm"
+          method="POST"
+          th:attr="data-newsletter-id=${newsletter.id}"
+          th:action="@{/moderate/newsletters/edit/__${newsletter.id}__}"
+          th:object="${newsletter}">
+        <h2>Newsletter Details </h2>
+        <div class="row">
+
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-12">
+                        <th:block th:include="fragments/forms :: input
+                        ('title', *{title}, 'title', 'Title', 'Enter title')"/>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <label class="col-xs-12 control-label">
+                        Description
+                <textarea th:text="*{description}" name="description" rows="3" class="form-control"
+                          placeholder="Enter thread description"></textarea>
+                    </label>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <div class="row">
+                        <label class="col-xs-12">
+                            Offer list
+                            <select name="offers" class="form-control" multiple="multiple">
+                                <option th:each="offer : ${offers}"
+                                        th:text="${offer.headline}"
+                                        th:value="${offer.id}"
+                                        th:selected="*{hasOffer('__${offer.id}__')}"></option>
+                            </select>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <div class="row">
+                        <label class="col-xs-12">
+                            Is published
+                            <select th:field="*{published}" class="form-control">
+                                <option th:selected="*{published}" value="true">Enabled</option>
+                                <option th:selected="*{!published}" value="false">Disabled</option>
+                            </select>
+                        </label>
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-12">
+                        <th:block th:include="fragments/forms :: input
+                        ('expirationDate', *{expirationDate}, 'expirationDate', 'Expiration date', 'Expiration date')"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-success">Save</button>
+        <a th:href="@{/moderate/newsletters}" class="btn btn-danger">Cancel</a>
+    </form>
+</th:block>
+
+<!-- Initialize javascript for this page -->
+<script type="application/javascript" layout:fragment="javascript">
+    $('select[name="offers"]').select2({
+        placeholder: 'Select offers',
+        theme: 'bootstrap'
+    });
+</script>
+</body>
+</html>

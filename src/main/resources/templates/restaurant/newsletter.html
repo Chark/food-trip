@@ -1,0 +1,26 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layouts/default">
+
+<head>
+    <title>Newsletter</title>
+</head>
+
+<body>
+
+<th:block layout:fragment="content">
+    <div class="container">
+        <th:block th:if="${published}">
+            <div th:text="${newsletter.title}"></div>
+            DO YA THING
+        </th:block>
+
+        <th:block th:if="${!published}">
+            NOT PUBLISHED CONTENT
+
+        </th:block>
+    </div>
+</th:block>
+
+</body>
+</html>

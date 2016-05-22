@@ -68,7 +68,7 @@ public class Comment extends BaseEntity {
     public String getMonthYear() {
         Calendar cal = Calendar.getInstance();
         cal.setTimeInMillis(this.creationDate.getTime());
-        return cal.get(Calendar.DAY_OF_MONTH) + "/" + cal.get(Calendar.MONTH) + "/" + cal.get(Calendar.YEAR);
+        return cal.get(Calendar.YEAR) + "-" + cal.get(Calendar.MONTH) + "-" + cal.get(Calendar.DAY_OF_MONTH);
     }
 
     public List<Rating> getRatings() {

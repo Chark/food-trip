@@ -1,0 +1,39 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layouts/moderation">
+
+<head>
+    <title>Newsletter</title>
+</head>
+
+<body>
+<th:block layout:fragment="content">
+    <h2>Manage newsletters</h2>
+    <p>Moderate newsletter. To create a new newsletter click <a th:href="@{/moderate/newsletters/edit/0}">Here</a></p>
+    <table class="newsletter-table table table-striped table-bordered" cellspacing="0" width="100%">
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Creation Date</th>
+            <th>Expiration Date</th>
+            <th>Created by</th>
+            <th>View count</th>
+            <th>Is published</th>
+            <th>Is edited</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+    </table>
+</th:block>
+
+<!-- Initialize javascript for this page -->
+<script type="application/javascript" layout:fragment="javascript">
+    $(function () {
+        Newsletter.initNewsletter();
+    });
+</script>
+
+</body>
+</html>

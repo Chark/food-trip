@@ -1,15 +1,13 @@
-package io.chark.food.app.offer;
+package io.chark.food.app.restaurant.offer;
 
 import io.chark.food.app.account.AccountService;
 import io.chark.food.domain.authentication.account.Account;
 import io.chark.food.domain.offer.Offer;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.util.Collections;
 import java.util.List;
 
 @Controller

@@ -29,6 +29,7 @@ public class Account extends BaseEntity implements UserDetails {
     private String email;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+
     @Column(length = DEFAULT_LENGTH * 32, nullable = false)
     private String password;
 

@@ -1,27 +1,30 @@
-package io.chark.food.app.offer;
+package io.chark.food.app.restaurant.offer;
 
-import io.chark.food.app.administrate.audit.AuditService;
 import io.chark.food.app.restaurant.RestaurantService;
-import io.chark.food.domain.authentication.account.Account;
-import io.chark.food.domain.authentication.permission.Permission;
 import io.chark.food.domain.offer.Offer;
 import io.chark.food.domain.offer.OfferRepository;
 import io.chark.food.domain.restaurant.Restaurant;
-import io.chark.food.domain.restaurant.RestaurantDetails;
-import io.chark.food.domain.restaurant.location.Location;
+import io.chark.food.domain.restaurant.RestaurantRepository;
+import io.chark.food.domain.restaurant.newsletter.Newsletter;
+import io.chark.food.domain.restaurant.newsletter.NewsletterRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import java.util.*;
 
 @Service
 public class OfferService {
     private static final Logger LOGGER = LoggerFactory.getLogger(OfferService.class);
+
+    private final NewsletterRepository newsletterRepository;
+    private final RestaurantRepository restaurantRepository;
     private final OfferRepository offerRepository;
     private final RestaurantService restaurantService;
 
@@ -29,14 +32,20 @@ public class OfferService {
     private EntityManager entityManager;
 
     @Autowired
-    public OfferService(OfferRepository offerRepository, AuditService auditService, RestaurantService restaurantService) {
+    public OfferService(OfferRepository offerRepository,
+                        NewsletterRepository newsletterRepository,
+                        RestaurantRepository restaurantRepository,
+                        RestaurantService restaurantService) {
+
+        this.newsletterRepository = newsletterRepository;
+        this.restaurantRepository = restaurantRepository;
         this.restaurantService = restaurantService;
         this.offerRepository = offerRepository;
     }
 
     public Optional<Offer> register(String validThrough, String description, String headline) {
         Offer offer = new Offer(validThrough, description, headline);
-        if(offer.getValidThroughDate().getTime() > new Date().getTime()) {
+        if (offer.getValidThroughDate().getTime() > new Date().getTime()) {
             offer.setRestaurant(restaurantService.getRestaurant());
             try {
 
@@ -64,7 +73,7 @@ public class OfferService {
     }
 
 
-    public Offer getOffer(long id){
+    public Offer getOffer(long id) {
         return offerRepository.findOne(id);
     }
 
@@ -93,12 +102,25 @@ public class OfferService {
             return Optional.of(offer);
         } catch (DataIntegrityViolationException e) {
             LOGGER.error("Could not update restaurant details", e);
-
             return Optional.empty();
         }
     }
 
-    public void deleteOffer(long id){
+    public void deleteOffer(long id) {
+        Offer offer = offerRepository.findOne(id);
+
+        Restaurant restaurant = offer.getRestaurant();
+        if (restaurant != null) {
+            restaurant.removeOffer(offer);
+        }
+        restaurantRepository.save(restaurant);
+
+        List<Newsletter> newsletters = newsletterRepository.findByOfferId(offer.getId());
+        for (Newsletter newsletter : newsletters) {
+            newsletter.removeOffer(offer);
+        }
+        newsletterRepository.save(newsletters);
+
         offerRepository.delete(id);
     }
 

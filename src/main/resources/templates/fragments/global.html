@@ -143,6 +143,7 @@
             <li><a th:href="@{/moderate/threads}" sec:authorize="hasAuthority('ROLE_MODERATOR')">Threads</a></li>
             <li><a th:href="@{/moderate/threads/categories}" sec:authorize="hasAuthority('ROLE_MODERATOR')">Thread Categories</a></li>
             <li><a th:href="@{/moderate/comments}" sec:authorize="hasAuthority('ROLE_MODERATOR')">Comments</a></li>
+            <li><a th:href="@{/moderate/newsletters}" sec:authorize="hasAuthority('ROLE_MODERATOR')">Newsletter</a></li>
         </ul>
     </div>
 </th:block>

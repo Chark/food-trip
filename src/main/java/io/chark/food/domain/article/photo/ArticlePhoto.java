@@ -3,6 +3,7 @@ package io.chark.food.domain.article.photo;
 import io.chark.food.domain.BaseEntity;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.util.Date;
 
 @Entity
@@ -13,6 +14,8 @@ public class ArticlePhoto extends BaseEntity {
     @Column(nullable = false)
     private byte[] photo;
 
+    @Size(max = DEFAULT_LONG_LENGTH)
+    @Column(length = DEFAULT_LONG_LENGTH)
     private String description;
     private String alt;
 

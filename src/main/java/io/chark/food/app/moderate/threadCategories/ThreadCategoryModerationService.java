@@ -3,6 +3,7 @@ package io.chark.food.app.moderate.threadCategories;
 import io.chark.food.app.administrate.audit.AuditService;
 import io.chark.food.app.thread.ThreadService;
 import io.chark.food.app.thread.categories.ThreadCategoryService;
+import io.chark.food.domain.offer.Offer;
 import io.chark.food.domain.thread.Thread;
 import io.chark.food.domain.thread.category.ThreadCategory;
 import io.chark.food.domain.thread.category.ThreadCategoryRepository;
@@ -99,4 +100,6 @@ public class ThreadCategoryModerationService {
             return Optional.empty();
         }
     }
+
+
 }

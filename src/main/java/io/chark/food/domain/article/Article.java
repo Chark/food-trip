@@ -9,6 +9,7 @@ import io.chark.food.domain.comment.Comment;
 import io.chark.food.domain.restaurant.Restaurant;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.util.*;
 
 @Entity
@@ -17,8 +18,12 @@ public class Article extends BaseEntity {
     @Column(nullable = false)
     private String title;
 
+    @Size(max = DEFAULT_LONG_LENGTH)
+    @Column(length = DEFAULT_LONG_LENGTH)
     private String description;
 
+    @Size(max = DEFAULT_LONG_LENGTH)
+    @Column(length = DEFAULT_LONG_LENGTH)
     private String shortDescription;
 
     private String metaKeywords;

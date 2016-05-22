@@ -133,6 +133,23 @@
     </div>
 
 
+    <!-- List of newsletters -->
+
+    <div class="col-sm-7 col-md-9" th:if="${!newsletters.isEmpty()}">
+        <h4>Newsletters</h4>
+        <div class="list-group newsletters">
+            <th:block th:each="newsletter : ${newsletters}">
+                <a class="list-group-item "
+                   th:href="@{/newsletter/__${newsletter.id}__}"
+                   th:attr="data-id=${newsletter.id}">
+                    <h4 class="list-group-item-heading" th:text="${newsletter.title}"></h4>
+                    <p class="list-group-item-text" th:text="${newsletter.description}"></p>
+                </a>
+            </th:block>
+        </div>
+    </div>
+
+
 </th:block>
 
 <!-- Initialize javascript for this page -->

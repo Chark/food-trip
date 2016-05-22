@@ -51,15 +51,13 @@ public class Restaurant extends BaseEntity {
     @OneToMany(mappedBy = "restaurant", orphanRemoval = true)
     private List<Article> articles;
 
+    @ManyToMany
     @JsonManagedReference
-    @OneToMany(orphanRemoval = true)
     @OrderBy("validThrough asc")
     private List<Offer> offers;
 
-
     @OneToOne
     private Location location;
-
 
     public Location getLocation() {
         return location;

@@ -8,6 +8,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToMany;
+import javax.validation.constraints.Size;
 import java.util.*;
 
 @Entity
@@ -16,6 +17,8 @@ public class ArticleCategory extends BaseEntity {
     @Column(nullable = false)
     private String title;
 
+    @Size(max = DEFAULT_LONG_LENGTH)
+    @Column(length = DEFAULT_LONG_LENGTH)
     private String description;
 
     @Column(nullable = false)

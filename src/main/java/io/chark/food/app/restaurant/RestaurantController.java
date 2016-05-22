@@ -1,18 +1,14 @@
 package io.chark.food.app.restaurant;
 
-import io.chark.food.app.offer.OfferService;
+import io.chark.food.app.restaurant.offer.OfferService;
 import io.chark.food.app.restaurant.details.BankService;
 import io.chark.food.app.restaurant.location.CityService;
-import io.chark.food.app.restaurant.location.LocationService;
 import io.chark.food.domain.audit.RestaurantAuditMessage;
 import io.chark.food.domain.offer.Offer;
 import io.chark.food.domain.restaurant.Bank;
 import io.chark.food.domain.restaurant.Invitation;
 import io.chark.food.domain.restaurant.Restaurant;
-import io.chark.food.domain.restaurant.RestaurantDetails;
-import io.chark.food.domain.restaurant.location.City;
 import io.chark.food.domain.restaurant.location.Location;
-import io.chark.food.domain.restaurant.location.LocationRepository;
 import io.chark.food.util.exception.BadInputException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,7 +18,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,22 +30,19 @@ public class RestaurantController {
     private final BankService bankService;
     private final OfferService offerService;
     private final CityService cityService;
-    private final LocationRepository locationRepository;
 
     @Autowired
     public RestaurantController(RestaurantService restaurantService,
                                 RestaurantAuditService auditService,
                                 OfferService offerService,
                                 BankService bankService,
-                                CityService cityService,
-                                LocationRepository locationRepository) {
+                                CityService cityService) {
 
         this.restaurantService = restaurantService;
         this.auditService = auditService;
         this.bankService = bankService;
         this.offerService = offerService;
         this.cityService = cityService;
-        this.locationRepository = locationRepository;
     }
 
     /**
@@ -244,10 +236,6 @@ public class RestaurantController {
     @ResponseStatus(HttpStatus.OK)
     @RequestMapping(value = "/api/offers/{id}", method = RequestMethod.DELETE)
     public void deleteOffer(@PathVariable long id) {
-        Offer offer = offerService.getOffer(id);
-        restaurantService.deleteOffer(offer);
-        offerService.deleteOffer(offer.getId());
+        offerService.deleteOffer(id);
     }
-
-
 }

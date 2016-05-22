@@ -8,6 +8,7 @@ import io.chark.food.domain.comment.Comment;
 import io.chark.food.domain.thread.Thread;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -18,6 +19,8 @@ public class ThreadCategory extends BaseEntity {
     @Column(nullable = false)
     private String name;
 
+    @Size(max = DEFAULT_LONG_LENGTH)
+    @Column(length = DEFAULT_LONG_LENGTH)
     private String description;
 
     @Column(nullable = false)

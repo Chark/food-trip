@@ -1,5 +1,6 @@
 package io.chark.food.app.account;
 
+import io.chark.food.app.moderate.newsletter.NewsletterModerationService;
 import io.chark.food.domain.authentication.account.Account;
 import io.chark.food.domain.extras.Color;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,12 +17,14 @@ import javax.validation.Valid;
 public class AccountController {
 
     private final AccountService accountService;
-
+    private final NewsletterModerationService newsletterModerationService;
 
     @Autowired
-    public AccountController(AccountService accountService) {
+    public AccountController(AccountService accountService, NewsletterModerationService newsletterModerationService) {
         this.accountService = accountService;
+        this.newsletterModerationService = newsletterModerationService;
     }
+
 
     @RequestMapping(value = "/login")
     public String login() {
@@ -77,7 +80,9 @@ public class AccountController {
      */
     @RequestMapping(value = "/profile", method = RequestMethod.GET)
     public String profile(Model model) {
+
         model.addAttribute("account", accountService.getAccount());
+        model.addAttribute("newsletters", newsletterModerationService.getPublishedNewsletter());
         return "account/profile";
     }
 
