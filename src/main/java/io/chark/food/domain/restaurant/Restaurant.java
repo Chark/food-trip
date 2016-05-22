@@ -1,6 +1,7 @@
 package io.chark.food.domain.restaurant;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import io.chark.food.domain.BaseEntity;
 import io.chark.food.domain.article.Article;
 import io.chark.food.domain.authentication.account.Account;
@@ -49,7 +50,8 @@ public class Restaurant extends BaseEntity {
     @OneToMany(mappedBy = "restaurant", orphanRemoval = true)
     private List<Article> articles;
 
-    @OneToMany
+    @JsonManagedReference
+    @OneToMany(orphanRemoval = true)
     private List<Offer> offers;
 
 
@@ -173,4 +175,8 @@ public class Restaurant extends BaseEntity {
         offers.add(offer);
     }
 
+
+    public void removeOffer(Offer offer){
+        this.offers.remove(offer);
+    }
 }

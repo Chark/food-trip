@@ -40,8 +40,7 @@ public class RestaurantController {
     @Autowired
     public RestaurantController(RestaurantService restaurantService,
                                 RestaurantAuditService auditService,
-                                BankService bankService,
-                                OfferService offerService) {
+                                OfferService offerService,
                                 BankService bankService,
                                 CityService cityService,
                                 LocationRepository locationRepository) {
@@ -75,7 +74,7 @@ public class RestaurantController {
     public String restaurant(Model model) {
         Restaurant rest = restaurantService.getRestaurant();
         List<Bank> banks = bankService.getBanks();
-        if(rest.getLocation() == null){
+        if (rest.getLocation() == null) {
             rest.setLocation(new Location());
         }
         model.addAttribute("restaurant", rest);
@@ -92,8 +91,7 @@ public class RestaurantController {
      * @return restaurant profile template.
      */
     @RequestMapping(method = RequestMethod.POST)
-    public String restaurant(Restaurant details,  Model model) {
-
+    public String restaurant(Restaurant details, Model model) {
 
 
         if (restaurantService.update(details).isPresent()) {
@@ -114,7 +112,7 @@ public class RestaurantController {
     public String addOffer(Offer offer, Model model) {
         offerService.register(offer).isPresent();
 //        if (offerService.register(offer).isPresent()) {
-            // Success, redirect to profile page.
+        // Success, redirect to profile page.
 //            return "redirect:/restaurant";
 //        }
         return "redirect:/restaurant";
@@ -202,6 +200,54 @@ public class RestaurantController {
         return auditService.getRestaurantAuditMessages();
     }
 
+
+    @ResponseBody
+    @RequestMapping(value = "/api/offers", method = RequestMethod.GET)
+    public List<Offer> getOffers() {
+        return offerService.getOffers();
+    }
+
+
+    @RequestMapping(value = "/offer/edit/{id}", method = RequestMethod.GET)
+    public String getAccount(@PathVariable long id, Model model) {
+        Offer offer;
+
+        if (id <= 0) {
+            // Id below or equals to zero means this is a new account.
+            offer = new Offer();
+        } else {
+            // Id is above zero, existing account.
+            offer = offerService.getOffer(id);
+        }
+        model.addAttribute("offer", offer);
+        return "restaurant/offer";
+    }
+
+
+    @RequestMapping(value = "/offer/edit/{id}", method = RequestMethod.POST)
+    public String saveOffer(Offer details, @PathVariable long id, Model model) {
+
+
+        if (offerService.update(id, details).isPresent()) {
+            // Success, redirect to profile page.
+            return "redirect:/restaurant";
+        }
+
+        // Error, failed to update.
+        model.addAttribute("error", "Could not update restaurant details, " +
+                "please double check what you've entered");
+
+        model.addAttribute("restaurant", details);
+        return "restaurant/profile";
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @RequestMapping(value = "/api/offers/{id}", method = RequestMethod.DELETE)
+    public void deleteOffer(@PathVariable long id) {
+        Offer offer = offerService.getOffer(id);
+        restaurantService.deleteOffer(offer);
+        offerService.deleteOffer(offer.getId());
+    }
 
 
 }

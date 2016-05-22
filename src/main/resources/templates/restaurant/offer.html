@@ -1,0 +1,57 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layouts/moderation">
+
+<head>
+    <title>Article</title>
+</head>
+
+<body>
+<th:block layout:fragment="content">
+    <form name="offerForm"
+          method="POST"
+          th:attr="data-offer-id=${offer.id}"
+          th:action="@{/restaurant/offer/edit/__${offer.id}__}"
+          th:object="${offer}">
+
+        <div class="row">
+            <div class="col-md-12">
+                <h2>Offers</h2>
+                <div class="row">
+                    <div class="col-md-6">
+                        <th:block th:include="fragments/forms :: input
+                        ('headline', *{headline}, 'headline', 'Headline', 'Enter offer headline')"/>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <label class="col-xs-6 control-label">
+                Short Description
+                <textarea th:text="*{description}" name="description" rows="3" class="form-control"
+                          placeholder="Enter offer description"></textarea>
+            </label>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <th:block th:include="fragments/forms :: input
+                        ('validThrough', *{validThrough}, 'validThrough', 'Offer expiration date', 'Enter offer expiration date')"/>
+            </div>
+        </div>
+
+
+        <!-- Submit and back -->
+        <button type="submit" class="btn btn-success">Save</button>
+        <a th:href="@{/restaurant}" class="btn btn-danger">Cancel</a>
+    </form>
+</th:block>
+
+<!-- Initialize javascript for this page -->
+<script type="application/javascript" layout:fragment="javascript">
+</script>
+
+</body>
+</html>

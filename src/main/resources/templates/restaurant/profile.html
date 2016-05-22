@@ -42,10 +42,18 @@
                 <th:block th:include="this :: restaurantInfo('Hygiene index', *{hygieneLevel})"/>
                 <th:block th:include="this :: restaurantInfo('Views', *{viewCount})"/>
                 <th:block th:include="this :: restaurantInfo('Employees', *{accounts.size()})"/>
-                <th:block th:include="this :: restaurantInfo('City', *{location.city.name})"/>
-                <th:block th:include="this :: restaurantInfo('Country', *{location.city.country})"/>
-                <th:block th:include="this :: restaurantInfo('Street', *{location.street})"/>
-                <th:block th:include="this :: restaurantInfo('Danger index', *{location.dangerIndex})"/>
+                <th:block th:if="*{location != null and  location.city != null}">
+                    <th:block th:include="this :: restaurantInfo('City', *{location.city.name})"/>
+                </th:block>
+                <th:block th:if="*{location != null and  location.city != null}">
+                    <th:block th:include="this :: restaurantInfo('Country', *{location.city.country})"/>
+                </th:block>
+                <th:block th:if="*{location != null and  location.street != null}">
+                    <th:block th:include="this :: restaurantInfo('Street', *{location.street})"/>
+                </th:block>
+                <th:block th:if="*{location != null and  location.dangerIndex != null}">
+                    <th:block th:include="this :: restaurantInfo('Danger index', *{location.dangerIndex})"/>
+                </th:block>
 
                 <h5>Description</h5>
                 <th:block th:if="*{description == null or description == ''}">
@@ -279,7 +287,7 @@
 
     </div>
 
-    <div class="col-md-9 col-md-push-3">
+    <div class="col-md-9">
         <div class="row">
             <!-- Accounts under this restaurant -->
             <div class="col-md-6">
@@ -389,11 +397,36 @@
         </div>
     </div>
 
+
+    <!-- Restaurant offers -->
+    <div class="col-md-push-3 col-md-9">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                Offers
+            </div>
+            <div class="panel-body">
+                <table class="offers-table table table-striped table-bordered" cellspacing="0" width="100%">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Headline</th>
+                        <th>Description</th>
+                        <th>Publication date</th>
+                        <th>Valid through</th>
+                        <th>Action</th>
+                    </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+
 </th:block>
 
 <!-- Initialize javascript for this page -->
 <script type="application/javascript" layout:fragment="javascript">
     $(function () {
+        Offers.initOffers();
         RestaurantProfile.init();
     });
 </script>

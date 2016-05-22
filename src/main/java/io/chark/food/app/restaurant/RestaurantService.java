@@ -6,6 +6,7 @@ import io.chark.food.app.offer.OfferService;
 import io.chark.food.app.restaurant.details.RestaurantDetailsService;
 import io.chark.food.domain.authentication.account.Account;
 import io.chark.food.domain.authentication.permission.Permission;
+import io.chark.food.domain.offer.Offer;
 import io.chark.food.domain.restaurant.*;
 import io.chark.food.domain.restaurant.location.Location;
 import io.chark.food.domain.restaurant.location.LocationRepository;
@@ -225,5 +226,11 @@ public class RestaurantService {
     void deleteInvitation(long id) {
         restaurantAuditService.warn("Deleting invitation with id: %d", "Invitation", id);
         invitationRepository.deleteByRestaurantAndId(getRestaurant().getId(), id);
+    }
+
+    public void deleteOffer(Offer offer){
+        Restaurant restaurant = getRestaurant();
+        restaurant.removeOffer(offer);
+        restaurantRepository.save(restaurant);
     }
 }
