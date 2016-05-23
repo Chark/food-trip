@@ -26,17 +26,18 @@ public class NewsletterModerationController {
     }
 
     @RequestMapping(value = "/newsletters", method = RequestMethod.GET)
-    public String threads() {
+    public String getData() {
         return "moderate/newsletters";
     }
 
 
     @RequestMapping(value = "/newsletters/edit/{id}", method = RequestMethod.GET)
-    public String getNewsletter(@PathVariable long id, Model model) {
+    public String getData(@PathVariable long id, Model model) {
         Newsletter newsletter;
 
         if (id <= 0) {
-            // Id below or equals to zero means this is a new thread.
+            // Id below or equals to zero means t
+            // his is a new thread.
             newsletter = new Newsletter();
         } else {
             // Id is above zero, existing account.
