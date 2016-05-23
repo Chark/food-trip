@@ -91,6 +91,7 @@ public class NewsletterModerationService {
         } catch (DataIntegrityViolationException e) {
             return Optional.empty();
         }
+
     }
 
     public void delete(long id){
