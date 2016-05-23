@@ -15,46 +15,30 @@
         <ul>
                 <div class="panel panel-default" >
                     <div class="panel-body" >
-
                         <th:block th:each="offer : ${offers}">
-
                             <a style="color:black" th:href="@{/restaurant/__${offer.restaurant.id}__}" >
                             <div class="panel panel-default" style="padding:0 20px">
                                 <div class="panel-body">
                                     <div class="row">
                                         <h4> <div th:text="${offer.headline}"></div></h4>
-
                                     </div>
-
                                     <div class="row">
                                         <div th:text="${offer.description}"></div>
                                     </div>
-
                                     <br></br>
                                     <br></br>
                                     <div class="row">
                                         <span>Expiration Date: </span>
 
                                         <span th:text="${offer.validThrough}"></span>
-
-
                                     </div>
-
                                 </div>
-
                             </div>
                             </a>
                         </th:block>
 
                     </div>
                 </div>
-
-                <!--<ul>-->
-                    <!--<th:block th:each="article : ${category.articles}">-->
-                        <!--<li><a th:href="@{/articles/__${article.id}__}" th:text="${article.title}"></a></li>-->
-                    <!--</th:block>-->
-                <!--</ul>-->
-
         </ul>
     </div>
 </th:block>

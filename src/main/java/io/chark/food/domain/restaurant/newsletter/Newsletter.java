@@ -37,13 +37,15 @@ public class Newsletter extends BaseEntity {
     @ManyToOne
     private Account account;
 
-    @ManyToMany
+
+    @ManyToMany()
+    @Column(unique = true)
     private List<Offer> offers = new ArrayList<>();
 
     public Newsletter() {
     }
 
-    public void removeOffer(Offer offer){
+    public void removeOffer(Offer offer) {
         this.offers.remove(offer);
     }
 
@@ -66,9 +68,9 @@ public class Newsletter extends BaseEntity {
     }
 
 
-
-    public void addOffer(Offer o){
-        offers.add(o);
+    public void addOffer(Offer o) {
+        if (!offers.contains(o))
+            offers.add(o);
     }
 
     public List<Offer> getOffers() {
