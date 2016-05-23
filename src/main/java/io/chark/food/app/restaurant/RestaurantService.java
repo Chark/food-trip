@@ -65,17 +65,21 @@ public class RestaurantService {
         restaurant.setName(updateDetails.getName());
         restaurant.setDescription(updateDetails.getDescription());
 
-        restaurant.getRestaurantDetails().setRegistrationCode(updateDetails.getRestaurantDetails().getRegistrationCode());
-        restaurant.getRestaurantDetails().setFax(updateDetails.getRestaurantDetails().getFax());
-        restaurant.getRestaurantDetails().setManager(updateDetails.getRestaurantDetails().getManager());
-        restaurant.getRestaurantDetails().setMobileNumber(updateDetails.getRestaurantDetails().getMobileNumber());
-        restaurant.getRestaurantDetails().setVat(updateDetails.getRestaurantDetails().getVat());
-        restaurant.getRestaurantDetails().setWebsite(updateDetails.getRestaurantDetails().getWebsite());
-        restaurant.getRestaurantDetails().setPhoneNumber(updateDetails.getRestaurantDetails().getPhoneNumber());
-        restaurant.getRestaurantDetails().setBank(updateDetails.getRestaurantDetails().getBank());
-        restaurant.getRestaurantDetails().setBankAccountNumber(updateDetails.getRestaurantDetails().getBankAccountNumber());
-        Location location = locationRepository.save(updateDetails.getLocation());
-        restaurant.setLocation(location);
+        RestaurantDetails details = restaurant.getRestaurantDetails();
+        details.setRegistrationCode(updateDetails.getRestaurantDetails().getRegistrationCode());
+        details.setFax(updateDetails.getRestaurantDetails().getFax());
+        details.setManager(updateDetails.getRestaurantDetails().getManager());
+        details.setMobileNumber(updateDetails.getRestaurantDetails().getMobileNumber());
+        details.setVat(updateDetails.getRestaurantDetails().getVat());
+        details.setWebsite(updateDetails.getRestaurantDetails().getWebsite());
+        details.setPhoneNumber(updateDetails.getRestaurantDetails().getPhoneNumber());
+        details.setBank(updateDetails.getRestaurantDetails().getBank());
+        details.setBankAccountNumber(updateDetails.getRestaurantDetails().getBankAccountNumber());
+
+        if (updateDetails.getLocation() != null) {
+            Location location = locationRepository.save(updateDetails.getLocation());
+            restaurant.setLocation(location);
+        }
 
         try {
             restaurant = restaurantRepository.save(restaurant);
@@ -225,11 +229,5 @@ public class RestaurantService {
     void deleteInvitation(long id) {
         restaurantAuditService.warn("Deleting invitation with id: %d", "Invitation", id);
         invitationRepository.deleteByRestaurantAndId(getRestaurant().getId(), id);
-    }
-
-    public void deleteOffer(Offer offer){
-        Restaurant restaurant = getRestaurant();
-        restaurant.removeOffer(offer);
-        restaurantRepository.save(restaurant);
     }
 }

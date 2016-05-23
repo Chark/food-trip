@@ -3,6 +3,7 @@ package io.chark.food.domain.offer;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import io.chark.food.domain.BaseEntity;
 import io.chark.food.domain.restaurant.Restaurant;
+
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import java.text.ParseException;
@@ -10,13 +11,10 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Entity
-public class Offer  extends BaseEntity implements Comparable<Offer> {
-
+public class Offer extends BaseEntity implements Comparable<Offer> {
 
     private String validThrough;
-
     private String description;
-
     private String headline;
 
     private Date publicationDate;
@@ -75,20 +73,20 @@ public class Offer  extends BaseEntity implements Comparable<Offer> {
         this.restaurant = restaurant;
     }
 
-    public Date getValidThroughDate(){
+    public Date getValidThroughDate() {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         try {
             return formatter.parse(validThrough);
-        } catch (ParseException e) {
-            e.printStackTrace();
+        } catch (ParseException ignored) {
+            return new Date();
         }
-        return new Date();
     }
 
     @Override
     public int compareTo(Offer o) {
-        if (getValidThroughDate() == null || o.getValidThroughDate() == null)
+        if (getValidThroughDate() == null || o.getValidThroughDate() == null) {
             return 0;
+        }
         return getValidThroughDate().compareTo(o.getValidThroughDate());
     }
 }
