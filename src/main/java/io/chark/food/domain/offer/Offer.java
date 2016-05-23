@@ -11,7 +11,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Entity
-public class offer2 extends BaseEntity implements Comparable<offer2> {
+public class Offer extends BaseEntity implements Comparable<Offer> {
 
     private String validThrough;
     private String description;
@@ -19,14 +19,14 @@ public class offer2 extends BaseEntity implements Comparable<offer2> {
 
     private Date publicationDate;
 
-    public offer2(String validThrough, String description, String headline) {
+    public Offer(String validThrough, String description, String headline) {
         this.validThrough = validThrough;
         this.description = description;
         this.headline = headline;
         this.publicationDate = new Date();
     }
 
-    public offer2() {
+    public Offer() {
     }
 
     @ManyToOne
@@ -83,7 +83,7 @@ public class offer2 extends BaseEntity implements Comparable<offer2> {
     }
 
     @Override
-    public int compareTo(offer2 o) {
+    public int compareTo(Offer o) {
         if (getValidThroughDate() == null || o.getValidThroughDate() == null) {
             return 0;
         }
