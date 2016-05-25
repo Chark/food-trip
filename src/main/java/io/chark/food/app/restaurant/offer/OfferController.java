@@ -28,7 +28,7 @@ public class OfferController {
      * View article categories.
      */
     @RequestMapping(value = "")
-    public String list(Model model) {
+    public String open(Model model) {
         int n = 5;
         try{
             Account account = accountService.getAccount();
@@ -37,7 +37,7 @@ public class OfferController {
         catch(Exception e){
             System.out.println(e);
         }
-        List<Offer> offers = offerService.getnOffers(n);
+        List<Offer> offers = offerService.getOffers(n);
 
         model.addAttribute("offers", offers);
         return "offers/offers";

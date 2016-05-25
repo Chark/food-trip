@@ -124,7 +124,7 @@ public class OfferService {
         offerRepository.delete(id);
     }
 
-    public List<Offer> getnOffers(int max){
+    public List<Offer> getOffers(int max){
         return entityManager.createQuery("SELECT a FROM Offer a ORDER BY a.validThrough asc", Offer.class)
                 .setMaxResults(max)
                 .getResultList();
